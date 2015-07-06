@@ -15,6 +15,8 @@ namespace debt_fe.Controllers
     [Authorize]
     public class AccountController : Controller
     {
+
+
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
@@ -66,7 +68,7 @@ namespace debt_fe.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
+        public ActionResult Login(LoginViewModel model, string returnUrl)
         {
             if (!ModelState.IsValid)
             {
@@ -75,6 +77,12 @@ namespace debt_fe.Controllers
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
+
+            //
+            // build craft version
+            //
+
+            /*
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
@@ -89,6 +97,9 @@ namespace debt_fe.Controllers
                     ModelState.AddModelError("", "Invalid login attempt.");
                     return View(model);
             }
+             */
+
+            return View();
         }
 
         //

@@ -1,0 +1,84 @@
+﻿
+@{
+    ViewBag.Title = "Documents";
+}
+
+<div class="col-lg-12 mart30 marb10">
+    <form class="form-inline">
+        <div class="form-group">
+            <button type="button" class="btn btn-primary marr30">Upload</button>
+            <button type="button" class="btn btn-default">Go to</button>
+            <input type="text" value="1" class="form-control" size="3">
+            <button type="button" class="btn btn-default">«</button>
+            <div class="form-group"><label>1 of 20</label></div>
+            <button type="button" class="btn btn-default">»</button>
+            <div class="form-group"><label>Record/Page:</label></div>
+            <div class="form-group">
+                <select>
+                    <option>50
+                </select>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="col-lg-12">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>No.</th>
+                <th class="text-center">Document Name</th>
+                <th>File Name</th>
+                <th>Created Date</th>
+                <th>Description</th>
+                <th>Is Right Signature</th>
+                <th class="text-center">Document Status</th>
+                <th nowrap>Last Update <a href="#"><span class="glyphicon glyphicon-triangle-bottom"></span></a></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Search</td>
+                <td>
+                    String
+                </td>
+                <td>
+                    String
+                </td>
+                <td>
+                    String
+                </td>
+                <td>
+                    String
+                </td>
+                <td>
+                    <select class="new-form">
+                        <option>All
+                    </select>
+                </td>
+                <td>List=All</td>
+                <td>Date</td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox">1
+                        </label>
+                    </div>
+                </td>
+                <td>%Document Name%</td>
+                <td><a href="#">filename.pdf </a></td>
+                <td>04/17/2015, 9:13 AM by %username%</td>
+                <td align="right"></td>
+                <td>Yes</td>
+                <td>In Process</td>
+                <td>
+                    04/17/2015, 9:13 AM by %username%
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+

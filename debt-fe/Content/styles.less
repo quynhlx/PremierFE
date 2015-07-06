@@ -1,0 +1,45 @@
+﻿.border-radius (@radius) {
+    -webkit-border-radius: @radius;
+    -moz-border-radius: @radius;
+    -ms-border-radius: @radius;
+    -o-border-radius: @radius;
+    border-radius: @radius;
+}
+
+.font-weight (@weight) {
+    font-weight: @weight;
+}
+
+.no-border-radius {
+    .border-radius(0);
+}
+
+.font-weight-500 {
+    .font-weight(500);
+}
+
+.valign-wrapper {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center; 
+}
+
+.valign-wrapper .valign {
+    display: block;
+}
+
+//
+// login
+// 
+#form-login {
+    // margin-top: 25%;
+    border: 1px solid #cecece;
+    padding: 8px 16px 32px;
+    background-color: #fff;
+}

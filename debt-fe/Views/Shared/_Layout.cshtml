@@ -3,42 +3,56 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title - Pemodea</title>
     @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/custom")
     @Scripts.Render("~/bundles/modernizr")
 
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                </ul>
-                @Html.Partial("_LoginPartial")
+    
+    <div class="row-fluid">
+        <div class="container posCenter float-Left whiteBackground noPaddingLR">
+            <div class="container-fluid noPaddingLR">
+                <div class="navLeft pull-left ">
+                    <div class="logo pull-left"><a href="#"><img src='@Url.Content("~/Content/images/logo.png")' /></a></div>
+                    <div class="clear">
+                        <ul class="menu">
+                            <li><a href='@Url.Action("Index","MyAccount")'><span class="glyphicon glyphicon-user"></span> MY ACCOUNT</a></li>
+                            <li><a href='@Url.Action("Index","Payment")'><span class="glyphicon glyphicon-credit-card"></span> MAKE PAYMENT</a></li>
+                            <li><a href='@Url.Action("Index","Document")'><span class="glyphicon glyphicon-file"></span> DOCUMENTS</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="Rcontent pull-left">
+                    <div class="blueBackground pull-left col-lg-12">
+                        <div class="col-lg-4 mart30 marb30">
+                            <h3 class="white text-uppercase">@ViewBag.Title</h3>
+                        </div>
+                        <div class="col-lg-8 mart30 user text-right">
+                            <ul>
+                                <li><a href="#"><span class="glyphicon glyphicon-log-out"></span>LOGOUT</a></li>
+                                <li><span class="glyphicon glyphicon-edit"></span><a href="#">CHANGE PASSWORD</a></li>
+                                <li><span class="glyphicon glyphicon-user"></span>Allenpham</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    @RenderBody()
+                    <!--End content-->
+                </div>
             </div>
         </div>
-    </div>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
+        <footer>2015 Debt Inc. All Rights Reserved</footer>
     </div>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+
+    <script src="~/Scripts/app/app.js"></script>
+
     @RenderSection("scripts", required: false)
+
+
 </body>
 </html>

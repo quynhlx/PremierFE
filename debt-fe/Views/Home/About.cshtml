@@ -1,7 +1,109 @@
-﻿@{
-    ViewBag.Title = "About";
-}
-<h2>@ViewBag.Title.</h2>
-<h3>@ViewBag.Message</h3>
+﻿<div class="row-fluid">
+    <div class="container posCenter float-Left whiteBackground noPaddingLR">
+        <div class="container-fluid noPaddingLR">
+            <div class="navLeft pull-left ">
+                <div class="logo pull-left"><a href="#"><img src="images/logo.png" /></a></div>
+                <div class="clear">
+                    <ul>
+                        <li><a href="#"><span class="glyphicon glyphicon-user"></span> MY ACCOUNT</a></li>
+                        <li><a href="#"><span class="glyphicon glyphicon-credit-card"></span> MAKE PAYMENT</a></li>
+                        <li><a href="#" class="active"><span class="glyphicon glyphicon-file"></span> DOCUMENTS</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="Rcontent pull-left">
+                <div class="blueBackground pull-left col-lg-12">
+                    <div class="col-lg-4 mart30 marb30">
+                        <h3 class="white">DOCUMENTS</h3>
+                    </div>
+                    <div class="col-lg-8 mart30 user text-right">
+                        <ul>
+                            <li><a href="#"><span class="glyphicon glyphicon-log-out"></span>LOGOUT</a></li>
+                            <li><span class="glyphicon glyphicon-edit"></span><a href="#">CHANGE PASSWORD</a></li>
+                            <li><span class="glyphicon glyphicon-user"></span>Allenpham</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-12 mart30 marb10">
+                    <form class="form-inline">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary marr30">Upload</button>
+                            <button type="button" class="btn btn-default">Go to</button>
+                            <input type="text" value="1" class="form-control" size="3">
+                            <button type="button" class="btn btn-default">«</button>
+                            <div class="form-group"><label>1 of 20</label></div>
+                            <button type="button" class="btn btn-default">»</button>
+                            <div class="form-group"><label>Record/Page:</label></div>
+                            <div class="form-group">
+                                <select>
+                                    <option>50
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-lg-12">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th class="text-center">Document Name</th>
+                                <th>File Name</th>
+                                <th>Created Date</th>
+                                <th>Description</th>
+                                <th>Is Right Signature</th>
+                                <th class="text-center">Document Status</th>
+                                <th nowrap>Last Update <a href="#"><span class="glyphicon glyphicon-triangle-bottom"></span></a></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Search</td>
+                                <td>
+                                    String
+                                </td>
+                                <td>
+                                    String
+                                </td>
+                                <td>
+                                    String
+                                </td>
+                                <td>
+                                    String
+                                </td>
+                                <td>
+                                    <select class="new-form">
+                                        <option>All
+                                    </select>
+                                </td>
+                                <td>List=All</td>
+                                <td>Date</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox">1
+                                        </label>
+                                    </div>
+                                </td>
+                                <td>%Document Name%</td>
+                                <td><a href="#">filename.pdf </a></td>
+                                <td>04/17/2015, 9:13 AM by %username%</td>
+                                <td align="right"></td>
+                                <td>Yes</td>
+                                <td>In Process</td>
+                                <td>
+                                    04/17/2015, 9:13 AM by %username%
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
 
-<p>Use this area to provide additional information.</p>
+                </div>
+                <!--End content-->
+            </div>
+        </div>
+    </div>
+    <footer>2015 Debt Inc. All Rights Reserved</footer>
+</div>
