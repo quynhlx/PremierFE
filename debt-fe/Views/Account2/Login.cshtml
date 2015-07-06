@@ -11,32 +11,26 @@
             <a href="#" class="text-center display-block p++">
                 <img src='@Url.Content("~/Content/images/logo.png")' />
             </a>
-            @using (Html.BeginForm("Login", "Account", FormMethod.Post, htmlAttributes: new { @class = "form-horizontal", id = "form-login" }))
+            @using (Html.BeginForm("", "", FormMethod.Post, htmlAttributes: new { @class = "form-horizontal", id="form-login" }))
             {
                 <h3 class="text-center text-uppercase mb++">LOGIN</h3>
                 <div class="form-group">
                     <label class="col-md-3 control-label font-weight-500">User name</label>
                     <div class="col-md-9">
-						@Html.TextBoxFor(m => m.Username, htmlAttributes: new { @class="form-control no-border-radius" })
+                        <input type="text" class="form-control no-border-radius" value="" />
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label class="col-md-3 control-label font-weight-500">Password</label>
                     <div class="col-md-9">
-						@Html.PasswordFor(m => m.Password, htmlAttributes: new { @class="form-control no-border-radius"})
+                        <input type="password" class="form-control no-border-radius" value="" />
                     </div>
                 </div>
-				
-				<div class="form-group">
-					<div class="col-md-9 col-md-offset-3">
-						<button type="submit" class="btn btn-default">LOGIN</button>
-					</div>
-				</div>
             }
         </div>
     </div>
-
+    
 </div>
 
 @section Scripts {
