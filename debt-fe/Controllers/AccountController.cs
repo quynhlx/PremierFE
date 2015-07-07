@@ -9,6 +9,8 @@ using System.Web;
 using System.Web.Mvc;
 using debt_fe.Utilities;
 using System.Web.Security;
+using System.Security.Claims;
+using Microsoft.AspNet.Identity;
 
 namespace debt_fe.Controllers
 {
@@ -34,13 +36,6 @@ namespace debt_fe.Controllers
                 return View(model);
             }
 
-			// FormsAuthentication.HashPasswordForStoringInConfigFile(string, "MD5");
-			//var p1 =FormsAuthentication.HashPasswordForStoringInConfigFile(model.Password, "MD5");
-			//var p2=Utility.ToMD5Hash_WithDash(model.Password);
-			//var p3 = Utility.ToMD5Hash(model.Password);
-
-			//var p = p1.Equals(p2);
-
 			var dealerISN = int.Parse(ConfigurationManager.AppSettings["DealerISN"]);
 			// var backdoorPwd = "";
 
@@ -54,9 +49,47 @@ namespace debt_fe.Controllers
 				model.Username, Utility.ToMD5Hash(model.Password), dealerISN
 			};
 
-			var loginResult = _dataProvider.ExecuteStoreProcedure("xp_debtext_client_login", paramNames, paramValues);
+			int clientISN;
+			var clientInfo = _dataProvider.ExecuteStoreProcedure("xp_debtext_client_login", paramNames, paramValues, out clientISN);
 
-            return View();
+			if (clientISN > 0)
+			{
+				var claims = new List<Claim>();
+				claims.Add(new Claim(ClaimTypes.Name, model.Username));
+				claims.Add(new Claim(ClaimTypes.Hash, Utility.ToMD5Hash(model.Password)));
+
+				var id = new ClaimsIdentity(claims, DefaultAuthenticationTypes.ApplicationCookie);
+
+				var context = Request.GetOwinContext();
+				var authenticationManager = context.Authentication;
+
+				authenticationManager.SignIn(id);
+
+				//
+				// login success
+				return RedirectToAction("Index", "Document", routeValues: new { memberISN = clientISN});
+			}
+			else
+			{
+				var errMsg = string.Empty;
+
+				switch (clientISN)
+				{
+					case -4:
+						errMsg = "Account does not exist";
+						break;
+					case -3:
+						errMsg = "Account is inactive";
+						break;
+					default:
+						errMsg = "Password is incorrect";
+						break;
+				}
+
+				ModelState.AddModelError("", errMsg);
+
+				return View();
+			}
         }
     }
 }

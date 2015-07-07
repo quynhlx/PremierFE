@@ -13,6 +13,7 @@
             </a>
             @using (Html.BeginForm("Login", "Account", FormMethod.Post, htmlAttributes: new { @class = "form-horizontal", id = "form-login" }))
             {
+				<h4 class="login-error-summary">@Html.ValidationSummary()</h4>
                 <h3 class="text-center text-uppercase mb++">LOGIN</h3>
                 <div class="form-group">
                     <label class="col-md-3 control-label font-weight-500">User name</label>

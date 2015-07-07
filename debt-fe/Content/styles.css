@@ -27,4 +27,14 @@
   padding: 8px 16px 32px;
   background-color: #fff;
 }
+#form-login .login-error-summary ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+#form-login .login-error-summary ul li {
+  background-color: #f2dede;
+  color: #a94442;
+  padding: 8px 16px;
+}
 /*# sourceMappingURL=styles.css.map */
