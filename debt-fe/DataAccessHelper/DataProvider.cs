@@ -29,18 +29,25 @@ namespace debt_fe.DataAccessHelper
             this._password = password;
         }
 
-        private bool Connect()
+        private void Connect()
         {
             var connectionString = ConfigurationManager.AppSettings["ConnectionString"];
             connectionString = string.Format("{0}; User ID={1}; Password={2}", connectionString, _username, _password);
 
-            if (_connection == null || _connection.State == ConnectionState.Closed)
+            if (_connection == null)
             {
-                _connection = new SqlConnection(connectionString);
+				try
+				{
+					_connection = new SqlConnection(connectionString);
+				}
+				catch (Exception ex)
+				{
+					throw ex;
+				}
             }
 
 
-            return (_connection.State == ConnectionState.Open);
+            // return (_connection.State == ConnectionState.Open);
         }
 
         /// <summary>
@@ -55,7 +62,11 @@ namespace debt_fe.DataAccessHelper
                 throw new Exception("Query not found");
             }
 
-            if (!Connect())
+			try
+			{
+				Connect();
+			}
+            catch
             {
                 throw new Exception("Cannot connect to database: " + _connection.ConnectionString);
             }
@@ -85,7 +96,11 @@ namespace debt_fe.DataAccessHelper
                 throw new Exception("Query not found");
             }
 
-            if (!Connect())
+			try
+			{
+				Connect();
+			}
+            catch
             {
                 throw new Exception("Cannot connect to database: " + _connection.ConnectionString);
             }
@@ -126,7 +141,11 @@ namespace debt_fe.DataAccessHelper
                 throw new Exception("Query not found");
             }
 
-            if (!Connect())
+            try
+			{
+				Connect();
+			}
+			catch
             {
                 throw new Exception("Cannot connect to database: " + _connection.ConnectionString);
             }
@@ -168,7 +187,11 @@ namespace debt_fe.DataAccessHelper
                 throw new Exception("Query not found");
             }
 
-            if (!Connect())
+            try
+			{
+				Connect();
+			}
+			catch
             {
                 throw new Exception("Cannot connect to database: " + _connection.ConnectionString);
             }
@@ -228,7 +251,11 @@ namespace debt_fe.DataAccessHelper
                 throw new Exception("Parameters not found");
             }
 
-            if (!Connect())
+            try
+			{
+				Connect();
+			}
+			catch
             {
                 throw new Exception("Cannot connect to database: " + _connection.ConnectionString);
             }
@@ -302,7 +329,11 @@ namespace debt_fe.DataAccessHelper
                 throw new Exception("Parameters not found");
             }
 
-            if (!Connect())
+            try
+			{
+				Connect();
+			}
+			catch
             {
                 throw new Exception("Cannot connect to database: " + _connection.ConnectionString);
             }
