@@ -16,12 +16,12 @@ namespace debt_fe.Businesses
 
         public List<DocumentModel> GetList(DataTable table)
         {
+            var documents = new List<DocumentModel>();
+
             if (table == null || table.Rows.Count == 0)
             {
-                return null;
+                return documents;
             }
-
-            var documents = new List<DocumentModel>();
 
             foreach (DataRow row in table.Rows)
             {

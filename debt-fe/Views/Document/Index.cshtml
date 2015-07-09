@@ -28,8 +28,30 @@
 </div>
 -->
 
+<style>
+    #table-documents {
+        border-bottom: 1px solid #ddd;
+    }
+</style>
+
+<!-- Button trigger modal -->
+<!--
+<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+    Launch demo modal
+</button>
+-->
+
+<!-- Modal -->
+<div class="modal fade" id="modal-document" tabindex="-1" role="dialog" aria-labelledby="modalDocument">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <!-- load modal content here -->
+        </div>
+    </div>
+</div>
+
 <div class="col-md-12 mt+">
-    <table class="table table-bordered">
+    <table class="table table-bordered" id="table-documents">
         <thead>
             <tr>
                 <th>No.</th>
@@ -38,19 +60,21 @@
                 <th>Creditor Name</th>
                 <th>Notes</th>
                 <th>Added Date</th>
-                <th><!-- edit--></th>
+                <th class="text-center">
+                    <a href='@Url.Action("Upload","Document")' class="btn btn-sm btn-primary" id="btn-upload-document" data-toggle="tooltip" data-placement="right" title="Upload Document">Upload</a>
+                </th>
             </tr>
         </thead>
         <tbody>
             @foreach (DocumentModel doc in Model)
             {
                 <tr>
-                    <td>@(no++)</td>
+                    <td class="text-center">@(no++)</td>
                     <td>@doc.FileName</td>
                     <td>@doc.DocName</td>
                     <td>creditor name</td>
                     <td>@doc.Desc</td>
-                    <td>@doc.AddedDate</td>
+                    <td class="text-center">@doc.AddedDate</td>
                     <td>
                         <div class="text-center">
                             <a href="#" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-pencil"></span></a>
@@ -63,3 +87,54 @@
     </table>
 </div>
 
+@section scripts{
+    <script>
+        $(document).ready(function () {
+
+            //
+            // init datatable
+            // 
+            $('#table-documents').DataTable({
+                "pageLength": 10, // record per page
+                "lengthChange": false, // no record per page change
+                "info": false, // no entities info                
+                aoColumnDefs: [{ "bSortable": false, "aTargets": [6] }] // disable sort in last column
+            });
+
+            //
+            // button upload document click
+            //
+            $('#btn-upload-document').click(function (e) {
+                    
+                e.preventDefault();
+                e.stopPropagation();
+
+                var self = $(this);
+                var modal = $('#modal-document');
+
+                var href = self.prop('href');
+                
+
+                var req = $.ajax({ url: href });
+
+                req.fail(function (jqXHR) {
+                    console.log('load modal error',jqXHR);
+                });
+
+                req.done(function (resp) {
+                    if (resp === unde || resp == '') {
+                        toastr.info('Unexpected error occurred. Please try again !!!');
+                        return;
+                    }
+
+                    //
+                    // load partial into modal content
+                    modal.find('.modal-content').html(resp);
+
+                    
+                });
+            });
+
+        });
+    </script>
+}

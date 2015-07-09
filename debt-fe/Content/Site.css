@@ -194,6 +194,7 @@ form.general {
 }
 
 /* Labels */
+/*
 label {
 	margin-right: 10px;
 	float: left;
@@ -201,6 +202,7 @@ label {
 	color: #333;
 	font-size: 14px;
 }
+*/
 .general label{
 	text-align:right;
 }

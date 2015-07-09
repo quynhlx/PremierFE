@@ -11,7 +11,7 @@
             <a href="#" class="text-center display-block p++">
                 <img src='@Url.Content("~/Content/images/logo.png")' />
             </a>
-            @using (Html.BeginForm("Login", "Account", FormMethod.Post, htmlAttributes: new { @class = "form-horizontal", id = "form-login" }))
+            @using (Html.BeginForm("Login", "Account", FormMethod.Post, htmlAttributes: new { @class = "form-horizontal m0 pb0", id = "form-login" }))
             {
 				<h4 class="login-error-summary">@Html.ValidationSummary()</h4>
                 <h3 class="text-center text-uppercase mb++">LOGIN</h3>

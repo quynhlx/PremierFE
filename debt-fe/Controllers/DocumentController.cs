@@ -58,5 +58,14 @@ namespace debt_fe.Controllers
 
             return View(documents);
         }
+
+        /// <summary>
+        /// load upload document partial view
+        /// </summary>
+        /// <returns>partial view of document upload</returns>
+        public ActionResult Upload()
+        {
+            return PartialView("_UploadDocument");
+        }
     }
 }

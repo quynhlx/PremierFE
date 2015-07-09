@@ -37,4 +37,22 @@
   color: #a94442;
   padding: 8px 16px;
 }
+.dataTables_paginate > a {
+  padding: 8px;
+  display: inline-block;
+  cursor: pointer;
+}
+.dataTables_paginate > a:hover {
+  background: #27b2bc none repeat scroll 0% 0%;
+  color: #ffffff;
+}
+.dataTables_paginate > span > a {
+  padding: 8px 16px;
+  display: inline-block;
+  cursor: pointer;
+}
+.dataTables_paginate > span > a.current {
+  background: #27b2bc none repeat scroll 0% 0%;
+  color: #ffffff;
+}
 /*# sourceMappingURL=styles.css.map */

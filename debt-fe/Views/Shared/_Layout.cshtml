@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - Pemodea</title>
     @Styles.Render("~/Content/css")
-    @Styles.Render("~/Content/custom")
+    @Styles.Render("~/Content/extensions")
+    @Styles.Render("~/Content/custom")        
     @Scripts.Render("~/bundles/modernizr")
 
 </head>
@@ -18,8 +19,8 @@
                     <div class="logo pull-left"><a href="#"><img src='@Url.Content("~/Content/images/logo.png")' /></a></div>
                     <div class="clear">
                         <ul class="menu">
-                            <li><a href='@Url.Action("Index","MyAccount")'><span class="glyphicon glyphicon-user"></span> MY ACCOUNT</a></li>
-                            <li><a href='@Url.Action("Index","Payment")'><span class="glyphicon glyphicon-credit-card"></span> MAKE PAYMENT</a></li>
+                            <li><a href='#'><span class="glyphicon glyphicon-user"></span> MY ACCOUNT</a></li>
+                            <li><a href='#'><span class="glyphicon glyphicon-credit-card"></span> MAKE PAYMENT</a></li>
                             <li><a href='@Url.Action("Index","Document")'><span class="glyphicon glyphicon-file"></span> DOCUMENTS</a></li>
                         </ul>
                     </div>
@@ -44,6 +45,7 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/plugins")
 
     <script src="~/Scripts/app/app.js"></script>
 

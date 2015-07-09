@@ -56,3 +56,28 @@
 	}
 }
 
+//
+// datatable paginate
+//
+.dataTables_paginate {
+    & > a {
+        padding: 8px;
+        display: inline-block;
+        cursor: pointer;
+        &:hover {
+            background: rgb(39, 178, 188) none repeat scroll 0% 0%;
+            color: rgb(255, 255, 255);
+        }
+    }
+    & > span {
+        & > a {
+            padding: 8px 16px;
+            display: inline-block;
+            cursor: pointer;
+            &.current {
+                background: rgb(39, 178, 188) none repeat scroll 0% 0%;
+                color: rgb(255, 255, 255);
+            }
+        }        
+    }
+}

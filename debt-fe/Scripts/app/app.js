@@ -2,6 +2,8 @@
 
     $(document).ready(function () {
 
+        settings();
+
         //
         // active menu
         //        
@@ -25,6 +27,10 @@
         });
 
     });
+
+    function settings() {
+        $('[data-toggle=tooltip]').tooltip();
+    }
 
     function getController(href) {
         if (href === undefined || href === '') {

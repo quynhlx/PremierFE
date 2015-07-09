@@ -188,8 +188,11 @@
     <Content Include="Content\css\font-awesome.css" />
     <Content Include="Content\css\font-awesome.min.css" />
     <Content Include="Content\extensions\box-model.css" />
+    <Content Include="Content\extensions\jquery.dataTables.css" />
+    <Content Include="Content\extensions\jquery.dataTables.min.css" />
     <Content Include="Content\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\images\222.png" />
+    <Content Include="Content\images\favicon.ico" />
     <Content Include="Content\images\ico-alert.png" />
     <Content Include="Content\images\ico-bank.png" />
     <Content Include="Content\images\ico-billing.png" />
@@ -202,6 +205,11 @@
     <Content Include="Content\images\ico-setting.png" />
     <Content Include="Content\images\logo.png" />
     <Content Include="Content\images\routing.jpg" />
+    <Content Include="Content\images\sort_asc.png" />
+    <Content Include="Content\images\sort_asc_disabled.png" />
+    <Content Include="Content\images\sort_both.png" />
+    <Content Include="Content\images\sort_desc.png" />
+    <Content Include="Content\images\sort_desc_disabled.png" />
     <Content Include="Content\images\user.png" />
     <Content Include="Content\styles.css">
       <DependentUpon>styles.less</DependentUpon>
@@ -209,6 +217,8 @@
     <Content Include="Content\styles.min.css">
       <DependentUpon>styles.css</DependentUpon>
     </Content>
+    <Content Include="Content\toastr.css" />
+    <Content Include="Content\toastr.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -229,6 +239,8 @@
     <Content Include="Content\styles.css.map">
       <DependentUpon>styles.css</DependentUpon>
     </Content>
+    <Content Include="Content\toastr.scss" />
+    <Content Include="Content\toastr.less" />
     <None Include="Scripts\jquery-1.11.3.intellisense.js" />
     <Content Include="Icon.png" />
     <Content Include="Scripts\app\app.js" />
@@ -244,8 +256,12 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\npm.js" />
+    <Content Include="Scripts\plugins\jquery.dataTables.js" />
+    <Content Include="Scripts\plugins\jquery.dataTables.min.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\toastr.js" />
+    <Content Include="Scripts\toastr.min.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -286,6 +302,7 @@
     <Content Include="Views\MyAccount\Index.cshtml" />
     <Content Include="Views\Shared\_LayoutLogin.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Document\_UploadDocument.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
