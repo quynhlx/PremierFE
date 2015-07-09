@@ -1,4 +1,5 @@
 ﻿@using debt_fe.Models
+@using debt_fe.Utilities
 @model IEnumerable<DocumentModel>
 
 
@@ -50,6 +51,13 @@
     </div>
 </div>
 
+@if (!string.IsNullOrEmpty(ViewBag.Message))
+{
+	<div class="col-md-12 mt">
+		<div class="bg-danger p">@ViewBag.Message</div>
+	</div>
+}
+
 <div class="col-md-12 mt+">
     <table class="table table-bordered" id="table-documents">
         <thead>
@@ -61,7 +69,7 @@
                 <th>Notes</th>
                 <th>Added Date</th>
                 <th class="text-center">
-                    <a href='@Url.Action("Upload","Document")' class="btn btn-sm btn-primary" id="btn-upload-document" data-toggle="tooltip" data-placement="right" title="Upload Document">Upload</a>
+                    <a href='@Url.Action("Upload","Document")' class="btn btn-sm btn-primary" id="btn-upload-document">Upload</a>
                 </th>
             </tr>
         </thead>
@@ -70,10 +78,10 @@
             {
                 <tr>
                     <td class="text-center">@(no++)</td>
-                    <td>@doc.FileName</td>
-                    <td>@doc.DocName</td>
-                    <td>creditor name</td>
-                    <td>@doc.Desc</td>
+                    <td>@Utility.Truncate(doc.DocName)</td>
+                    <td>@Utility.Truncate(doc.FileName,10)</td>
+                    <td>@Utility.Truncate(doc.CreditorName)</td>
+                    <td>@Utility.Truncate(doc.Desc)</td>
                     <td class="text-center">@doc.AddedDate</td>
                     <td>
                         <div class="text-center">
@@ -95,7 +103,7 @@
             // init datatable
             // 
             $('#table-documents').DataTable({
-                "pageLength": 10, // record per page
+                "pageLength": 7, // record per page
                 "lengthChange": false, // no record per page change
                 "info": false, // no entities info                
                 aoColumnDefs: [{ "bSortable": false, "aTargets": [6] }] // disable sort in last column

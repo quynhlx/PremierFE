@@ -1,4 +1,7 @@
-﻿@using (Html.BeginForm("", "", FormMethod.Post, htmlAttributes: new { @class = "form-horizontal", id = "form-upload-document", enctype = "multipart/form-data" }))
+﻿@using debt_fe.Models.ViewModels
+@model DocumentViewModel
+
+@using (Html.BeginForm("UploadDocument", "Document", FormMethod.Post, htmlAttributes: new { @class = "form-horizontal", id = "form-upload-document", enctype = "multipart/form-data" }))
 {
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -9,39 +12,38 @@
         <div class="form-group">
             <label class="control-label col-md-3">Document Name</label>
             <div class="col-md-9">
-                <input type="text" class="form-control" value="" />
+                <!--<input type="text" class="form-control" value="" />-->
+				@Html.TextBoxFor(m => m.DocName, new { @class="form-control"})
             </div>
         </div>
 
         <div class="form-group">
             <label class="control-label col-md-3">File</label>
             <div class="col-md-9">
-                <input type="text" class="form-control" value="" />
+                <!--<input type="file" class="form-control" value="" />-->
+				@Html.TextBoxFor(m => m.FileName, new { @class="form-control", type="file"})
             </div>
         </div>
 
         <div class="form-group">
             <label class="control-label col-md-3">Creditor</label>
             <div class="col-md-9">
-                <select class="form-control">
-                    <option>abc 123</option>
-                    <option>abc 123</option>
-                    <option>abc 123</option>
-                </select>
+				@Html.DropDownListFor(m => m.SelectedCreditorID, Model.CreditorItems, new { @class="form-control"})                
             </div>
         </div>
 
         <div class="form-group">
             <label class="control-label col-md-3">Notes</label>
             <div class="col-md-9">
-                <textarea class="form-control" rows="3"></textarea>
+                <!--<textarea class="form-control" rows="3"></textarea>-->
+				@Html.TextAreaFor(m => m.Notes, new { @class="form-control", rows="3"})
             </div>
         </div>
 
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>        
-        <button type="button" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary">Submit</button>
         
         <!--
         <div class="col-md-9 col-md-offset-3 text-left">
