@@ -1,11 +1,14 @@
-﻿
+﻿@using debt_fe.Models
+@model IEnumerable<DocumentModel>
 
 
 @{
     ViewBag.Title = "Documents";
+    var no = 1;
 }
 
-<div class="col-lg-12 mart30 marb10">
+<!--
+<div class="col-md-12 mart30 marb10">
     <form class="form-inline">
         <div class="form-group">
             <button type="button" class="btn btn-primary marr30">Upload</button>
@@ -23,64 +26,40 @@
         </div>
     </form>
 </div>
+-->
 
-<div class="col-lg-12">
+<div class="col-md-12 mt+">
     <table class="table table-bordered">
         <thead>
             <tr>
                 <th>No.</th>
-                <th class="text-center">Document Name</th>
-                <th>File Name</th>
-                <th>Created Date</th>
-                <th>Description</th>
-                <th>Is Right Signature</th>
-                <th class="text-center">Document Status</th>
-                <th nowrap>Last Update <a href="#"><span class="glyphicon glyphicon-triangle-bottom"></span></a></th>
+                <th>Document Name</th>
+                <th>File</th>
+                <th>Creditor Name</th>
+                <th>Notes</th>
+                <th>Added Date</th>
+                <th><!-- edit--></th>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>Search</td>
-                <td>
-                    String
-                </td>
-                <td>
-                    String
-                </td>
-                <td>
-                    String
-                </td>
-                <td>
-                    String
-                </td>
-                <td>
-                    <select class="new-form">
-                        <option>All
-                    </select>
-                </td>
-                <td>List=All</td>
-                <td>Date</td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox">1
-                        </label>
-                    </div>
-                </td>
-                <td>%Document Name%</td>
-                <td><a href="#">filename.pdf </a></td>
-                <td>04/17/2015, 9:13 AM by %username%</td>
-                <td align="right"></td>
-                <td>Yes</td>
-                <td>In Process</td>
-                <td>
-                    04/17/2015, 9:13 AM by %username%
-                </td>
-            </tr>
+            @foreach (DocumentModel doc in Model)
+            {
+                <tr>
+                    <td>@(no++)</td>
+                    <td>@doc.FileName</td>
+                    <td>@doc.DocName</td>
+                    <td>creditor name</td>
+                    <td>@doc.Desc</td>
+                    <td>@doc.AddedDate</td>
+                    <td>
+                        <div class="text-center">
+                            <a href="#" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-pencil"></span></a>
+                        </div>
+                    </td>
+                </tr>
+            }
         </tbody>
-    </table>
 
+    </table>
 </div>
 

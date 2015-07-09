@@ -11,16 +11,18 @@ using debt_fe.Utilities;
 using System.Web.Security;
 using System.Security.Claims;
 using Microsoft.AspNet.Identity;
+using debt_fe.Businesses;
 
 namespace debt_fe.Controllers
 {
     public class AccountController : Controller
     {
         private DataProvider _dataProvider;
+        
 
         public AccountController()
         {
-            _dataProvider = new DataProvider("tbone","tbone");
+            _dataProvider = new DataProvider("tbone","tbone");            
         }
         
         public ActionResult Login()
@@ -90,6 +92,16 @@ namespace debt_fe.Controllers
 
 				return View();
 			}
+        }
+
+        [HttpPost]        
+        public ActionResult LogOff()
+        {
+            var ctx = Request.GetOwinContext();
+            var authenticationManager = ctx.Authentication;
+            authenticationManager.SignOut();
+
+            return RedirectToAction("Login", "Account");
         }
     }
 }
