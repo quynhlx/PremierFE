@@ -1,6 +1,8 @@
 ﻿@using debt_fe.Models.ViewModels
 @model DocumentViewModel
 
+<link href="~/Content/extensions/bootstrapValidator.css" rel="stylesheet" />
+
 @using (Html.BeginForm("UploadDocument", "Document", FormMethod.Post, htmlAttributes: new { @class = "form-horizontal", id = "form-upload-document", enctype = "multipart/form-data" }))
 {
     <div class="modal-header">
@@ -12,8 +14,8 @@
         <div class="form-group">
             <label class="control-label col-md-3">Document Name</label>
             <div class="col-md-9">
-                <!--<input type="text" class="form-control" value="" />-->
-				@Html.TextBoxFor(m => m.DocName, new { @class="form-control"})
+                <!--<input type="text" class="form-control" value="" />-->                
+				@Html.TextBoxFor(m => m.DocName, new { @class="form-control",maxlength="50"})
             </div>
         </div>
 
@@ -36,7 +38,7 @@
             <label class="control-label col-md-3">Notes</label>
             <div class="col-md-9">
                 <!--<textarea class="form-control" rows="3"></textarea>-->
-				@Html.TextAreaFor(m => m.Notes, new { @class="form-control", rows="3"})
+				@Html.TextAreaFor(m => m.Notes, new { @class="form-control", rows="3", maxlength="250"})
             </div>
         </div>
 
@@ -54,3 +56,5 @@
     </div>
 
 }
+
+<script src="~/Scripts/app/app.validator.js"></script>

@@ -60,10 +60,6 @@ namespace debt_fe.Controllers
                 {
                     return RedirectToAction("Login", "Account");
                 }
-				//else
-				//{
-				//	memberISN = this.MemberISN;
-				//}
 			}
             else
             {
@@ -73,9 +69,17 @@ namespace debt_fe.Controllers
 			//
 			// view message when upload document failed
 			var doc = (int?)Session["debt_document_isn"];
-			if (doc != null && doc.Value < 0)
+			if (doc != null)
 			{
-				ViewBag.Message = "Document already exist";
+                if (doc.Value < 0)
+                {
+                    ViewBag.ErrorMessage = "Document already exist.";
+                }
+                else
+                {
+                    ViewBag.SuccessMessage = "Document has been added successfully.";
+                }
+				
 				Session.Remove("debt_document_isn");
 			}
 			
@@ -146,36 +150,28 @@ namespace debt_fe.Controllers
 				}
 
 				path = path.TrimEnd('/');
-				fullPath = Path.Combine(path, viewModel.FileName.FileName);
+                fullPath = Path.Combine(path, document.FileName);
 				
 			}
 
 			var documentISN = _docBusiness.UploadDocument(document);
 
-			if (documentISN < 0)
-			{
-				// ViewBag.Message = "Document already exist";
-				Session["debt_document_isn"] = documentISN;
-			}
-			else
-			{
-				//
-				// save file if create folder success
-				if (canSave)
-				{
-					try
-					{
-						viewModel.FileName.SaveAs(fullPath);
-					}
-					catch (Exception ex)
-					{
-						Debug.WriteLine(ex.Message);
-					}
-				}
-			}
+            Session["debt_document_isn"] = documentISN;
 
-			// var documents = _docBusiness.GetDocuments(this.MemberISN);
-			// return View("Index", documents);
+            if (documentISN > 0 && canSave)
+            {
+
+                //
+                // save file if create folder success
+                try
+                {
+                    viewModel.FileName.SaveAs(fullPath);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.Message);
+                }
+            }
 
 			return RedirectToAction("Index");
 		}

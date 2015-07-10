@@ -8,6 +8,10 @@
 .font-weight-500 {
   font-weight: 500;
 }
+.inline {
+  display: inline;
+  width: auto;
+}
 .valign-wrapper {
   display: -webkit-box;
   display: -moz-box;

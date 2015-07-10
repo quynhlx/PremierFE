@@ -88,7 +88,7 @@ border:#d4dce4 1px solid; font-size:13px; color:#263d52; padding-left:12px}
 .noPaddingRight{padding-right:0 !important}
 label{font-weight:normal}
 .form-control{border-radius:0; /*margin:2px 0*/}
-.alert{padding:7px 20px}
+/*.alert{padding:7px 20px}*/
 .radio span{font-size:13px; color:#999; font-weight:normal !important}
 .newLabel{font-size:16px; color:#333d4d; font-weight:bold !important; }
 .text-small{font-size:11px}

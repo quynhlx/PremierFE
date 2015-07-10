@@ -51,11 +51,29 @@
     </div>
 </div>
 
-@if (!string.IsNullOrEmpty(ViewBag.Message))
+@if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
 {
+    <!--
 	<div class="col-md-12 mt">
-		<div class="bg-danger p">@ViewBag.Message</div>
-	</div>
+		<div class="bg-danger p">ViewBag.Message</div>
+	</div>-->
+    <div class="col-md-12">
+        <div class="alert alert-danger alert-dismissible mb0 mt+" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <strong>Error!</strong> @ViewBag.ErrorMessage
+        </div>
+    </div>
+    
+}
+
+@if (!string.IsNullOrEmpty(ViewBag.SuccessMessage))
+{
+    <div class="col-md-12">
+        <div class="alert alert-success alert-dismissible mb0 mt+" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <strong>Success!</strong> @ViewBag.SuccessMessage
+        </div>
+    </div>
 }
 
 <div class="col-md-12 mt+">
@@ -82,7 +100,7 @@
                     <td>@Utility.Truncate(doc.FileName,10)</td>
                     <td>@Utility.Truncate(doc.CreditorName)</td>
                     <td>@Utility.Truncate(doc.Desc)</td>
-                    <td class="text-center">@doc.AddedDate</td>
+                    <td class="text-center">@string.Format("{0:MM/dd/yyyy}", doc.AddedDate)<br />@string.Format("{0:hh:mm tt}", doc.AddedDate)</td>
                     <td>
                         <div class="text-center">
                             <a href="#" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-pencil"></span></a>
@@ -108,6 +126,10 @@
                 "info": false, // no entities info                
                 aoColumnDefs: [{ "bSortable": false, "aTargets": [6] }] // disable sort in last column
             });
+
+            //
+            // add class form-control to datatable search 
+            $('.dataTables_filter').find('input').addClass('form-control inline');
 
             //
             // button upload document click
