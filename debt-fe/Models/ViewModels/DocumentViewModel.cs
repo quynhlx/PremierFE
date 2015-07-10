@@ -37,6 +37,11 @@ namespace debt_fe.Models.ViewModels
 			_creditors = GetCreditors(memberISN);
 		}
 
+		public DocumentViewModel(int memberISN, int documentISN):this(memberISN)
+		{
+			var document = 1;
+		}
+
 		private List<CreditorModel> GetCreditors(int memberISN)
 		{
 			var query = "select * from Creditor where MemberISN=@MemberISN";

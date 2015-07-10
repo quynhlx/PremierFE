@@ -263,6 +263,9 @@
     <Content Include="Scripts\npm.js" />
     <Content Include="Scripts\plugins\bootstrapValidator.js" />
     <Content Include="Scripts\plugins\bootstrapValidator.min.js" />
+    <Content Include="Scripts\plugins\dropzone.js" />
+    <Content Include="Scripts\plugins\filedrop-min.js" />
+    <Content Include="Scripts\plugins\filedrop.js" />
     <Content Include="Scripts\plugins\jquery.dataTables.js" />
     <Content Include="Scripts\plugins\jquery.dataTables.min.js" />
     <Content Include="Scripts\respond.js" />
@@ -310,6 +313,7 @@
     <Content Include="Views\Shared\_LayoutLogin.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Document\_UploadDocument.cshtml" />
+    <Content Include="Views\Document\_EditDocument.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

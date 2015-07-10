@@ -99,6 +99,13 @@ namespace debt_fe.Controllers
             return PartialView("_UploadDocument", viewModel);
         }
 
+		public ActionResult Edit(int documentISN)
+		{
+			var viewModel = new DocumentViewModel();
+
+			return PartialView("_EditDocument", viewModel);
+		}
+
 		[HttpPost]
 		public ActionResult UploadDocument(DocumentViewModel viewModel)
 		{

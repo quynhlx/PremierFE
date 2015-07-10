@@ -1,0 +1,62 @@
+﻿@using debt_fe.Models.ViewModels
+@model DocumentViewModel
+
+<link href="~/Content/extensions/bootstrapValidator.css" rel="stylesheet" />
+
+
+@using (Html.BeginForm("UploadDocument", "Document", FormMethod.Post, htmlAttributes: new { @class = "form-horizontal dropzone2", id = "form-upload-document", enctype = "multipart/form-data" }))
+{
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		<h4 class="modal-title" id="modalDocument">Upload Document</h4>
+	</div>
+	<div class="modal-body">
+
+		<div class="form-group">
+			<label class="control-label col-md-3">Document Name</label>
+			<div class="col-md-9">
+				@Html.TextBoxFor(m => m.DocName, new { @class = "form-control", maxlength = "50" })
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="control-label col-md-3">File</label>
+			<div class="col-md-9">
+				@Html.TextBoxFor(m => m.FileName, new { @class = "form-control", type = "file" })
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="control-label col-md-3">Creditor</label>
+			<div class="col-md-9">
+				@Html.DropDownListFor(m => m.SelectedCreditorID, Model.CreditorItems, new { @class = "form-control" })
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="control-label col-md-3">Notes</label>
+			<div class="col-md-9">
+				@Html.TextAreaFor(m => m.Notes, new { @class = "form-control", rows = "3", maxlength = "250" })
+			</div>
+		</div>
+
+	</div>
+	<div class="modal-footer">
+		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		<button type="submit" class="btn btn-primary">Submit</button>
+
+		<!--
+		<div class="col-md-9 col-md-offset-3 text-left">
+			<button type="button" class="btn btn-primary">Submit</button>
+			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		</div>-->
+
+	</div>
+
+}
+
+<script src="~/Scripts/plugins/dropzone.js"></script>
+<script src="~/Scripts/app/app.validator.js"></script>
+<script src="~/Scripts/plugins/filedrop.js"></script>
+
+

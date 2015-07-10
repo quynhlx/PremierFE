@@ -3,7 +3,8 @@
 
 <link href="~/Content/extensions/bootstrapValidator.css" rel="stylesheet" />
 
-@using (Html.BeginForm("UploadDocument", "Document", FormMethod.Post, htmlAttributes: new { @class = "form-horizontal", id = "form-upload-document", enctype = "multipart/form-data" }))
+
+@using (Html.BeginForm("UploadDocument", "Document", FormMethod.Post, htmlAttributes: new { @class = "form-horizontal dropzone2", id = "form-upload-document", enctype = "multipart/form-data" }))
 {
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -14,7 +15,6 @@
         <div class="form-group">
             <label class="control-label col-md-3">Document Name</label>
             <div class="col-md-9">
-                <!--<input type="text" class="form-control" value="" />-->                
 				@Html.TextBoxFor(m => m.DocName, new { @class="form-control",maxlength="50"})
             </div>
         </div>
@@ -22,7 +22,6 @@
         <div class="form-group">
             <label class="control-label col-md-3">File</label>
             <div class="col-md-9">
-                <!--<input type="file" class="form-control" value="" />-->
 				@Html.TextBoxFor(m => m.FileName, new { @class="form-control", type="file"})
             </div>
         </div>
@@ -37,7 +36,6 @@
         <div class="form-group">
             <label class="control-label col-md-3">Notes</label>
             <div class="col-md-9">
-                <!--<textarea class="form-control" rows="3"></textarea>-->
 				@Html.TextAreaFor(m => m.Notes, new { @class="form-control", rows="3", maxlength="250"})
             </div>
         </div>
@@ -57,4 +55,7 @@
 
 }
 
+<script src="~/Scripts/plugins/dropzone.js"></script>
 <script src="~/Scripts/app/app.validator.js"></script>
+<script src="~/Scripts/plugins/filedrop.js"></script>
+
