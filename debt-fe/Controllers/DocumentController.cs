@@ -9,6 +9,7 @@ using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Web.Mvc;
+using System.Web;
 
 namespace debt_fe.Controllers
 {
@@ -299,7 +300,7 @@ namespace debt_fe.Controllers
             return RedirectToAction("Index");
 		}
 
-        public FileResult DownloadDocument(int documentISN)
+        public ActionResult DownloadDocument(int documentISN)
         {
             var documents = _docBusiness.GetDocuments(this.MemberISN);
             //var document = documents.Find(d => d.ID == documentISN);
@@ -329,7 +330,9 @@ namespace debt_fe.Controllers
             {
                 _logger.Error(ex.Message, ex);
 
-                return null;
+                // return null;
+                // throw new HttpException(404, "File Not Found");
+                return HttpNotFound();
             }
             
             var fileDownloadName = doc.FileName;

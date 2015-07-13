@@ -145,3 +145,54 @@ File name: 'E:\debt\debt-fe\debt-fe\Uploads2\aaaaaaa'
    at System.IO.File.InternalReadAllBytes(String path, Boolean checkHost)
    at System.IO.File.ReadAllBytes(String path)
    at debt_fe.Controllers.DocumentController.DownloadDocument(Int32 documentISN) in e:\debt\debt-fe\debt-fe\Controllers\DocumentController.cs:line 326
+INFO  2015-07-13 14:55:20,057  9618ms DocumentController     DownloadDocument   - download path = E:\debt\debt-fe\debt-fe\Uploads2\aaaaaaa
+ERROR 2015-07-13 14:55:20,142  9703ms DocumentController     DownloadDocument   - Could not find file 'E:\debt\debt-fe\debt-fe\Uploads2\aaaaaaa'.
+System.IO.FileNotFoundException: Could not find file 'E:\debt\debt-fe\debt-fe\Uploads2\aaaaaaa'.
+File name: 'E:\debt\debt-fe\debt-fe\Uploads2\aaaaaaa'
+   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   at System.IO.FileStream.Init(String path, FileMode mode, FileAccess access, Int32 rights, Boolean useRights, FileShare share, Int32 bufferSize, FileOptions options, SECURITY_ATTRIBUTES secAttrs, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   at System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize, FileOptions options, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   at System.IO.File.InternalReadAllBytes(String path, Boolean checkHost)
+   at System.IO.File.ReadAllBytes(String path)
+   at debt_fe.Controllers.DocumentController.DownloadDocument(Int32 documentISN) in e:\debt\debt-fe\debt-fe\Controllers\DocumentController.cs:line 327
+INFO  2015-07-13 14:56:34,338  8789ms DocumentController     DownloadDocument   - download path = E:\debt\debt-fe\debt-fe\Uploads2\aaaaaaa
+ERROR 2015-07-13 14:56:34,407  8858ms DocumentController     DownloadDocument   - Could not find file 'E:\debt\debt-fe\debt-fe\Uploads2\aaaaaaa'.
+System.IO.FileNotFoundException: Could not find file 'E:\debt\debt-fe\debt-fe\Uploads2\aaaaaaa'.
+File name: 'E:\debt\debt-fe\debt-fe\Uploads2\aaaaaaa'
+   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   at System.IO.FileStream.Init(String path, FileMode mode, FileAccess access, Int32 rights, Boolean useRights, FileShare share, Int32 bufferSize, FileOptions options, SECURITY_ATTRIBUTES secAttrs, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   at System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize, FileOptions options, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   at System.IO.File.InternalReadAllBytes(String path, Boolean checkHost)
+   at System.IO.File.ReadAllBytes(String path)
+   at debt_fe.Controllers.DocumentController.DownloadDocument(Int32 documentISN) in e:\debt\debt-fe\debt-fe\Controllers\DocumentController.cs:line 327
+INFO  2015-07-13 14:56:47,324 21775ms DocumentController     DownloadDocument   - download path = E:\debt\debt-fe\debt-fe\Uploads2\logo-fun581-szerwzsrivp.png
+INFO  2015-07-13 14:56:58,608 33060ms DocumentController     DownloadDocument   - download path = E:\debt\debt-fe\debt-fe\Uploads2\co-iom-ubl34hzvaqs.png
+ERROR 2015-07-13 14:56:58,663 33115ms DocumentController     DownloadDocument   - Could not find file 'E:\debt\debt-fe\debt-fe\Uploads2\co-iom-ubl34hzvaqs.png'.
+System.IO.FileNotFoundException: Could not find file 'E:\debt\debt-fe\debt-fe\Uploads2\co-iom-ubl34hzvaqs.png'.
+File name: 'E:\debt\debt-fe\debt-fe\Uploads2\co-iom-ubl34hzvaqs.png'
+   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   at System.IO.FileStream.Init(String path, FileMode mode, FileAccess access, Int32 rights, Boolean useRights, FileShare share, Int32 bufferSize, FileOptions options, SECURITY_ATTRIBUTES secAttrs, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   at System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize, FileOptions options, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   at System.IO.File.InternalReadAllBytes(String path, Boolean checkHost)
+   at System.IO.File.ReadAllBytes(String path)
+   at debt_fe.Controllers.DocumentController.DownloadDocument(Int32 documentISN) in e:\debt\debt-fe\debt-fe\Controllers\DocumentController.cs:line 327
+INFO  2015-07-13 14:57:09,967 44419ms DocumentController     DownloadDocument   - download path = E:\debt\debt-fe\debt-fe\Uploads2\co-skrill-fezvrpacdnh.png
+ERROR 2015-07-13 14:57:10,021 44473ms DocumentController     DownloadDocument   - Could not find file 'E:\debt\debt-fe\debt-fe\Uploads2\co-skrill-fezvrpacdnh.png'.
+System.IO.FileNotFoundException: Could not find file 'E:\debt\debt-fe\debt-fe\Uploads2\co-skrill-fezvrpacdnh.png'.
+File name: 'E:\debt\debt-fe\debt-fe\Uploads2\co-skrill-fezvrpacdnh.png'
+   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   at System.IO.FileStream.Init(String path, FileMode mode, FileAccess access, Int32 rights, Boolean useRights, FileShare share, Int32 bufferSize, FileOptions options, SECURITY_ATTRIBUTES secAttrs, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   at System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize, FileOptions options, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   at System.IO.File.InternalReadAllBytes(String path, Boolean checkHost)
+   at System.IO.File.ReadAllBytes(String path)
+   at debt_fe.Controllers.DocumentController.DownloadDocument(Int32 documentISN) in e:\debt\debt-fe\debt-fe\Controllers\DocumentController.cs:line 327
+INFO  2015-07-13 14:57:40,633 75085ms DocumentController     DownloadDocument   - download path = E:\debt\debt-fe\debt-fe\Uploads2\aaaaaaa
+ERROR 2015-07-13 14:57:40,672 75124ms DocumentController     DownloadDocument   - Could not find file 'E:\debt\debt-fe\debt-fe\Uploads2\aaaaaaa'.
+System.IO.FileNotFoundException: Could not find file 'E:\debt\debt-fe\debt-fe\Uploads2\aaaaaaa'.
+File name: 'E:\debt\debt-fe\debt-fe\Uploads2\aaaaaaa'
+   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   at System.IO.FileStream.Init(String path, FileMode mode, FileAccess access, Int32 rights, Boolean useRights, FileShare share, Int32 bufferSize, FileOptions options, SECURITY_ATTRIBUTES secAttrs, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   at System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize, FileOptions options, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   at System.IO.File.InternalReadAllBytes(String path, Boolean checkHost)
+   at System.IO.File.ReadAllBytes(String path)
+   at debt_fe.Controllers.DocumentController.DownloadDocument(Int32 documentISN) in e:\debt\debt-fe\debt-fe\Controllers\DocumentController.cs:line 327
