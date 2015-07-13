@@ -1,0 +1,147 @@
+INFO  2015-07-13 11:26:44,989 53108ms DocumentBusiness       EditDocument       - [edit_document] prepare data
+INFO  2015-07-13 11:26:45,017 53136ms DocumentBusiness       EditDocument       - [edit_document] parameters System.Collections.Hashtable
+INFO  2015-07-13 11:26:45,022 53141ms DocumentBusiness       EditDocument       - [edit_document] edit success 325
+INFO  2015-07-13 11:34:25,648 17952ms DocumentBusiness       EditDocument       - [edit_document] prepare data
+INFO  2015-07-13 11:34:25,671 17976ms DocumentBusiness       EditDocument       - [edit_document] parameters [fileName=aaaaaaa]
+[fileSize=0]
+[memberISN=66927]
+[desc=asdasdasdasdasd]
+[ISN=326]
+[name=11111111232323]
+[creditorISN=1122]
+
+INFO  2015-07-13 11:34:25,703 18008ms DocumentBusiness       EditDocument       - [edit_document] edit success 326
+INFO  2015-07-13 11:35:55,389 107694ms DocumentBusiness       UploadDocument     - [upload_document] prepare data
+INFO  2015-07-13 11:35:55,392 107697ms DocumentBusiness       UploadDocument     - [upload_document] store xp_debtext_document_insupd - parameters [docFileName=page-navigation2-ryht10sfry2.js]
+[MemberISN=66927]
+[docStatus=False]
+[docPublic=False]
+[docDesc=2aaaaaaaaaaaaaaaaaa2]
+[updatedBy=0]
+[docSize=10225]
+[docLastAction=]
+[CreditorISN=1122]
+[docSignatureStatus=]
+[docName=2aaaaaaaaaaaaaaaaaaaa]
+
+INFO  2015-07-13 11:35:55,413 107718ms DocumentBusiness       UploadDocument     - [upload_document] document isn = 358
+INFO  2015-07-13 13:32:46,036 26747ms DocumentBusiness       EditDocument       - [edit_document] prepare data
+INFO  2015-07-13 13:32:46,070 26781ms DocumentBusiness       EditDocument       - [edit_document] parameters 
+[fileName=aaaaaaa]
+[fileSize=3753]
+[memberISN=66927]
+[desc=aaaaaaaaaaaaaaaaaaaaaaaaaa]
+[ISN=330]
+[name=1aaaaaaaaaaaaa]
+[creditorISN=1122]
+INFO  2015-07-13 13:32:46,152 26863ms DocumentBusiness       EditDocument       - [edit_document] edit success 330
+INFO  2015-07-13 13:34:14,328 19119ms DocumentBusiness       EditDocument       - [edit_document] prepare data
+INFO  2015-07-13 13:34:14,349 19140ms DocumentBusiness       EditDocument       - [edit_document] parameters 
+[fileName=logo-fun581-szerwzsrivp.png]
+[fileSize=3753]
+[memberISN=66927]
+[desc=aaaaaaaaaaaaaaaaaaaaaaaaaa]
+[ISN=330]
+[name=1aaaaaaaaaaaaa]
+[creditorISN=1122]
+INFO  2015-07-13 13:34:14,356 19148ms DocumentBusiness       EditDocument       - [edit_document] edit success 330
+INFO  2015-07-13 13:44:10,012 33322ms DocumentBusiness       EditDocument       - [edit_document] prepare data
+INFO  2015-07-13 13:44:10,042 33352ms DocumentBusiness       EditDocument       - Cannot edit document cuz duplicated name
+INFO  2015-07-13 13:44:36,958 60268ms DocumentBusiness       EditDocument       - [edit_document] prepare data
+INFO  2015-07-13 13:46:36,345 13875ms DocumentBusiness       EditDocument       - [edit_document] prepare data
+INFO  2015-07-13 13:46:36,381 13910ms DocumentBusiness       EditDocument       - [edit_document] parameters 
+[fileName=]
+[fileSize=0]
+[memberISN=66927]
+[desc=asdasd]
+[ISN=331]
+[name=phantienquang]
+[creditorISN=1121]
+INFO  2015-07-13 13:46:36,391 13920ms DocumentBusiness       EditDocument       - [edit_document] edit success 331
+INFO  2015-07-13 13:49:32,680 190209ms DocumentBusiness       EditDocument       - [edit_document] prepare data
+INFO  2015-07-13 13:49:32,684 190213ms DocumentBusiness       EditDocument       - [edit_document] parameters 
+[fileName=]
+[fileSize=0]
+[memberISN=66927]
+[desc=zxczxcxc]
+[ISN=332]
+[name=phantienquang]
+[creditorISN=1121]
+INFO  2015-07-13 13:49:32,690 190219ms DocumentBusiness       EditDocument       - [edit_document] edit success 332
+INFO  2015-07-13 13:51:16,818 13438ms DocumentBusiness       EditDocument       - [edit_document] prepare data
+INFO  2015-07-13 13:51:16,841 13461ms DocumentBusiness       EditDocument       - Cannot edit document cuz duplicated name
+INFO  2015-07-13 13:51:23,672 20291ms DocumentBusiness       EditDocument       - [edit_document] prepare data
+INFO  2015-07-13 13:51:23,678 20297ms DocumentBusiness       EditDocument       - [edit_document] parameters 
+[fileName=]
+[fileSize=0]
+[memberISN=66927]
+[desc=111111111111111111111111]
+[ISN=333]
+[name=phantienquang2]
+[creditorISN=1121]
+INFO  2015-07-13 13:51:23,715 20335ms DocumentBusiness       EditDocument       - [edit_document] edit success 333
+INFO  2015-07-13 13:51:29,527 26147ms DocumentBusiness       EditDocument       - [edit_document] prepare data
+INFO  2015-07-13 13:51:29,534 26154ms DocumentBusiness       EditDocument       - Cannot edit document cuz duplicated name
+INFO  2015-07-13 14:15:20,082 29418ms DocumentBusiness       EditDocument       - [edit_document] prepare data
+INFO  2015-07-13 14:15:20,114 29450ms DocumentBusiness       EditDocument       - [edit_document] parameters 
+[desc=aaaaaaaaaaaaaaaaaa]
+[ISN=334]
+[creditorISN=1121]
+[memberISN=66927]
+[name=1aaa2222333]
+INFO  2015-07-13 14:15:20,121 29457ms DocumentBusiness       EditDocument       - [edit_document] edit success 334
+INFO  2015-07-13 14:15:33,638 42974ms DocumentBusiness       EditDocument       - [edit_document] prepare data
+INFO  2015-07-13 14:15:33,644 42980ms DocumentBusiness       EditDocument       - [edit_document] parameters 
+[desc=aaaaaaaaaaaaaaaaaa2]
+[ISN=334]
+[creditorISN=1121]
+[memberISN=66927]
+[name=1aaa2222333]
+INFO  2015-07-13 14:15:33,652 42988ms DocumentBusiness       EditDocument       - [edit_document] edit success 334
+INFO  2015-07-13 14:15:46,149 55485ms DocumentBusiness       EditDocument       - [edit_document] prepare data
+INFO  2015-07-13 14:15:46,155 55491ms DocumentBusiness       EditDocument       - Cannot edit document cuz duplicated name
+INFO  2015-07-13 14:19:17,534 31222ms DocumentBusiness       EditDocument       - [edit_document] prepare data
+INFO  2015-07-13 14:19:17,560 31248ms DocumentBusiness       EditDocument       - Cannot edit document cuz duplicated name
+INFO  2015-07-13 14:19:35,006 48694ms DocumentBusiness       EditDocument       - [edit_document] prepare data
+INFO  2015-07-13 14:19:35,012 48700ms DocumentBusiness       EditDocument       - [edit_document] parameters 
+[fileName=Debt Ext_FE site_1.1-lmgxx1yjjvc.pdf]
+[fileSize=594272]
+[memberISN=66927]
+[desc=asdasd]
+[ISN=331]
+[name=phantienquang3]
+[creditorISN=1121]
+INFO  2015-07-13 14:19:35,022 48710ms DocumentBusiness       EditDocument       - [edit_document] edit success 331
+INFO  2015-07-13 14:40:42,600 53511ms DocumentController     DownloadDocument   - download path = E:\debt\debt-fe\debt-fe\Uploads2\Debt Ext_FE site_1.1-lmgxx1yjjvc.pdf
+INFO  2015-07-13 14:41:04,439 75349ms DocumentController     DownloadDocument   - download path = E:\debt\debt-fe\debt-fe\Uploads2\f88-logo.png
+ERROR 2015-07-13 14:41:04,527 75437ms DocumentController     DownloadDocument   - Could not find file 'E:\debt\debt-fe\debt-fe\Uploads2\f88-logo.png'.
+System.IO.FileNotFoundException: Could not find file 'E:\debt\debt-fe\debt-fe\Uploads2\f88-logo.png'.
+File name: 'E:\debt\debt-fe\debt-fe\Uploads2\f88-logo.png'
+   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   at System.IO.FileStream.Init(String path, FileMode mode, FileAccess access, Int32 rights, Boolean useRights, FileShare share, Int32 bufferSize, FileOptions options, SECURITY_ATTRIBUTES secAttrs, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   at System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize, FileOptions options, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   at System.IO.File.InternalReadAllBytes(String path, Boolean checkHost)
+   at System.IO.File.ReadAllBytes(String path)
+   at debt_fe.Controllers.DocumentController.DownloadDocument(Int32 documentISN) in e:\debt\debt-fe\debt-fe\Controllers\DocumentController.cs:line 318
+INFO  2015-07-13 14:41:24,538 95448ms DocumentController     DownloadDocument   - download path = E:\debt\debt-fe\debt-fe\Uploads2\co-master-dvdj44bhrso.png
+ERROR 2015-07-13 14:41:24,599 95509ms DocumentController     DownloadDocument   - Could not find file 'E:\debt\debt-fe\debt-fe\Uploads2\co-master-dvdj44bhrso.png'.
+System.IO.FileNotFoundException: Could not find file 'E:\debt\debt-fe\debt-fe\Uploads2\co-master-dvdj44bhrso.png'.
+File name: 'E:\debt\debt-fe\debt-fe\Uploads2\co-master-dvdj44bhrso.png'
+   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   at System.IO.FileStream.Init(String path, FileMode mode, FileAccess access, Int32 rights, Boolean useRights, FileShare share, Int32 bufferSize, FileOptions options, SECURITY_ATTRIBUTES secAttrs, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   at System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize, FileOptions options, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   at System.IO.File.InternalReadAllBytes(String path, Boolean checkHost)
+   at System.IO.File.ReadAllBytes(String path)
+   at debt_fe.Controllers.DocumentController.DownloadDocument(Int32 documentISN) in e:\debt\debt-fe\debt-fe\Controllers\DocumentController.cs:line 318
+INFO  2015-07-13 14:47:56,456 89448ms DocumentController     DownloadDocument   - download path = E:\debt\debt-fe\debt-fe\Uploads2\f88-logo.png
+INFO  2015-07-13 14:48:32,587 125579ms DocumentController     DownloadDocument   - download path = E:\debt\debt-fe\debt-fe\Uploads2\f88-logo.png
+INFO  2015-07-13 14:49:05,634 158627ms DocumentController     DownloadDocument   - download path = E:\debt\debt-fe\debt-fe\Uploads2\aaaaaaa
+ERROR 2015-07-13 14:49:21,416 174408ms DocumentController     DownloadDocument   - Could not find file 'E:\debt\debt-fe\debt-fe\Uploads2\aaaaaaa'.
+System.IO.FileNotFoundException: Could not find file 'E:\debt\debt-fe\debt-fe\Uploads2\aaaaaaa'.
+File name: 'E:\debt\debt-fe\debt-fe\Uploads2\aaaaaaa'
+   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   at System.IO.FileStream.Init(String path, FileMode mode, FileAccess access, Int32 rights, Boolean useRights, FileShare share, Int32 bufferSize, FileOptions options, SECURITY_ATTRIBUTES secAttrs, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   at System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize, FileOptions options, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   at System.IO.File.InternalReadAllBytes(String path, Boolean checkHost)
+   at System.IO.File.ReadAllBytes(String path)
+   at debt_fe.Controllers.DocumentController.DownloadDocument(Int32 documentISN) in e:\debt\debt-fe\debt-fe\Controllers\DocumentController.cs:line 326

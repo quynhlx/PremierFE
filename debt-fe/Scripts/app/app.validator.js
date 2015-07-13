@@ -11,7 +11,7 @@
     var nameVal = {
         validators: {
             notEmpty: { message: 'Name is required' },
-            stringLength: { max: 50, min: 6, message: 'Name is too short' }
+            stringLength: { max: 50, min: 3, message: 'Name is too short' }
         }
     };
 
@@ -31,13 +31,11 @@
         }
     };
 
-
-
     var formDocumentSetup = {
         feedbackIcons: feedbackIcons,
         fields: {
             DocName: nameVal,
-            FileName: fileUploadVal,
+            UploadedFile: fileUploadVal,
             Notes: descriptionVal
         }
     };

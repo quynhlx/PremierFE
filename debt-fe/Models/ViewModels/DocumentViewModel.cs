@@ -6,15 +6,22 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Data;
+using debt_fe.Businesses;
 
 namespace debt_fe.Models.ViewModels
 {
 	public class DocumentViewModel
 	{
+        private DocumentBusiness _docBusiness;
+
 		public string DocName { get; set; }
-		public HttpPostedFileBase FileName { get; set; }
+		public HttpPostedFileBase UploadedFile { get; set; }
 		public string Creditor { get; set; }
 		public string Notes { get; set; }
+        public int DocumentISN { get; set; }
+
+        public string OldFileName { get; set; }
+        public double OldFileSize { get; set; }
 
 		private List<CreditorModel> _creditors;
 		public int SelectedCreditorID { get; set; }
@@ -30,6 +37,7 @@ namespace debt_fe.Models.ViewModels
 		public DocumentViewModel()
 		{
 			this._creditors = new List<CreditorModel>();
+            _docBusiness = new DocumentBusiness();
 		}
 
 		public DocumentViewModel(int memberISN) : this()
@@ -39,7 +47,24 @@ namespace debt_fe.Models.ViewModels
 
 		public DocumentViewModel(int memberISN, int documentISN):this(memberISN)
 		{
-			var document = 1;
+            this.DocumentISN = documentISN;
+
+            var documents = _docBusiness.GetDocuments(memberISN);
+
+            if (documents != null && documents.Count>0)
+            {
+                var document = documents.Find(d => d.ID == documentISN);
+
+                if (document != null)
+                {
+                    this.DocName = document.DocName;
+                    this.Notes = document.Desc;
+                    this.SelectedCreditorID = document.CreditorISN;
+                    this.OldFileName = document.FileName;
+                    this.OldFileSize = document.FileSize;
+                }
+            }
+			
 		}
 
 		private List<CreditorModel> GetCreditors(int memberISN)

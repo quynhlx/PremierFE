@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -129,5 +130,17 @@ namespace debt_fe.Utilities
 
 			return output;
 		}
+
+        public static string HashtableToString(Hashtable hash)
+        {
+            var builder = new StringBuilder();
+
+            foreach (DictionaryEntry entry in hash)
+            {
+                builder.AppendFormat("{0}[{1}={2}]", Environment.NewLine,entry.Key, entry.Value);
+            }
+
+            return builder.ToString();
+        }
 	}
 }

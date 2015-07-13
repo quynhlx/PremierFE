@@ -119,7 +119,15 @@ namespace debt_fe.DataAccessHelper
                 var name = paramNames[i].TrimStart('@');
                 name = string.Format("@{0}",name);
 
-                cmd.Parameters.AddWithValue(name, paramValues[i]);
+                // cmd.Parameters.AddWithValue(name, paramValues[i]);
+
+                var cmdParameter = new SqlParameter(name, paramValues[i]);
+                if (paramValues[i] == null)
+                {
+                    cmdParameter.Value = DBNull.Value;
+                }
+
+                cmd.Parameters.Add(cmdParameter);
             }
 
 			
@@ -165,8 +173,19 @@ namespace debt_fe.DataAccessHelper
 
 			foreach (DictionaryEntry param in parameters)
 			{
-				var name = string.Format("@{0}",param.Key);
-				cmd.Parameters.AddWithValue(name, param.Value);
+				// var name = string.Format("@{0}",param.Key);
+				// cmd.Parameters.AddWithValue(name, param.Value);
+
+                var name = param.Key.ToString().TrimStart('@');
+                name = string.Format("@{0}", name);
+
+                var cmdParameter = new SqlParameter(name, param.Value);
+                if (param.Value == null)
+                {
+                    cmdParameter.Value = DBNull.Value;
+                }
+
+                cmd.Parameters.Add(cmdParameter);
 			}
 
 			/*
@@ -268,7 +287,14 @@ namespace debt_fe.DataAccessHelper
                 var name = paramNames[i].TrimStart('@');
                 name = string.Format("@{0}", name);
 
-                cmd.Parameters.AddWithValue(name, paramValues[i]);
+                // cmd.Parameters.AddWithValue(name, paramValues[i]);
+                var cmdParameter = new SqlParameter(name, paramValues[i]);
+                if (paramValues[i] == null)
+                {
+                    cmdParameter.Value = DBNull.Value;
+                }
+
+                cmd.Parameters.Add(cmdParameter);
             }
 
             try
@@ -323,7 +349,15 @@ namespace debt_fe.DataAccessHelper
 				var name = param.Key.ToString().TrimStart('@');
 				name = string.Format("@{0}", name);
 
-				cmd.Parameters.AddWithValue(name, param.Value);
+				// cmd.Parameters.AddWithValue(name, param.Value);
+
+                var cmdParameter = new SqlParameter(name, param.Value);
+                if (param.Value == null)
+                {
+                    cmdParameter.Value = DBNull.Value;
+                }
+
+                cmd.Parameters.Add(cmdParameter);
 			}
 
 			/*
@@ -397,7 +431,18 @@ namespace debt_fe.DataAccessHelper
 
             for (int i = 0; i < paramNames.Count; i++)
             {
-                cmd.Parameters.AddWithValue(paramNames[i], paramValues[i]);
+                // cmd.Parameters.AddWithValue(paramNames[i], paramValues[i]);
+                var name = paramNames[i].TrimStart('@');
+                name = string.Format("@{0}",name);
+
+
+                var cmdParameter = new SqlParameter(name, paramValues[i]);
+                if (paramValues[i] == null)
+                {
+                    cmdParameter.Value = DBNull.Value;
+                }
+
+                cmd.Parameters.Add(cmdParameter);
             }
 
             var returnParam = cmd.Parameters.Add("@b", SqlDbType.NVarChar);
@@ -473,7 +518,15 @@ namespace debt_fe.DataAccessHelper
 				var name = param.Key.ToString().TrimStart('@');
 				name = string.Format("@{0}", name);
 
-				cmd.Parameters.AddWithValue(name, param.Value);
+				// cmd.Parameters.AddWithValue(name, param.Value);
+
+                var cmdParameter = new SqlParameter(name, param.Value);
+                if (param.Value == null)
+                {
+                    cmdParameter.Value = DBNull.Value;
+                }
+
+                cmd.Parameters.Add(cmdParameter);
 			}
 
 			var returnParam = cmd.Parameters.Add("@b", SqlDbType.NVarChar);
@@ -545,7 +598,17 @@ namespace debt_fe.DataAccessHelper
 
 			for (int i = 0; i < paramNames.Count; i++)
 			{
-				cmd.Parameters.AddWithValue(paramNames[i], paramValues[i]);
+				// cmd.Parameters.AddWithValue(paramNames[i], paramValues[i]);
+                var name = paramNames[i].TrimStart('@');
+                name = string.Format("@{0}",name);
+
+                var cmdParameter = new SqlParameter(name, paramValues[i]);
+                if (paramValues[i] == null)
+                {
+                    cmdParameter.Value = DBNull.Value;
+                }
+
+                cmd.Parameters.Add(cmdParameter);
 			}
 
 			var returnParam = cmd.Parameters.Add("@b", SqlDbType.NVarChar);
@@ -624,7 +687,15 @@ namespace debt_fe.DataAccessHelper
 				var name = param.Key.ToString().TrimStart('@');
 				name = string.Format("@{0}", name);
 
-				cmd.Parameters.AddWithValue(name, param.Value);
+				// cmd.Parameters.AddWithValue(name, param.Value);
+
+                var cmdParameter = new SqlParameter(name, param.Value);
+                if (param.Value == null)
+                {
+                    cmdParameter.Value = DBNull.Value;
+                }
+
+                cmd.Parameters.Add(cmdParameter);
 			}
 
 			var returnParam = cmd.Parameters.Add("@b", SqlDbType.NVarChar);
