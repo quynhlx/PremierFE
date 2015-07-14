@@ -125,7 +125,7 @@
                     <td>
                         @if (!string.IsNullOrEmpty(doc.FileName))
                         {
-                            <a href='@Url.Action("DownloadDocument", "Document", new { documentISN = doc.ID})' class="btn-download-file">@Utility.Truncate(doc.FileName, 10)</a>
+                            <a href='@Url.Action("DownloadDocument", "Document", new { documentISN = doc.ID})' data-toggle="tooltip" data-placement="top" title="download" class="btn-download-file">@Utility.Truncate(doc.FileName, 10)</a>
                         }
                     </td>                    
                     <td>@Utility.Truncate(doc.CreditorName)</td>
@@ -133,7 +133,7 @@
                     <td class="text-center">@string.Format("{0:MM/dd/yyyy}", doc.AddedDate)<br />@string.Format("{0:hh:mm tt}", doc.AddedDate)</td>
                     <td>
                         <div class="text-center">
-                            <a href='@Url.Action("Edit", "Document", new { documentISN = doc.ID})' data-isn="@doc.ID" class="btn btn-primary btn-sm btn-edit-document">
+                            <a href='@Url.Action("Edit", "Document", new { documentISN = doc.ID})' data-toggle="tooltip" data-placement="top" title="edit" data-isn="@doc.ID" class="btn btn-primary btn-sm btn-edit-document">
                                 <span class="glyphicon glyphicon-pencil"></span>
                             </a>
                         </div>

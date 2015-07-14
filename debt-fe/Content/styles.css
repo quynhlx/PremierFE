@@ -8,6 +8,13 @@
 .font-weight-500 {
   font-weight: 500;
 }
+[class*=btn] {
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  -ms-border-radius: 0;
+  -o-border-radius: 0;
+  border-radius: 0;
+}
 .inline {
   display: inline;
   width: auto;

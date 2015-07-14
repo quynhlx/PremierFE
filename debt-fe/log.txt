@@ -196,3 +196,37 @@ File name: 'E:\debt\debt-fe\debt-fe\Uploads2\aaaaaaa'
    at System.IO.File.InternalReadAllBytes(String path, Boolean checkHost)
    at System.IO.File.ReadAllBytes(String path)
    at debt_fe.Controllers.DocumentController.DownloadDocument(Int32 documentISN) in e:\debt\debt-fe\debt-fe\Controllers\DocumentController.cs:line 327
+INFO  2015-07-14 14:04:35,351 563176ms DocumentController     DownloadDocument   - download path = E:\debt\debt-fe\debt-fe\Uploads\aaaaaaa
+ERROR 2015-07-14 14:04:35,475 563300ms DocumentController     DownloadDocument   - Could not find file 'E:\debt\debt-fe\debt-fe\Uploads\aaaaaaa'.
+System.IO.FileNotFoundException: Could not find file 'E:\debt\debt-fe\debt-fe\Uploads\aaaaaaa'.
+File name: 'E:\debt\debt-fe\debt-fe\Uploads\aaaaaaa'
+   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   at System.IO.FileStream.Init(String path, FileMode mode, FileAccess access, Int32 rights, Boolean useRights, FileShare share, Int32 bufferSize, FileOptions options, SECURITY_ATTRIBUTES secAttrs, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   at System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize, FileOptions options, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   at System.IO.File.InternalReadAllBytes(String path, Boolean checkHost)
+   at System.IO.File.ReadAllBytes(String path)
+   at debt_fe.Controllers.DocumentController.DownloadDocument(Int32 documentISN) in e:\debt\debt-fe\debt-fe\Controllers\DocumentController.cs:line 327
+INFO  2015-07-14 14:05:14,110 601935ms DocumentBusiness       EditDocument       - [edit_document] prepare data
+INFO  2015-07-14 14:05:14,117 601942ms DocumentBusiness       EditDocument       - [edit_document] parameters 
+[desc=asdasdasdasdasd]
+[ISN=337]
+[creditorISN=1121]
+[memberISN=66927]
+[name=123123123]
+INFO  2015-07-14 14:05:14,127 601952ms DocumentBusiness       EditDocument       - [edit_document] edit success 337
+INFO  2015-07-14 14:05:34,437 622262ms DocumentBusiness       EditDocument       - [edit_document] prepare data
+INFO  2015-07-14 14:05:34,442 622267ms DocumentBusiness       EditDocument       - [edit_document] parameters 
+[desc=asdasdasdasd]
+[ISN=335]
+[creditorISN=1121]
+[memberISN=66927]
+[name=asdasd123123]
+INFO  2015-07-14 14:05:34,448 622273ms DocumentBusiness       EditDocument       - [edit_document] edit success 335
+INFO  2015-07-14 14:05:44,887 632712ms DocumentBusiness       EditDocument       - [edit_document] prepare data
+INFO  2015-07-14 14:05:44,892 632717ms DocumentBusiness       EditDocument       - [edit_document] parameters 
+[desc=asdasdasd]
+[ISN=336]
+[creditorISN=1121]
+[memberISN=66927]
+[name=asdasd3123213]
+INFO  2015-07-14 14:05:44,899 632724ms DocumentBusiness       EditDocument       - [edit_document] edit success 336
