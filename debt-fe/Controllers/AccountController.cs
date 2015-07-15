@@ -48,7 +48,7 @@ namespace debt_fe.Controllers
 
 			var paramValues = new ArrayList
 			{
-				model.Username, Utility.ToMD5Hash(model.Password), dealerISN
+				model.Username, Utility.ToMD5Hash(model.Password), dealerISN.ToString()
 			};
 
 			int clientISN;

@@ -12,8 +12,11 @@ namespace debt.methods
 	{
 		static void Main(string[] args)
 		{
-			// var pass = "123456";
-			// var md5 = ToMD5Hash(pass);
+			var pass = "1";
+			var md5 = ToMD5Hash(pass);
+
+
+
 			var path = "~//asd/~/asd";
 			path = path.TrimStart('~', '/');
 

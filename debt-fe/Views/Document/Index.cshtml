@@ -158,7 +158,8 @@
                 "pageLength": 7, // record per page
                 "lengthChange": false, // no record per page change
                 "info": false, // no entities info                
-                aoColumnDefs: [{ "bSortable": false, "aTargets": [6] }] // disable sort in last column
+                aoColumnDefs: [{ "bSortable": false, "aTargets": [6] }], // disable sort in last column,
+                "order": [[ 5, "desc" ]] // set default sort by column 5 (added date)
             });
 
             //
