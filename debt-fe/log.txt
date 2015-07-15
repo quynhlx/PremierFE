@@ -230,3 +230,99 @@ INFO  2015-07-14 14:05:44,892 632717ms DocumentBusiness       EditDocument      
 [memberISN=66927]
 [name=asdasd3123213]
 INFO  2015-07-14 14:05:44,899 632724ms DocumentBusiness       EditDocument       - [edit_document] edit success 336
+INFO  2015-07-15 15:07:56,810 71107ms DocumentBusiness       UploadDocument     - [upload_document] prepare data
+INFO  2015-07-15 15:07:56,893 71191ms DocumentBusiness       UploadDocument     - [upload_document] store xp_debtext_document_insupd - parameters 
+[docFileName=page-navigation2.js]
+[MemberISN=66927]
+[docStatus=False]
+[docPublic=False]
+[docDesc=asdasd]
+[updatedBy=0]
+[docSize=10225]
+[docLastAction=]
+[CreditorISN=1121]
+[docSignatureStatus=]
+[docName=phantienquang11]
+INFO  2015-07-15 15:07:56,958 71256ms DocumentBusiness       UploadDocument     - [upload_document] document isn = 383
+INFO  2015-07-15 15:09:00,054 28526ms DocumentBusiness       UploadDocument     - [upload_document] prepare data
+INFO  2015-07-15 15:09:00,106 28578ms DocumentBusiness       UploadDocument     - [upload_document] store xp_debtext_document_insupd - parameters 
+[docFileName=page-navigation2.js]
+[MemberISN=66927]
+[docStatus=False]
+[docPublic=False]
+[docDesc=222222222222222222222]
+[updatedBy=0]
+[docSize=10225]
+[docLastAction=]
+[CreditorISN=1121]
+[docSignatureStatus=]
+[docName=phantienquang12]
+INFO  2015-07-15 15:09:00,112 28584ms DocumentBusiness       UploadDocument     - [upload_document] document isn = 384
+INFO  2015-07-15 15:10:44,111 132583ms DocumentBusiness       UploadDocument     - [upload_document] prepare data
+INFO  2015-07-15 15:10:44,113 132585ms DocumentBusiness       UploadDocument     - [upload_document] store xp_debtext_document_insupd - parameters 
+[docFileName=page-navigation2.js]
+[MemberISN=66927]
+[docStatus=False]
+[docPublic=False]
+[docDesc=asdasd]
+[updatedBy=0]
+[docSize=10225]
+[docLastAction=]
+[CreditorISN=1121]
+[docSignatureStatus=]
+[docName=my-document12]
+INFO  2015-07-15 15:10:44,118 132590ms DocumentBusiness       UploadDocument     - [upload_document] document isn = 385
+INFO  2015-07-15 15:16:24,225 22019ms DocumentBusiness       UploadDocument     - [upload_document] prepare data
+INFO  2015-07-15 15:16:24,300 22094ms DocumentBusiness       UploadDocument     - [upload_document] store xp_debtext_document_insupd - parameters 
+[docFileName=page-navigation2.js]
+[MemberISN=66927]
+[docStatus=False]
+[docPublic=False]
+[docDesc=asdasd]
+[updatedBy=0]
+[docSize=10225]
+[docLastAction=]
+[CreditorISN=1121]
+[docSignatureStatus=]
+[docName=asd123]
+INFO  2015-07-15 15:16:24,307 22101ms DocumentBusiness       UploadDocument     - [upload_document] document isn = 386
+INFO  2015-07-15 15:19:41,254 219048ms DocumentBusiness       EditDocument       - [edit_document] prepare data
+INFO  2015-07-15 15:19:41,268 219062ms DocumentBusiness       EditDocument       - [edit_document] parameters 
+[fileName=logo-fun581.png]
+[fileSize=3753]
+[memberISN=66927]
+[desc=asdasd]
+[ISN=386]
+[name=asd123456]
+[creditorISN=1121]
+INFO  2015-07-15 15:19:41,276 219070ms DocumentBusiness       EditDocument       - [edit_document] edit success 386
+INFO  2015-07-15 15:20:27,973 265767ms DocumentController     DownloadDocument   - download path = C:\\Temp\201507\Documents\15\386\logo-fun581.png
+INFO  2015-07-15 15:38:33,202 48754ms DocumentBusiness       UploadDocument     - [upload_document] prepare data
+INFO  2015-07-15 15:38:33,274 48826ms DocumentBusiness       UploadDocument     - [upload_document] store xp_debtext_document_insupd - parameters 
+[docFileName=cs.PNG]
+[MemberISN=66927]
+[docStatus=False]
+[docPublic=False]
+[docDesc=asdasdasd]
+[updatedBy=0]
+[docSize=20498]
+[docLastAction=]
+[CreditorISN=1121]
+[docSignatureStatus=]
+[docName=111222333]
+INFO  2015-07-15 15:38:33,283 48835ms DocumentBusiness       UploadDocument     - [upload_document] document isn = 390
+INFO  2015-07-15 15:40:08,045 143597ms DocumentController     DownloadDocument   - download path = \\192.168.100.33\Websites\Files_ROI\201507\Documents\15\390\cs.PNG
+INFO  2015-07-15 15:43:27,137 342690ms DocumentBusiness       UploadDocument     - [upload_document] prepare data
+INFO  2015-07-15 15:43:27,140 342693ms DocumentBusiness       UploadDocument     - [upload_document] store xp_debtext_document_insupd - parameters 
+[docFileName=dealer-config.PNG]
+[MemberISN=66927]
+[docStatus=False]
+[docPublic=False]
+[docDesc=asdasdasdasd]
+[updatedBy=0]
+[docSize=10099]
+[docLastAction=]
+[CreditorISN=1121]
+[docSignatureStatus=]
+[docName=1111111111]
+INFO  2015-07-15 15:43:27,145 342698ms DocumentBusiness       UploadDocument     - [upload_document] document isn = 394

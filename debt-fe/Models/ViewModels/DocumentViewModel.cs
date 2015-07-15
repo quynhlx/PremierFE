@@ -22,6 +22,7 @@ namespace debt_fe.Models.ViewModels
 
         public string OldFileName { get; set; }
         public double OldFileSize { get; set; }
+        public DateTime? AddedDate { get; set; }
 
 		private List<CreditorModel> _creditors;
 		public int SelectedCreditorID { get; set; }
@@ -62,6 +63,7 @@ namespace debt_fe.Models.ViewModels
                     this.SelectedCreditorID = document.CreditorISN;
                     this.OldFileName = document.FileName;
                     this.OldFileSize = document.FileSize;
+                    this.AddedDate = document.AddedDate;
                 }
             }
 			

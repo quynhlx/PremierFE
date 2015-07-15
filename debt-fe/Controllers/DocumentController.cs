@@ -75,7 +75,7 @@ namespace debt_fe.Controllers
                 {
                     if (doc.Value == -1)
                     {
-                        ViewBag.ErrorMessage = "Cannot update document. Make sure that document's name does not exist.";
+                        ViewBag.ErrorMessage = "Cannot update document.";
                     }
                     else
                     {
@@ -88,7 +88,7 @@ namespace debt_fe.Controllers
                 {
                     if (doc.Value < 0)
                     {
-                        ViewBag.ErrorMessage = "Document already exist.";
+                        ViewBag.ErrorMessage = "Cannot upload document.";
                     }
                     else
                     {
@@ -125,6 +125,13 @@ namespace debt_fe.Controllers
         [HttpPost]
         public ActionResult Edit(DocumentViewModel viewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                Session["debt_document_isn"] = -1;
+
+                return RedirectToAction("Index");
+            }
+
             var document = new DocumentModel();
 
             document.ID = viewModel.DocumentISN;
@@ -133,6 +140,7 @@ namespace debt_fe.Controllers
             document.CreditorISN = viewModel.SelectedCreditorID;
             document.DocName = viewModel.DocName;
             document.CreditorName = viewModel.GetCreditorName(viewModel.SelectedCreditorID, this.MemberISN);
+            document.AddedDate = viewModel.AddedDate;
 
             //
             // TODO
@@ -142,34 +150,35 @@ namespace debt_fe.Controllers
 
             //
             // save file
-
             #region save file
             if (viewModel.UploadedFile != null && viewModel.UploadedFile.ContentLength > 0)
             {
-
-                document.FileName = Utility.FormatFileName(viewModel.UploadedFile.FileName);
+                document.FileName = viewModel.UploadedFile.FileName;
                 document.FileSize = viewModel.UploadedFile.ContentLength;
 
                 var pathConfig = ConfigurationManager.AppSettings["UploadFolder"];
                 if (string.IsNullOrEmpty(pathConfig))
                 {
-                    pathConfig = "Uploads";
+                    pathConfig = "C:\\";
                 }
 
                 //
                 // remove first escape
-                pathConfig = pathConfig.TrimStart('~', '/');
+                // pathConfig = pathConfig.TrimStart('~', '/');
 
                 //
                 // check path is exist
                 // if not exist, create new folder
-                var path = Server.MapPath("~/" + pathConfig);
 
-                if (!Directory.Exists(path))
+                // var path = Server.MapPath("~/" + pathConfig);
+                var docPath = _docBusiness.GetDocumentPath(viewModel.DocumentISN, document.AddedDate);
+                fullPath = Path.Combine(pathConfig, docPath);
+
+                if (!Directory.Exists(fullPath))
                 {
                     try
                     {
-                        Directory.CreateDirectory(path);
+                        Directory.CreateDirectory(fullPath);
                     }
                     catch (Exception ex)
                     {
@@ -177,15 +186,8 @@ namespace debt_fe.Controllers
                         Debug.WriteLine(ex.Message);
                     }
                 }
-
-                path = path.TrimEnd('/');
-                fullPath = Path.Combine(path, document.FileName);
-
-            }
-            else
-            {
-                // document.FileName = viewModel.FileName;
-
+                
+                fullPath = Path.Combine(fullPath.TrimEnd('/','\\'), document.FileName);
             }
             #endregion
 
@@ -204,7 +206,8 @@ namespace debt_fe.Controllers
                     }
                     catch (Exception ex)
                     {
-                        Debug.WriteLine(ex.Message);
+                        // Debug.WriteLine(ex.Message);
+                        _logger.Info("Cannot save file",ex);
                     }
                 }                
             }
@@ -219,6 +222,13 @@ namespace debt_fe.Controllers
 		[HttpPost]
 		public ActionResult UploadDocument(DocumentViewModel viewModel)
 		{
+            if (!ModelState.IsValid)
+            {
+                Session["debt_document_isn"] = -1;
+
+                return RedirectToAction("Index");
+            }
+
 			var document = new DocumentModel();
 
 			document.MemberISN = this.MemberISN;
@@ -227,62 +237,58 @@ namespace debt_fe.Controllers
 			document.CreditorISN = viewModel.SelectedCreditorID;
 			document.CreditorName = viewModel.GetCreditorName(viewModel.SelectedCreditorID, this.MemberISN);
 
+            var addedDate = DateTime.Now;
 
 			var fullPath = string.Empty;
-			var canSave = true;
 
 			//
             // save file
-
             #region save file
             if (viewModel.UploadedFile != null && viewModel.UploadedFile.ContentLength > 0)
-			{
-				document.FileName = Utility.FormatFileName(viewModel.UploadedFile.FileName);
-				document.FileSize = viewModel.UploadedFile.ContentLength;
-
-				var pathConfig = ConfigurationManager.AppSettings["UploadFolder"];
-				if (string.IsNullOrEmpty(pathConfig))
-				{
-					pathConfig = "Uploads";
-				}
-
-				//
-				// remove first escape
-				pathConfig = pathConfig.TrimStart('~', '/');
-
-				//
-				// check path is exist
-				// if not exist, create new folder
-				var path = Server.MapPath("~/" + pathConfig);				
-
-				if (!Directory.Exists(path))
-				{
-					try
-					{
-						Directory.CreateDirectory(path);						
-					}
-					catch(Exception ex)
-					{
-						canSave = false;
-                        _logger.Error("Cannot create directory "+path,ex);
-						Debug.WriteLine(ex.Message);
-					}
-				}
-
-				path = path.TrimEnd('/');
-                fullPath = Path.Combine(path, document.FileName);
-
+            {
+                document.FileName = viewModel.UploadedFile.FileName;
+                document.FileSize = viewModel.UploadedFile.ContentLength;
             }
             #endregion
 
-            var documentISN = _docBusiness.UploadDocument(document);
 
+            var documentISN = _docBusiness.UploadDocument(document);
 
             #region save document isn to session
             Session["debt_document_isn"] = documentISN;
 
-            if (documentISN > 0 && canSave)
+            if (documentISN > 0)
             {
+
+                var pathConfig = ConfigurationManager.AppSettings["UploadFolder"];
+                if (string.IsNullOrEmpty(pathConfig))
+                {
+                    pathConfig = "C:\\";
+                }
+
+                //
+                // check path is exist
+                // if not exist, create new folder
+                var docPath = _docBusiness.GetDocumentPath(documentISN, addedDate);
+                fullPath = Path.Combine(pathConfig, docPath);
+
+                if (!Directory.Exists(fullPath))
+                {
+                    try
+                    {
+                        Directory.CreateDirectory(fullPath);
+                    }
+                    catch (Exception ex)
+                    {
+                        // canSave = false;
+                        Debug.WriteLine(ex.Message);
+                        _logger.Error("Cannot create directory",ex);
+                    }
+                }
+
+                fullPath = Path.Combine(fullPath.TrimEnd('/', '\\'), document.FileName);
+
+
                 //
                 // save file if create folder success
                 try
@@ -303,39 +309,51 @@ namespace debt_fe.Controllers
         public ActionResult DownloadDocument(int documentISN)
         {
             var documents = _docBusiness.GetDocuments(this.MemberISN);
-            //var document = documents.Find(d => d.ID == documentISN);
-
             var doc = documents.FirstOrDefault(d => d.ID == documentISN);
 
-            var uploadFolder = ConfigurationManager.AppSettings["UploadFolder"];
+            var fileDownloadName = doc.FileName;
 
-            if (string.IsNullOrEmpty(uploadFolder))
+
+            //
+            // get upload folder
+            var pathConfig = ConfigurationManager.AppSettings["UploadFolder"];
+            if (string.IsNullOrEmpty(pathConfig))
             {
-                uploadFolder = "Uploads";
+                pathConfig = "C:\\";
             }
 
-            var filePath = Path.Combine("~",uploadFolder, doc.FileName);
+            //
+            // get document folder and combine to root folder
+            var docPath = _docBusiness.GetDocumentPath(documentISN, doc.AddedDate);
+            var fullPath = Path.Combine(pathConfig, docPath);
 
-            var path = Server.MapPath(filePath);
+            //
+            // get file path
+            fullPath = Path.Combine(fullPath.TrimEnd('/', '\\'), fileDownloadName);
 
-            _logger.Info("download path = "+path);
+            if (!System.IO.File.Exists(fullPath))
+            {
+                return HttpNotFound();
+            }
+            
 
+            _logger.Info("download path = "+fullPath);
+
+
+            //
+            // read file and return to download
             byte[] fileBytes = null;
 
             try
             {
-                fileBytes = System.IO.File.ReadAllBytes(path);
+                fileBytes = System.IO.File.ReadAllBytes(fullPath);
             }
             catch(Exception ex)
             {
                 _logger.Error(ex.Message, ex);
 
-                // return null;
-                // throw new HttpException(404, "File Not Found");
                 return HttpNotFound();
             }
-            
-            var fileDownloadName = doc.FileName;
 
             return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileDownloadName);
         }

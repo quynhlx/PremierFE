@@ -6,6 +6,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Web;
 
@@ -72,13 +73,21 @@ namespace debt_fe.Businesses
             var doc = new DocumentModel();
 
             doc.ID = int.Parse(row["DocumentISN"].ToString());
-            doc.MemberISN = int.Parse(row["MemberISN"].ToString());
+
+            var memberISN = 0;
+            int.TryParse(row["MemberISN"].ToString(), out memberISN);
+            
+
+            doc.MemberISN = memberISN;
+
+            
             doc.FileName = row["docFileName"].ToString();
             doc.DocName = row["docName"].ToString();
             doc.Desc = row["docDesc"].ToString();
 			doc.CreditorName = row["cdtName"].ToString();
             doc.AddedDate = DateTime.Parse(row["docAddedDate"].ToString());
-            
+            // doc.Public = false;
+            doc.Public = row["docPublic"].ToString().Equals("1") ? true : false;
 
             var creditorISN = row["CreditorISN"].ToString();
             if (!string.IsNullOrEmpty(creditorISN))
@@ -88,6 +97,46 @@ namespace debt_fe.Businesses
             
 
             return doc;
+        }
+
+
+        public string GetDocumentPath(int documentISN, DateTime? addedDate)
+        {
+            var path = string.Empty;
+           
+            DocumentModel document = null;
+
+            if (addedDate == null)
+            {
+                //
+                // TODO: get document's added date
+                var query = "select * from Vw_DebtExt_Document";
+                var ds = _data.ExecuteQuery(query);
+
+                var documents = GetDocumentsFromTable(ds);
+
+                try
+                {
+                    document = documents.First(d => d.ID == documentISN);
+                    addedDate = document.AddedDate;
+                }
+                catch (Exception ex)
+                {
+                    _logger.Info("cannot get document path",ex);
+
+                    return string.Empty;
+                }
+            }
+
+
+            path = Path.Combine(
+                    addedDate.Value.ToString("yyyyMM"),
+                    "Documents",
+                    addedDate.Value.ToString("dd"),
+                    documentISN.ToString());
+
+
+            return path;
         }
 
 		/// <summary>
@@ -129,11 +178,11 @@ namespace debt_fe.Businesses
         {
             _logger.InfoFormat("[edit_document] prepare data");
 
-            if (!CanEditDocument(document.DocName, document.ID, document.MemberISN))
-            {
-                _logger.Info("Cannot edit document cuz duplicated name");
-                return false;
-            }
+            //if (!CanEditDocument(document.DocName, document.ID, document.MemberISN))
+            //{
+            //    _logger.Info("Cannot edit document cuz duplicated name");
+            //    return false;
+            //}
 
 
 

@@ -80,6 +80,32 @@ namespace debt_fe.Utilities
 			return formatted;
 		}
 
+        /// <summary>
+        /// format file name with random string by System.IO.Path
+        /// </summary>
+        /// <param name="filename">a string of filename like my-file.ext</param>
+        /// <returns>a string kind of my-file-random-string.ext</returns>
+        public static string FormatFileNameByPath(string filename)
+        {
+            if (string.IsNullOrEmpty(filename))
+            {
+                return "";
+            }
+
+            var ext = System.IO.Path.GetExtension(filename);
+            var name = System.IO.Path.GetFileNameWithoutExtension(filename);
+            var randomString = Path.GetRandomFileName().Replace(".", string.Empty);
+
+            if (string.IsNullOrEmpty(name))
+            {
+                return "";
+            }
+
+            var formatted = string.Format("{0}-{1}{2}", name, randomString, ext);
+
+            return formatted;
+        }
+
 		/// <summary>
 		/// get name without extension of file
 		/// </summary>
@@ -131,6 +157,11 @@ namespace debt_fe.Utilities
 			return output;
 		}
 
+        /// <summary>
+        /// convert a hashtable to string
+        /// </summary>
+        /// <param name="hash">hastable to convert</param>
+        /// <returns>a string in format [key=value]</returns>
         public static string HashtableToString(Hashtable hash)
         {
             var builder = new StringBuilder();
@@ -141,6 +172,21 @@ namespace debt_fe.Utilities
             }
 
             return builder.ToString();
+        }
+
+        public static string GetDocumentsPath(int DocumentISN, object AddedDate)
+        {
+            /*
+            WebControlLibrary.Utility.Database objDB = new WebControlLibrary.Utility.Database(System.Configuration.ConfigurationSettings.AppSettings["ReportConnectionString"]);
+            DateTime date = DateTime.Now;
+            if (AddedDate == null)
+                AddedDate = objDB.ExecuteScalar("Select docAddedDate From Document Where DocumentISN=" + DocumentISN.ToString());
+
+            if (AddedDate != null) date = Convert.ToDateTime(AddedDate);
+            string strPath = date.ToString("yyyyMM") + "\\" + "Documents\\" + date.ToString("dd") + "\\" + DocumentISN.ToString();
+            return strPath;
+             */
+            return "";
         }
 	}
 }

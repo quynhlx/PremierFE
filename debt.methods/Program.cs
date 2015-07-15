@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections;
+using System.IO;
 
 namespace debt.methods
 {
@@ -12,6 +13,9 @@ namespace debt.methods
 	{
 		static void Main(string[] args)
 		{
+            var path2 = Path.GetDirectoryName("C");
+            var path3 = Environment.SpecialFolder.MyComputer;
+
 			var pass = "1";
 			var md5 = ToMD5Hash(pass);
 
