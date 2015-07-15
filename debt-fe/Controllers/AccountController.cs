@@ -38,17 +38,17 @@ namespace debt_fe.Controllers
                 return View(model);
             }
 
-			var dealerISN = int.Parse(ConfigurationManager.AppSettings["DealerISN"]);
+            var dealers = ConfigurationManager.AppSettings["Dealers"];
 			// var backdoorPwd = "";
 
 			var paramNames = new List<string>
 			{
-				"username", "password", "dealerisn"
+				"username", "password", "dealers"
 			};
 
 			var paramValues = new ArrayList
 			{
-				model.Username, Utility.ToMD5Hash(model.Password), dealerISN.ToString()
+				model.Username, Utility.ToMD5Hash(model.Password), dealers
 			};
 
 			int clientISN;
