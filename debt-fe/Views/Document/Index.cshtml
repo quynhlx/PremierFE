@@ -95,12 +95,18 @@
                     <tr>
                         <td class="text-center">@(no++)</td>
                         <td>@Utility.Truncate(doc.DocName)</td>
-                        <td>
-                            @if (!string.IsNullOrEmpty(doc.FileName))
-                            {
-                                <a href='@Url.Action("DownloadDocument", "Document", new { documentISN = doc.ID})' data-toggle="tooltip" data-placement="top" title="download" class="btn-download-file">@Utility.Truncate(doc.FileName, 10)</a>
-                            }
-                        </td>
+						<td>
+							@if (!doc.CanSign)
+							{
+								<a href='@Url.Action("Signature", "Document", new { documentISN=doc.ID})' class="btn btn-primary btn-sm display-block mb" data-document-id="@doc.ID">Sign</a>
+							}
+
+							@if (!string.IsNullOrEmpty(doc.FileName))
+							{
+								<a href='@Url.Action("DownloadDocument", "Document", new { documentISN = doc.ID})' data-toggle="tooltip" data-placement="right" title="download" class="btn-download-file">@Utility.Truncate(doc.FileName, 10)</a>
+							}
+						</td>
+
                         <td>@Utility.Truncate(doc.CreditorName)</td>
                         <td>@Utility.Truncate(doc.Desc)</td>
                         <td class="text-center">@string.Format("{0:MM/dd/yyyy}", doc.AddedDate)<br />@string.Format("{0:hh:mm tt}", doc.AddedDate)</td>

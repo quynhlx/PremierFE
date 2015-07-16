@@ -85,9 +85,21 @@ namespace debt_fe.Businesses
             doc.DocName = row["docName"].ToString();
             doc.Desc = row["docDesc"].ToString();
 			doc.CreditorName = row["cdtName"].ToString();
-            doc.AddedDate = DateTime.Parse(row["docAddedDate"].ToString());
-            // doc.Public = false;
+            doc.AddedDate = DateTime.Parse(row["docAddedDate"].ToString());            
             doc.Public = row["docPublic"].ToString().Equals("1") ? true : false;
+
+			var canSign = row["docSignatureStatus"].ToString();
+			if (!string.IsNullOrEmpty(canSign))
+			{
+				if (canSign.Equals("1"))
+				{
+					doc.CanSign = true;
+				}
+				else
+				{
+					doc.CanSign = false;
+				}
+			}
 
             var creditorISN = row["CreditorISN"].ToString();
             if (!string.IsNullOrEmpty(creditorISN))

@@ -25,20 +25,54 @@ namespace debt_fe.Controllers
 		{
 			get
 			{
-				var session = Session["debt_member_isn"];
+				// var session = Session["debt_member_isn"];
+				// var cookie = new HttpCookie("debt_member_isn")
+				var cookie = Request.Cookies["debt_extension"];
+				
 
-				if (session == null)
+				if (cookie == null)
+				{
 					return -1;
+				}
 
+				var memberISN = cookie["debt_member_isn"];
+				var tem3 = Request.Cookies["debt_extension"]["debt_member_isn"];
+				var temp = cookie.Value;
+
+				if (string.IsNullOrEmpty(memberISN))
+				{
+					return -2;
+				}
+
+				return int.Parse(memberISN);
+
+				/*
 				if (session != null && string.IsNullOrEmpty(session.ToString()))
 					return -2;
 
 				return int.Parse(session.ToString());
+				*/
 			}
 			set
 			{
 				_memberISN = value;
-				Session["debt_member_isn"] = _memberISN;
+
+				var cookie = Request.Cookies["debt_extension"];				
+				if (cookie == null)
+				{
+					cookie = new HttpCookie("debt_extension");
+				}
+
+				cookie.Expires = DateTime.Now.AddDays(1);
+				cookie.Values["debt_member_isn"] = _memberISN.ToString();				
+				// cookie.Value = _memberISN.ToString();
+
+				// Session["debt_member_isn"] = _memberISN;
+
+				// Request.Cookies.Add(cookie);
+				// Response.Cookies.Add(cookie);
+				// Response.Cookies.Set(cookie);
+				Response.AppendCookie(cookie);
 			}
 		}
 
@@ -48,7 +82,7 @@ namespace debt_fe.Controllers
 		}
 
         public ActionResult Index(int? memberISN)
-        {            
+        {    
             //
             // add member isn to session
 			if (memberISN == null)
@@ -68,6 +102,7 @@ namespace debt_fe.Controllers
 			//
 			// view message when upload document failed
 			var doc = (int?)Session["debt_document_isn"];
+
 			if (doc != null)
 			{
                 var editMode = (bool?)Session["debt_document_edit"];
@@ -103,11 +138,7 @@ namespace debt_fe.Controllers
 
             return View(documents);
         }
-
-        /// <summary>
-        /// load upload document partial view
-        /// </summary>
-        /// <returns>partial view of document upload</returns>
+		        
         public ActionResult Upload()
         {
 			var viewModel = new DocumentViewModel(this.MemberISN);
@@ -161,11 +192,7 @@ namespace debt_fe.Controllers
                 {
                     pathConfig = "C:\\";
                 }
-
-                //
-                // remove first escape
-                // pathConfig = pathConfig.TrimStart('~', '/');
-
+                
                 //
                 // check path is exist
                 // if not exist, create new folder
@@ -257,7 +284,7 @@ namespace debt_fe.Controllers
             #region save document isn to session
             Session["debt_document_isn"] = documentISN;
 
-            if (documentISN > 0)
+            if (documentISN > 0 && !string.IsNullOrEmpty(document.FileName))
             {
 
                 var pathConfig = ConfigurationManager.AppSettings["UploadFolder"];
@@ -357,5 +384,13 @@ namespace debt_fe.Controllers
 
             return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileDownloadName);
         }
+
+		public ActionResult Signature(int documentISN)
+		{
+			var signName = string.Format("RightSigntureDoc_{0}_{1}",documentISN, DateTime.Now.ToString("MMddyyyy"));
+
+
+			return View();
+		}
     }
 }

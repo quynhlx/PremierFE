@@ -26,5 +26,6 @@ namespace debt_fe.Models
         public string UpdatedName { get; set; }
 		public string LastAction { get; set; }
 		public string SignatureStatus { get; set; }
+		public bool CanSign { get; set; }
 	}
 }

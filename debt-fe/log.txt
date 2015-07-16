@@ -326,3 +326,31 @@ INFO  2015-07-15 15:43:27,140 342693ms DocumentBusiness       UploadDocument    
 [docSignatureStatus=]
 [docName=1111111111]
 INFO  2015-07-15 15:43:27,145 342698ms DocumentBusiness       UploadDocument     - [upload_document] document isn = 394
+INFO  2015-07-16 15:02:23,798 27954ms DocumentBusiness       UploadDocument     - [upload_document] prepare data
+INFO  2015-07-16 15:02:23,836 27992ms DocumentBusiness       UploadDocument     - [upload_document] store xp_debtext_document_insupd - parameters 
+[docFileName=]
+[MemberISN=66927]
+[docStatus=False]
+[docPublic=False]
+[docDesc=adsad]
+[updatedBy=0]
+[docSize=0]
+[docLastAction=]
+[CreditorISN=1121]
+[docSignatureStatus=]
+[docName=test2]
+INFO  2015-07-16 15:02:23,880 28036ms DocumentBusiness       UploadDocument     - [upload_document] document isn = 428
+INFO  2015-07-16 15:04:50,127 29701ms DocumentBusiness       UploadDocument     - [upload_document] prepare data
+INFO  2015-07-16 15:04:50,147 29721ms DocumentBusiness       UploadDocument     - [upload_document] store xp_debtext_document_insupd - parameters 
+[docFileName=]
+[MemberISN=66927]
+[docStatus=False]
+[docPublic=False]
+[docDesc=asdasd]
+[updatedBy=0]
+[docSize=0]
+[docLastAction=]
+[CreditorISN=1121]
+[docSignatureStatus=]
+[docName=test212]
+INFO  2015-07-16 15:04:50,173 29747ms DocumentBusiness       UploadDocument     - [upload_document] document isn = 429
