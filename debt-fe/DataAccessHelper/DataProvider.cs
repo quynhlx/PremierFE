@@ -23,11 +23,11 @@ namespace debt_fe.DataAccessHelper
 
         }
 
-		/// <summary>
-		/// create new instance of data provider with username and password
-		/// </summary>
-		/// <param name="username">username of connection string</param>
-		/// <param name="password">password of connection string</param>
+        /// <summary>
+        /// create new instance of data provider with username and password
+        /// </summary>
+        /// <param name="username">username of connection string</param>
+        /// <param name="password">password of connection string</param>
         public DataProvider(string username, string password)
         {
             this._username = username;
@@ -38,25 +38,28 @@ namespace debt_fe.DataAccessHelper
         {
             var connectionString = ConfigurationManager.AppSettings["ConnectionString"];
 
-			if (!string.IsNullOrEmpty(this._username) && !string.IsNullOrEmpty(this._password))
-			{
-				connectionString = string.Format("{0}; User ID={1}; Password={2}", connectionString, _username, _password);
-			}
+            //
+            // ensure connection string from config do not contain password
+            if (!connectionString.Contains("Password") && !connectionString.ToLower().Contains("Pwd".ToLower()))
+            {
+                if (!string.IsNullOrEmpty(this._username) && !string.IsNullOrEmpty(this._password))
+                {
+                    connectionString = string.Format("{0}; User ID={1}; Password={2}", connectionString, _username, _password);
+                }
+            }
+                
 
             if (_connection == null)
             {
-				try
-				{
-					_connection = new SqlConnection(connectionString);
-				}
-				catch (Exception ex)
-				{
-					throw ex;
-				}
+                try
+                {
+                    _connection = new SqlConnection(connectionString);
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
             }
-
-
-            // return (_connection.State == ConnectionState.Open);
         }
 
         /// <summary>
@@ -71,10 +74,10 @@ namespace debt_fe.DataAccessHelper
                 throw new Exception("Query not found");
             }
 
-			try
-			{
-				Connect();
-			}
+            try
+            {
+                Connect();
+            }
             catch
             {
                 throw new Exception("Cannot connect to database: " + _connection.ConnectionString);
@@ -102,10 +105,10 @@ namespace debt_fe.DataAccessHelper
                 throw new Exception("Query not found");
             }
 
-			try
-			{
-				Connect();
-			}
+            try
+            {
+                Connect();
+            }
             catch
             {
                 throw new Exception("Cannot connect to database: " + _connection.ConnectionString);
@@ -117,7 +120,7 @@ namespace debt_fe.DataAccessHelper
             for (int i = 0; i < paramNames.Count; i++)
             {
                 var name = paramNames[i].TrimStart('@');
-                name = string.Format("@{0}",name);
+                name = string.Format("@{0}", name);
 
                 // cmd.Parameters.AddWithValue(name, paramValues[i]);
 
@@ -130,51 +133,51 @@ namespace debt_fe.DataAccessHelper
                 cmd.Parameters.Add(cmdParameter);
             }
 
-			
+
 
             try
             {
-				var adapter = new SqlDataAdapter(cmd);
-				var table = new DataTable();
+                var adapter = new SqlDataAdapter(cmd);
+                var table = new DataTable();
 
                 adapter.Fill(table);
-				return table;
+                return table;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }
         }
 
-		/// <summary>
-		/// execute a select query with parameters
-		/// </summary>
-		/// <param name="query">a string of select query</param>
-		/// <param name="parameters">a hashtable of key-value of parameter name - parameter value</param>
-		/// <returns>a datatable of query result</returns>
-		public DataTable ExecuteQuery(string query, Hashtable parameters)
-		{
-			if (string.IsNullOrEmpty(query))
-			{
-				throw new Exception("Query not found");
-			}
+        /// <summary>
+        /// execute a select query with parameters
+        /// </summary>
+        /// <param name="query">a string of select query</param>
+        /// <param name="parameters">a hashtable of key-value of parameter name - parameter value</param>
+        /// <returns>a datatable of query result</returns>
+        public DataTable ExecuteQuery(string query, Hashtable parameters)
+        {
+            if (string.IsNullOrEmpty(query))
+            {
+                throw new Exception("Query not found");
+            }
 
-			try
-			{
-				Connect();
-			}
-			catch
-			{
-				throw new Exception("Cannot connect to database: " + _connection.ConnectionString);
-			}
+            try
+            {
+                Connect();
+            }
+            catch
+            {
+                throw new Exception("Cannot connect to database: " + _connection.ConnectionString);
+            }
 
 
-			var cmd = new SqlCommand(query, _connection);
+            var cmd = new SqlCommand(query, _connection);
 
-			foreach (DictionaryEntry param in parameters)
-			{
-				// var name = string.Format("@{0}",param.Key);
-				// cmd.Parameters.AddWithValue(name, param.Value);
+            foreach (DictionaryEntry param in parameters)
+            {
+                // var name = string.Format("@{0}",param.Key);
+                // cmd.Parameters.AddWithValue(name, param.Value);
 
                 var name = param.Key.ToString().TrimStart('@');
                 name = string.Format("@{0}", name);
@@ -186,32 +189,32 @@ namespace debt_fe.DataAccessHelper
                 }
 
                 cmd.Parameters.Add(cmdParameter);
-			}
+            }
 
-			/*
-			for (int i = 0; i < paramNames.Count; i++)
-			{
-				var name = paramNames[i].TrimStart('@');
-				name = string.Format("@{0}", name);
+            /*
+            for (int i = 0; i < paramNames.Count; i++)
+            {
+                    var name = paramNames[i].TrimStart('@');
+                    name = string.Format("@{0}", name);
 
-				cmd.Parameters.AddWithValue(name, paramValues[i]);
-			}
-			*/
+                    cmd.Parameters.AddWithValue(name, paramValues[i]);
+            }
+            */
 
 
-			try
-			{
-				var adapter = new SqlDataAdapter(cmd);
-				var table = new DataTable();
+            try
+            {
+                var adapter = new SqlDataAdapter(cmd);
+                var table = new DataTable();
 
-				adapter.Fill(table);
-				return table;
-			}
-			catch (Exception ex)
-			{
-				throw ex;
-			}
-		}
+                adapter.Fill(table);
+                return table;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
         /// <summary>
         /// Execute query command: insert, update, delete
@@ -225,10 +228,10 @@ namespace debt_fe.DataAccessHelper
             }
 
             try
-			{
-				Connect();
-			}
-			catch
+            {
+                Connect();
+            }
+            catch
             {
                 throw new Exception("Cannot connect to database: " + _connection.ConnectionString);
             }
@@ -271,16 +274,16 @@ namespace debt_fe.DataAccessHelper
             }
 
             try
-			{
-				Connect();
-			}
-			catch
+            {
+                Connect();
+            }
+            catch
             {
                 throw new Exception("Cannot connect to database: " + _connection.ConnectionString);
             }
 
             _connection.Open();
-            var cmd = new SqlCommand(query, _connection);            
+            var cmd = new SqlCommand(query, _connection);
 
             for (int i = 0; i < paramNames.Count; i++)
             {
@@ -320,36 +323,36 @@ namespace debt_fe.DataAccessHelper
 
         }
 
-		/// <summary>
-		/// execute query command with parameters
-		/// </summary>
-		/// <param name="query">a string of query command</param>
-		/// <param name="parameters">a hashtable of parameter name - parameter value</param>
-		public void ExecuteNonQuery(string query, Hashtable parameters)
-		{
-			if (string.IsNullOrEmpty(query))
-			{
-				throw new Exception("Query not found");
-			}
+        /// <summary>
+        /// execute query command with parameters
+        /// </summary>
+        /// <param name="query">a string of query command</param>
+        /// <param name="parameters">a hashtable of parameter name - parameter value</param>
+        public void ExecuteNonQuery(string query, Hashtable parameters)
+        {
+            if (string.IsNullOrEmpty(query))
+            {
+                throw new Exception("Query not found");
+            }
 
-			try
-			{
-				Connect();
-			}
-			catch
-			{
-				throw new Exception("Cannot connect to database: " + _connection.ConnectionString);
-			}
+            try
+            {
+                Connect();
+            }
+            catch
+            {
+                throw new Exception("Cannot connect to database: " + _connection.ConnectionString);
+            }
 
-			_connection.Open();
-			var cmd = new SqlCommand(query, _connection);
+            _connection.Open();
+            var cmd = new SqlCommand(query, _connection);
 
-			foreach (DictionaryEntry param in parameters)
-			{
-				var name = param.Key.ToString().TrimStart('@');
-				name = string.Format("@{0}", name);
+            foreach (DictionaryEntry param in parameters)
+            {
+                var name = param.Key.ToString().TrimStart('@');
+                name = string.Format("@{0}", name);
 
-				// cmd.Parameters.AddWithValue(name, param.Value);
+                // cmd.Parameters.AddWithValue(name, param.Value);
 
                 var cmdParameter = new SqlParameter(name, param.Value);
                 if (param.Value == null)
@@ -358,40 +361,40 @@ namespace debt_fe.DataAccessHelper
                 }
 
                 cmd.Parameters.Add(cmdParameter);
-			}
+            }
 
-			/*
-			for (int i = 0; i < paramNames.Count; i++)
-			{
-				var name = paramNames[i].TrimStart('@');
-				name = string.Format("@{0}", name);
+            /*
+            for (int i = 0; i < paramNames.Count; i++)
+            {
+                    var name = paramNames[i].TrimStart('@');
+                    name = string.Format("@{0}", name);
 
-				cmd.Parameters.AddWithValue(name, paramValues[i]);
-			}
-			*/ 
+                    cmd.Parameters.AddWithValue(name, paramValues[i]);
+            }
+            */
 
-			try
-			{
-				cmd.ExecuteNonQuery();
-			}
-			catch (Exception ex)
-			{
-				throw ex;
-			}
-			finally
-			{
-				if (_connection != null)
-				{
-					_connection.Close();
-				}
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                if (_connection != null)
+                {
+                    _connection.Close();
+                }
 
-				if (cmd != null)
-				{
-					cmd.Dispose();
-				}
-			}
+                if (cmd != null)
+                {
+                    cmd.Dispose();
+                }
+            }
 
-		}
+        }
 
         /// <summary>
         /// Execute select store procedure
@@ -415,10 +418,10 @@ namespace debt_fe.DataAccessHelper
             }
 
             try
-			{
-				Connect();
-			}
-			catch
+            {
+                Connect();
+            }
+            catch
             {
                 throw new Exception("Cannot connect to database: " + _connection.ConnectionString);
             }
@@ -433,7 +436,7 @@ namespace debt_fe.DataAccessHelper
             {
                 // cmd.Parameters.AddWithValue(paramNames[i], paramValues[i]);
                 var name = paramNames[i].TrimStart('@');
-                name = string.Format("@{0}",name);
+                name = string.Format("@{0}", name);
 
 
                 var cmdParameter = new SqlParameter(name, paramValues[i]);
@@ -479,46 +482,46 @@ namespace debt_fe.DataAccessHelper
             return returnValue;
         }
 
-		public object ExecuteStoreProcedure(string storeProc, Hashtable parameters)
-		{
-			object returnValue = null;
+        public object ExecuteStoreProcedure(string storeProc, Hashtable parameters)
+        {
+            object returnValue = null;
 
-			if (string.IsNullOrEmpty(storeProc))
-			{
-				throw new Exception("Store procedure not found");
-			}
+            if (string.IsNullOrEmpty(storeProc))
+            {
+                throw new Exception("Store procedure not found");
+            }
 
-			//if (paramNames == null || paramNames.Count == 0)
-			//{
-			//	throw new Exception("Parameters not found");
-			//}
+            //if (paramNames == null || paramNames.Count == 0)
+            //{
+            //	throw new Exception("Parameters not found");
+            //}
 
-			try
-			{
-				Connect();
-			}
-			catch
-			{
-				throw new Exception("Cannot connect to database: " + _connection.ConnectionString);
-			}
+            try
+            {
+                Connect();
+            }
+            catch
+            {
+                throw new Exception("Cannot connect to database: " + _connection.ConnectionString);
+            }
 
-			/*
-			 * prepare data
-			 * */
-			var cmd = new SqlCommand(storeProc, _connection);
-			cmd.CommandType = CommandType.StoredProcedure;
+            /*
+             * prepare data
+             * */
+            var cmd = new SqlCommand(storeProc, _connection);
+            cmd.CommandType = CommandType.StoredProcedure;
 
-			//for (int i = 0; i < paramNames.Count; i++)
-			//{
-			//	cmd.Parameters.AddWithValue(paramNames[i], paramValues[i]);
-			//}
+            //for (int i = 0; i < paramNames.Count; i++)
+            //{
+            //	cmd.Parameters.AddWithValue(paramNames[i], paramValues[i]);
+            //}
 
-			foreach (DictionaryEntry param in parameters)
-			{
-				var name = param.Key.ToString().TrimStart('@');
-				name = string.Format("@{0}", name);
+            foreach (DictionaryEntry param in parameters)
+            {
+                var name = param.Key.ToString().TrimStart('@');
+                name = string.Format("@{0}", name);
 
-				// cmd.Parameters.AddWithValue(name, param.Value);
+                // cmd.Parameters.AddWithValue(name, param.Value);
 
                 var cmdParameter = new SqlParameter(name, param.Value);
                 if (param.Value == null)
@@ -527,41 +530,41 @@ namespace debt_fe.DataAccessHelper
                 }
 
                 cmd.Parameters.Add(cmdParameter);
-			}
+            }
 
-			var returnParam = cmd.Parameters.Add("@b", SqlDbType.NVarChar);
-			returnParam.Direction = ParameterDirection.ReturnValue;
+            var returnParam = cmd.Parameters.Add("@b", SqlDbType.NVarChar);
+            returnParam.Direction = ParameterDirection.ReturnValue;
 
-			/*
-			 * execute query
-			 * */
-			try
-			{
-				_connection.Open();
-				cmd.ExecuteNonQuery();
+            /*
+             * execute query
+             * */
+            try
+            {
+                _connection.Open();
+                cmd.ExecuteNonQuery();
 
-				returnValue = cmd.Parameters["@b"].Value;
-			}
-			catch (Exception ex)
-			{
-				throw ex;
-			}
-			finally
-			{
-				if (_connection != null)
-				{
-					_connection.Close();
-				}
+                returnValue = cmd.Parameters["@b"].Value;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                if (_connection != null)
+                {
+                    _connection.Close();
+                }
 
-				if (cmd != null)
-				{
-					cmd.Dispose();
-				}
-			}
+                if (cmd != null)
+                {
+                    cmd.Dispose();
+                }
+            }
 
 
-			return returnValue;
-		}
+            return returnValue;
+        }
 
         /// <summary>
         /// Execute select store procedure
@@ -571,8 +574,8 @@ namespace debt_fe.DataAccessHelper
         /// <param name="paramValues">an array list of parameters value</param>
         /// <returns>a dataset of store procedure result</returns>
         public DataSet ExecuteStoreProcedure(string storeProc, List<string> paramNames, ArrayList paramValues, out int returnValue)
-        {           
-			returnValue = 0;
+        {
+            returnValue = 0;
 
             if (string.IsNullOrEmpty(storeProc))
             {
@@ -585,22 +588,22 @@ namespace debt_fe.DataAccessHelper
             }
 
             try
-			{
-				Connect();
-			}
-			catch
+            {
+                Connect();
+            }
+            catch
             {
                 throw new Exception("Cannot connect to database: " + _connection.ConnectionString);
             }
-            
-			var cmd = new SqlCommand(storeProc, _connection);
+
+            var cmd = new SqlCommand(storeProc, _connection);
             cmd.CommandType = CommandType.StoredProcedure;
 
-			for (int i = 0; i < paramNames.Count; i++)
-			{
-				// cmd.Parameters.AddWithValue(paramNames[i], paramValues[i]);
+            for (int i = 0; i < paramNames.Count; i++)
+            {
+                // cmd.Parameters.AddWithValue(paramNames[i], paramValues[i]);
                 var name = paramNames[i].TrimStart('@');
-                name = string.Format("@{0}",name);
+                name = string.Format("@{0}", name);
 
                 var cmdParameter = new SqlParameter(name, paramValues[i]);
                 if (paramValues[i] == null)
@@ -609,18 +612,18 @@ namespace debt_fe.DataAccessHelper
                 }
 
                 cmd.Parameters.Add(cmdParameter);
-			}
+            }
 
-			var returnParam = cmd.Parameters.Add("@b", SqlDbType.NVarChar);
-			returnParam.Direction = ParameterDirection.ReturnValue;
+            var returnParam = cmd.Parameters.Add("@b", SqlDbType.NVarChar);
+            returnParam.Direction = ParameterDirection.ReturnValue;
 
-			var ds = new DataSet();
-            
+            var ds = new DataSet();
+
             try
             {
 
-				var adapter = new SqlDataAdapter(cmd);
-				adapter.Fill(ds);                
+                var adapter = new SqlDataAdapter(cmd);
+                adapter.Fill(ds);
 
                 returnValue = (int)cmd.Parameters["@b"].Value;
             }
@@ -635,59 +638,59 @@ namespace debt_fe.DataAccessHelper
                     _connection.Close();
                 }
 
-				if (cmd != null)
-				{
-					cmd.Dispose();
-				}
+                if (cmd != null)
+                {
+                    cmd.Dispose();
+                }
             }
 
             return ds;
         }
 
-		/// <summary>
-		/// Execute store procedure with out value
-		/// </summary>
-		/// <param name="storeProc">a string of store procedure name</param>
-		/// <param name="parameters">a hashtable of parameters name-value key</param>
-		/// <param name="returnValue">a number of store return parameter</param>
-		/// <returns>a dataset of query command</returns>
-		public DataSet ExecuteStoreProcedure(string storeProc, Hashtable parameters, out int returnValue)
-		{
-			returnValue = 0;
+        /// <summary>
+        /// Execute store procedure with out value
+        /// </summary>
+        /// <param name="storeProc">a string of store procedure name</param>
+        /// <param name="parameters">a hashtable of parameters name-value key</param>
+        /// <param name="returnValue">a number of store return parameter</param>
+        /// <returns>a dataset of query command</returns>
+        public DataSet ExecuteStoreProcedure(string storeProc, Hashtable parameters, out int returnValue)
+        {
+            returnValue = 0;
 
-			if (string.IsNullOrEmpty(storeProc))
-			{
-				throw new Exception("Store procedure not found");
-			}
+            if (string.IsNullOrEmpty(storeProc))
+            {
+                throw new Exception("Store procedure not found");
+            }
 
-			//if (paramNames == null || paramNames.Count == 0)
-			//{
-			//	throw new Exception("Parameters not found");
-			//}
+            //if (paramNames == null || paramNames.Count == 0)
+            //{
+            //	throw new Exception("Parameters not found");
+            //}
 
-			try
-			{
-				Connect();
-			}
-			catch
-			{
-				throw new Exception("Cannot connect to database: " + _connection.ConnectionString);
-			}
+            try
+            {
+                Connect();
+            }
+            catch
+            {
+                throw new Exception("Cannot connect to database: " + _connection.ConnectionString);
+            }
 
-			var cmd = new SqlCommand(storeProc, _connection);
-			cmd.CommandType = CommandType.StoredProcedure;
+            var cmd = new SqlCommand(storeProc, _connection);
+            cmd.CommandType = CommandType.StoredProcedure;
 
-			//for (int i = 0; i < paramNames.Count; i++)
-			//{
-			//	cmd.Parameters.AddWithValue(paramNames[i], paramValues[i]);
-			//}
+            //for (int i = 0; i < paramNames.Count; i++)
+            //{
+            //	cmd.Parameters.AddWithValue(paramNames[i], paramValues[i]);
+            //}
 
-			foreach (DictionaryEntry param in parameters)
-			{
-				var name = param.Key.ToString().TrimStart('@');
-				name = string.Format("@{0}", name);
+            foreach (DictionaryEntry param in parameters)
+            {
+                var name = param.Key.ToString().TrimStart('@');
+                name = string.Format("@{0}", name);
 
-				// cmd.Parameters.AddWithValue(name, param.Value);
+                // cmd.Parameters.AddWithValue(name, param.Value);
 
                 var cmdParameter = new SqlParameter(name, param.Value);
                 if (param.Value == null)
@@ -696,39 +699,39 @@ namespace debt_fe.DataAccessHelper
                 }
 
                 cmd.Parameters.Add(cmdParameter);
-			}
+            }
 
-			var returnParam = cmd.Parameters.Add("@b", SqlDbType.NVarChar);
-			returnParam.Direction = ParameterDirection.ReturnValue;
+            var returnParam = cmd.Parameters.Add("@b", SqlDbType.NVarChar);
+            returnParam.Direction = ParameterDirection.ReturnValue;
 
-			var ds = new DataSet();
+            var ds = new DataSet();
 
-			try
-			{
+            try
+            {
 
-				var adapter = new SqlDataAdapter(cmd);
-				adapter.Fill(ds);
+                var adapter = new SqlDataAdapter(cmd);
+                adapter.Fill(ds);
 
-				returnValue = (int)cmd.Parameters["@b"].Value;
-			}
-			catch (Exception ex)
-			{
-				throw ex;
-			}
-			finally
-			{
-				if (_connection != null)
-				{
-					_connection.Close();
-				}
+                returnValue = (int)cmd.Parameters["@b"].Value;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                if (_connection != null)
+                {
+                    _connection.Close();
+                }
 
-				if (cmd != null)
-				{
-					cmd.Dispose();
-				}
-			}
+                if (cmd != null)
+                {
+                    cmd.Dispose();
+                }
+            }
 
-			return ds;
-		}
+            return ds;
+        }
     }
 }

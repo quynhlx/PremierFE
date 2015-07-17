@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web;
+using System.Xml;
 
 namespace debt_fe.Utilities
 {
@@ -187,6 +189,122 @@ namespace debt_fe.Utilities
             return strPath;
              */
             return "";
+        }
+
+        public static string GetColumnValue(DataRow row, string columnName)
+        {
+            var value = string.Empty;
+
+            if (string.IsNullOrEmpty(columnName) || string.IsNullOrWhiteSpace(columnName))
+            {
+                return value;
+            }
+
+            if (row.Table.Rows.Count==0 || row.Table.Columns.Count==0 || row ==null)
+            {
+                return value;
+            }
+
+            try
+            {
+                value = row[columnName].ToString();
+            }
+            catch (Exception)
+            {                
+                return string.Empty;
+            }
+
+            return value;
+        }
+
+        public static DataSet ConvertXMLToDataSet(string xmlData)
+        {
+            if (string.IsNullOrEmpty(xmlData))
+            {
+                return null;
+            }
+
+            using (var stream = new StreamReader(xmlData))
+            {
+                using (var reader = new XmlTextReader(stream))
+                {
+                    var ds = new DataSet();
+
+                    try
+                    {
+                        ds.ReadXml(reader);
+
+                        return ds;
+                    }
+                    catch(Exception ex)
+                    {
+                        throw ex;
+                    }
+                }
+            }
+            /*
+            StringReader stream = null;
+            XmlTextReader reader = null;
+            try
+            {
+                DataSet xmlDS = new DataSet();
+                stream = new StringReader(xmlData);
+                // Load the XmlTextReader from the stream
+                reader = new XmlTextReader(stream);
+                xmlDS.ReadXml(reader);
+                return xmlDS;
+            }
+            catch
+            {
+                return null;
+            }
+            finally
+            {
+                if (reader != null) reader.Close();
+            }
+             */ 
+        }
+
+        /// <summary>
+        /// check if table contain column with name
+        /// </summary>
+        /// <param name="columnName">a string of column name</param>
+        /// <param name="table">a table to check</param>
+        /// <returns>true if table contain column name</returns>
+        public static bool ColumnExist(string columnName, DataTable table)
+        {
+            if (table == null || table.Columns.Count==0)
+            {
+                return false;
+            }
+
+            return table.Columns.Contains(columnName);
+        }
+
+        /// <summary>
+        /// check if table contain list of columns
+        /// </summary>
+        /// <param name="columnNames">a list string of column names</param>
+        /// <param name="table">a table to check</param>
+        /// <param name="notExistColumnName">first column that does not exist in table</param>
+        /// <returns>false if one of column does not exist in table</returns>
+        public static bool ColumnsExist(List<string> columnNames, DataTable table, out string notExistColumnName)
+        {
+            notExistColumnName = string.Empty;            
+
+            var exist = true;
+
+            foreach (var columnName in columnNames)
+            {
+                if (!ColumnExist(columnName, table))
+                {
+                    notExistColumnName = columnName;
+
+                    return false;
+                }
+            }
+
+            return exist;
         }
 	}
 }

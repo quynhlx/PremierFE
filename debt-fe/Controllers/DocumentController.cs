@@ -10,101 +10,114 @@ using System.Diagnostics;
 using System.IO;
 using System.Web.Mvc;
 using System.Web;
+using RightSignatures;
 
 namespace debt_fe.Controllers
 {
-	[Authorize]
+    [Authorize]
     public class DocumentController : Controller
     {
         private DocumentBusiness _docBusiness;
         private static readonly ILog _logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-		private int _memberISN;
+        private int _memberISN;
 
-		public int MemberISN
-		{
-			get
-			{
-				// var session = Session["debt_member_isn"];
-				// var cookie = new HttpCookie("debt_member_isn")
-				var cookie = Request.Cookies["debt_extension"];
+        public int MemberISN
+        {
+            get
+            {
+                var session = Session["debt_member_isn"];
+                // var cookie = new HttpCookie("debt_member_isn")
+
+                /*
+                var cookie = Request.Cookies["debt_extension"];
 				
 
-				if (cookie == null)
-				{
-					return -1;
-				}
+                if (cookie == null)
+                {
+                        return -1;
+                }
 
-				var memberISN = cookie["debt_member_isn"];
-				var tem3 = Request.Cookies["debt_extension"]["debt_member_isn"];
-				var temp = cookie.Value;
+                var memberISN = cookie["debt_member_isn"];
+                var tem3 = Request.Cookies["debt_extension"]["debt_member_isn"];
+                var temp = cookie.Value;
 
-				if (string.IsNullOrEmpty(memberISN))
-				{
-					return -2;
-				}
+                if (string.IsNullOrEmpty(memberISN))
+                {
+                        return -2;
+                }
+                 */
 
-				return int.Parse(memberISN);
+                // return int.Parse(memberISN);
 
-				/*
-				if (session != null && string.IsNullOrEmpty(session.ToString()))
-					return -2;
+                if (session == null)
+                { 
+                    return -1; 
+                }
 
-				return int.Parse(session.ToString());
-				*/
-			}
-			set
-			{
-				_memberISN = value;
+                if (session != null && string.IsNullOrEmpty(session.ToString()))
+                {
+                    return -2;
+                }
 
-				var cookie = Request.Cookies["debt_extension"];				
-				if (cookie == null)
-				{
-					cookie = new HttpCookie("debt_extension");
-				}
 
-				cookie.Expires = DateTime.Now.AddDays(1);
-				cookie.Values["debt_member_isn"] = _memberISN.ToString();				
-				// cookie.Value = _memberISN.ToString();
+                return int.Parse(session.ToString());
 
-				// Session["debt_member_isn"] = _memberISN;
+            }
+            set
+            {
+                _memberISN = value;
 
-				// Request.Cookies.Add(cookie);
-				// Response.Cookies.Add(cookie);
-				// Response.Cookies.Set(cookie);
-				Response.AppendCookie(cookie);
-			}
-		}
+                /*
+                var cookie = Request.Cookies["debt_extension"];				
+                if (cookie == null)
+                {
+                        cookie = new HttpCookie("debt_extension");
+                }
 
-		public DocumentController()
-		{
+                cookie.Expires = DateTime.Now.AddDays(1);
+                cookie.Values["debt_member_isn"] = _memberISN.ToString();
+                 */
+                // cookie.Value = _memberISN.ToString();
+
+                Session["debt_member_isn"] = _memberISN;
+
+                // Request.Cookies.Add(cookie);
+                // Response.Cookies.Add(cookie);
+                // Response.Cookies.Set(cookie);
+                // Response.AppendCookie(cookie);
+            }
+        }
+
+        public DocumentController()
+        {
             _docBusiness = new DocumentBusiness();
-		}
+        }
 
         public ActionResult Index(int? memberISN)
-        {    
+        {
             //
             // add member isn to session
-			if (memberISN == null)
-			{
-				memberISN = this.MemberISN;
+            if (memberISN == null)
+            {
+                memberISN = this.MemberISN;
 
                 if (memberISN < 0)
                 {
                     return RedirectToAction("Login", "Account");
                 }
-			}
+            }
             else
             {
-				this.MemberISN = memberISN.Value;
+                this.MemberISN = memberISN.Value;
             }
 
-			//
-			// view message when upload document failed
-			var doc = (int?)Session["debt_document_isn"];
+            //
+            // view message when upload document failed
+            var doc = (int?)Session["debt_document_isn"];
 
-			if (doc != null)
-			{
+            if (doc != null)
+            {
                 var editMode = (bool?)Session["debt_document_edit"];
                 if (editMode != null)
                 {
@@ -130,28 +143,28 @@ namespace debt_fe.Controllers
                         ViewBag.SuccessMessage = "Document has been added successfully.";
                     }
                 }
-				
-				Session.Remove("debt_document_isn");                
-			}
-			
-			var documents = _docBusiness.GetDocuments(this.MemberISN);
+
+                Session.Remove("debt_document_isn");
+            }
+
+            var documents = _docBusiness.GetDocuments(this.MemberISN);
 
             return View(documents);
         }
-		        
+
         public ActionResult Upload()
         {
-			var viewModel = new DocumentViewModel(this.MemberISN);
+            var viewModel = new DocumentViewModel(this.MemberISN);
 
             return PartialView("_UploadDocument", viewModel);
         }
 
-		public ActionResult Edit(int documentISN)
-		{
+        public ActionResult Edit(int documentISN)
+        {
             var viewModel = new DocumentViewModel(this.MemberISN, documentISN);
 
-			return PartialView("_EditDocument", viewModel);
-		}
+            return PartialView("_EditDocument", viewModel);
+        }
 
         [HttpPost]
         public ActionResult Edit(DocumentViewModel viewModel)
@@ -192,7 +205,7 @@ namespace debt_fe.Controllers
                 {
                     pathConfig = "C:\\";
                 }
-                
+
                 //
                 // check path is exist
                 // if not exist, create new folder
@@ -213,8 +226,8 @@ namespace debt_fe.Controllers
                         Debug.WriteLine(ex.Message);
                     }
                 }
-                
-                fullPath = Path.Combine(fullPath.TrimEnd('/','\\'), document.FileName);
+
+                fullPath = Path.Combine(fullPath.TrimEnd('/', '\\'), document.FileName);
             }
             #endregion
 
@@ -234,9 +247,9 @@ namespace debt_fe.Controllers
                     catch (Exception ex)
                     {
                         // Debug.WriteLine(ex.Message);
-                        _logger.Info("Cannot save file",ex);
+                        _logger.Info("Cannot save file", ex);
                     }
-                }                
+                }
             }
             else
             {
@@ -246,9 +259,9 @@ namespace debt_fe.Controllers
             return RedirectToAction("Index");
         }
 
-		[HttpPost]
-		public ActionResult UploadDocument(DocumentViewModel viewModel)
-		{
+        [HttpPost]
+        public ActionResult UploadDocument(DocumentViewModel viewModel)
+        {
             if (!ModelState.IsValid)
             {
                 Session["debt_document_isn"] = -1;
@@ -256,19 +269,19 @@ namespace debt_fe.Controllers
                 return RedirectToAction("Index");
             }
 
-			var document = new DocumentModel();
+            var document = new DocumentModel();
 
-			document.MemberISN = this.MemberISN;
-			document.DocName = viewModel.DocName;
-			document.Desc = viewModel.Notes;
-			document.CreditorISN = viewModel.SelectedCreditorID;
-			document.CreditorName = viewModel.GetCreditorName(viewModel.SelectedCreditorID, this.MemberISN);
+            document.MemberISN = this.MemberISN;
+            document.DocName = viewModel.DocName;
+            document.Desc = viewModel.Notes;
+            document.CreditorISN = viewModel.SelectedCreditorID;
+            document.CreditorName = viewModel.GetCreditorName(viewModel.SelectedCreditorID, this.MemberISN);
 
             var addedDate = DateTime.Now;
 
-			var fullPath = string.Empty;
+            var fullPath = string.Empty;
 
-			//
+            //
             // save file
             #region save file
             if (viewModel.UploadedFile != null && viewModel.UploadedFile.ContentLength > 0)
@@ -309,7 +322,7 @@ namespace debt_fe.Controllers
                     {
                         // canSave = false;
                         Debug.WriteLine(ex.Message);
-                        _logger.Error("Cannot create directory",ex);
+                        _logger.Error("Cannot create directory", ex);
                     }
                 }
 
@@ -324,14 +337,14 @@ namespace debt_fe.Controllers
                 }
                 catch (Exception ex)
                 {
-                    _logger.Error("Cannot save image "+fullPath,ex);
+                    _logger.Error("Cannot save image " + fullPath, ex);
                     Debug.WriteLine(ex.Message);
                 }
             }
             #endregion
 
             return RedirectToAction("Index");
-		}
+        }
 
         public ActionResult DownloadDocument(int documentISN)
         {
@@ -362,9 +375,9 @@ namespace debt_fe.Controllers
             {
                 return HttpNotFound();
             }
-            
 
-            _logger.Info("download path = "+fullPath);
+
+            _logger.Info("download path = " + fullPath);
 
 
             //
@@ -375,7 +388,7 @@ namespace debt_fe.Controllers
             {
                 fileBytes = System.IO.File.ReadAllBytes(fullPath);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.Error(ex.Message, ex);
 
@@ -385,12 +398,31 @@ namespace debt_fe.Controllers
             return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileDownloadName);
         }
 
-		public ActionResult Signature(int documentISN)
-		{
-			var signName = string.Format("RightSigntureDoc_{0}_{1}",documentISN, DateTime.Now.ToString("MMddyyyy"));
+        public ActionResult Signature(int documentISN)
+        {
+            //
+            // step 01: get template isn from vw_debtext_document
+            var templateISN = _docBusiness.GetTemplateId(documentISN);
+            if (templateISN < 0)
+            {
+                return Json(new { code=-1,msg="Templale not found" }, JsonRequestBehavior.AllowGet);
+            }
 
+            var signName = string.Format("RightSigntureDoc_{0}_{1}", documentISN, DateTime.Now.ToString("MMddyyyy"));
 
-			return View();
-		}
+            var signId = _docBusiness.GetSignatureId(documentISN, this.MemberISN, signName);
+
+            var template = _docBusiness.GetTemplateByDocumentId(documentISN,null);
+
+            var docKey = RightSignature.Embedded(
+                    Guid_Template: "",
+                    RoleName: "",
+                    mergeFields: null,
+                    NameFile: "",
+                    url_redirect: "",
+                    RightSign_ISN: "");
+
+            return Json(new { code=-2,msg="test"},JsonRequestBehavior.AllowGet);
+        }
     }
 }

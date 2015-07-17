@@ -26,6 +26,7 @@ namespace debt_fe
             // 
             bundles.Add(new ScriptBundle("~/bundles/plugins").Include(
                 "~/Scripts/plugins/jquery.dataTables.js",
+                "~/Scripts/plugins/toastr.js",
                 "~/Scripts/plugins/bootstrapValidator.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
@@ -39,6 +40,7 @@ namespace debt_fe
             //
             bundles.Add(new StyleBundle("~/Content/extensions").Include(
                 "~/Content/extensions/jquery.dataTables.css",
+                "~/Content/extensions/toastr.css",
                 "~/Content/extensions/bootstrapValidator.css"));
 
             bundles.Add(new StyleBundle("~/Content/custom").Include("~/Content/site.css"));

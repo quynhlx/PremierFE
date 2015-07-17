@@ -8,27 +8,6 @@
     var no = 1;
 }
 
-<!--
-<div class="col-md-12 mart30 marb10">
-    <form class="form-inline">
-        <div class="form-group">
-            <button type="button" class="btn btn-primary marr30">Upload</button>
-            <button type="button" class="btn btn-default">Go to</button>
-            <input type="text" value="1" class="form-control" size="3">
-            <button type="button" class="btn btn-default">«</button>
-            <div class="form-group"><label>1 of 20</label></div>
-            <button type="button" class="btn btn-default">»</button>
-            <div class="form-group"><label>Record/Page:</label></div>
-            <div class="form-group">
-                <select>
-                    <option>50
-                </select>
-            </div>
-        </div>
-    </form>
-</div>
--->
-
 <style>
     #table-documents {
         border-bottom: 1px solid #ddd;
@@ -45,14 +24,14 @@
 </div>
 
 @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
-{    
+{
     <div class="col-md-12">
         <div class="alert alert-danger alert-dismissible mb0 mt+" role="alert">
             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <strong>Error!</strong> @ViewBag.ErrorMessage
         </div>
     </div>
-    
+
 }
 
 @if (!string.IsNullOrEmpty(ViewBag.SuccessMessage))
@@ -66,10 +45,10 @@
 }
 
 <div class="col-md-12 hide" id="error-msg-container">
-	<div class="alert alert-danger alert-dismissible mb0 mt+" role="alert">
-		<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-		<strong>Error!</strong> <span id="error-msg">Document ISN not found!</span>
-	</div>
+    <div class="alert alert-danger alert-dismissible mb0 mt+" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>Error!</strong> <span id="error-msg">Document ISN not found!</span>
+    </div>
 </div>
 
 <div class="col-md-12 mt+">
@@ -95,17 +74,17 @@
                     <tr>
                         <td class="text-center">@(no++)</td>
                         <td>@Utility.Truncate(doc.DocName)</td>
-						<td>
-							@if (!doc.CanSign)
-							{
-								<a href='@Url.Action("Signature", "Document", new { documentISN=doc.ID})' class="btn btn-primary btn-sm display-block mb" data-document-id="@doc.ID">Sign</a>
-							}
+                        <td>
+                            @if (!doc.CanSign)
+                            {
+                                <a href='@Url.Action("Signature", "Document", new { documentISN=doc.ID})' class="btn btn-primary btn-sign btn-sm display-block mb" data-document-id="@doc.ID">Sign</a>
+                            }
 
-							@if (!string.IsNullOrEmpty(doc.FileName))
-							{
-								<a href='@Url.Action("DownloadDocument", "Document", new { documentISN = doc.ID})' data-toggle="tooltip" data-placement="right" title="download" class="btn-download-file">@Utility.Truncate(doc.FileName, 10)</a>
-							}
-						</td>
+                            @if (!string.IsNullOrEmpty(doc.FileName))
+                            {
+                                <a href='@Url.Action("DownloadDocument", "Document", new { documentISN = doc.ID})' data-toggle="tooltip" data-placement="right" title="download" class="btn-download-file">@Utility.Truncate(doc.FileName, 10)</a>
+                            }
+                        </td>
 
                         <td>@Utility.Truncate(doc.CreditorName)</td>
                         <td>@Utility.Truncate(doc.Desc)</td>
@@ -120,7 +99,7 @@
                     </tr>
                 }
             }
-            </tbody>
+        </tbody>
 
 
 
@@ -128,7 +107,7 @@
 
 
 
-        </table>
+    </table>
 </div>
 
 <script src="~/Scripts/plugins/dropzone.js"></script>
@@ -139,24 +118,24 @@
 
             //
             // init datatable
-            // 
+            //
             $('#table-documents').DataTable({
                 "pageLength": 7, // record per page
                 "lengthChange": false, // no record per page change
-                "info": false, // no entities info                
+                "info": false, // no entities info
                 aoColumnDefs: [{ "bSortable": false, "aTargets": [6] }], // disable sort in last column,
-                "order": [[ 5, "desc" ]] // set default sort by column 5 (added date)
+                "order": [[5, "desc"]] // set default sort by column 5 (added date)
             });
 
             //
-            // add class form-control to datatable search 
+            // add class form-control to datatable search
             $('.dataTables_filter').find('input').addClass('form-control inline');
 
             //
             // button upload document click
             //
             $('#btn-upload-document').click(function (e) {
-                    
+
                 e.preventDefault();
                 e.stopPropagation();
 
@@ -164,12 +143,12 @@
                 var modal = $('#modal-document');
 
                 var href = self.prop('href');
-                
+
 
                 var req = $.ajax({ url: href });
 
                 req.fail(function (jqXHR) {
-                    console.log('load modal error',jqXHR);
+                    console.log('load modal error', jqXHR);
                 });
 
                 req.done(function (resp) {
@@ -188,9 +167,9 @@
                 });
             });
 
-        	//
-        	// button edit document
-        	//
+            //
+            // button edit document
+            //
             $('#table-documents').on('click', '.btn-edit-document', function (e) {
 
                 e.preventDefault();
@@ -236,6 +215,54 @@
                     modal.modal({
                         backdrop: 'static'
                     });
+                });
+
+            });
+
+            //
+            // button sign
+            //
+            $('#table-documents').on('click', '.btn-sign', function (e) {
+
+                e.preventDefault();
+
+                var self = $(this);
+
+                //
+                // check document id is not empty
+                var docId = self.data('document-id');
+                if (docId === undefined || docId === '') {
+                    toastr.info('Document ISN not found!');
+
+                    return;
+                }
+
+                var url = self.prop('href');
+
+                //
+                // get sign partial view
+                var req = $.ajax({ url: url });
+
+                req.fail(function (jqXHR, stt, err) {
+                    toastr.error('Request error occurred. Please try again.');
+                });
+
+                req.done(function (resp) {
+
+                    if (resp === undefined || resp === null) {
+                        toastr.error('Unexpected error occurred. Please try again.');
+
+                        return;
+                    }
+
+                    if (!$.isNumeric(resp.code) || resp.code < 0) {
+                        toastr.info('Assigned template not found');
+
+                        return;
+                    }
+
+
+
                 });
 
             });
