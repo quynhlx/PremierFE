@@ -13,6 +13,10 @@ namespace debt.methods
 	{
 		static void Main(string[] args)
 		{
+            var p = Directory.GetLogicalDrives()[0];
+            var p1 = Environment.GetLogicalDrives()[0];
+            var p2 = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+
             var path2 = Path.GetDirectoryName("C");
             var path3 = Environment.SpecialFolder.MyComputer;
 

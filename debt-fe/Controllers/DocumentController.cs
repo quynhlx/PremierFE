@@ -27,29 +27,7 @@ namespace debt_fe.Controllers
             get
             {
                 var session = Session["debt_member_isn"];
-                // var cookie = new HttpCookie("debt_member_isn")
-
-                /*
-                var cookie = Request.Cookies["debt_extension"];
-				
-
-                if (cookie == null)
-                {
-                        return -1;
-                }
-
-                var memberISN = cookie["debt_member_isn"];
-                var tem3 = Request.Cookies["debt_extension"]["debt_member_isn"];
-                var temp = cookie.Value;
-
-                if (string.IsNullOrEmpty(memberISN))
-                {
-                        return -2;
-                }
-                 */
-
-                // return int.Parse(memberISN);
-
+                
                 if (session == null)
                 { 
                     return -1; 
@@ -60,7 +38,6 @@ namespace debt_fe.Controllers
                     return -2;
                 }
 
-
                 return int.Parse(session.ToString());
 
             }
@@ -68,24 +45,7 @@ namespace debt_fe.Controllers
             {
                 _memberISN = value;
 
-                /*
-                var cookie = Request.Cookies["debt_extension"];				
-                if (cookie == null)
-                {
-                        cookie = new HttpCookie("debt_extension");
-                }
-
-                cookie.Expires = DateTime.Now.AddDays(1);
-                cookie.Values["debt_member_isn"] = _memberISN.ToString();
-                 */
-                // cookie.Value = _memberISN.ToString();
-
                 Session["debt_member_isn"] = _memberISN;
-
-                // Request.Cookies.Add(cookie);
-                // Response.Cookies.Add(cookie);
-                // Response.Cookies.Set(cookie);
-                // Response.AppendCookie(cookie);
             }
         }
 
@@ -190,7 +150,7 @@ namespace debt_fe.Controllers
             // TODO
             // save file
             var fullPath = string.Empty;
-            var canSave = true;
+            var canSave = false;
 
             //
             // save file
@@ -219,6 +179,7 @@ namespace debt_fe.Controllers
                     try
                     {
                         Directory.CreateDirectory(fullPath);
+                        canSave = true;
                     }
                     catch (Exception ex)
                     {
@@ -245,8 +206,7 @@ namespace debt_fe.Controllers
                         viewModel.UploadedFile.SaveAs(fullPath);
                     }
                     catch (Exception ex)
-                    {
-                        // Debug.WriteLine(ex.Message);
+                    {                        
                         _logger.Info("Cannot save file", ex);
                     }
                 }
@@ -282,18 +242,17 @@ namespace debt_fe.Controllers
             var fullPath = string.Empty;
 
             //
-            // save file
-            #region save file
+            // get file uploaded
             if (viewModel.UploadedFile != null && viewModel.UploadedFile.ContentLength > 0)
             {
                 document.FileName = viewModel.UploadedFile.FileName;
                 document.FileSize = viewModel.UploadedFile.ContentLength;
             }
-            #endregion
-
 
             var documentISN = _docBusiness.UploadDocument(document);
 
+            //
+            // save file if add document success
             #region save document isn to session
             Session["debt_document_isn"] = documentISN;
 
@@ -303,12 +262,16 @@ namespace debt_fe.Controllers
                 var pathConfig = ConfigurationManager.AppSettings["UploadFolder"];
                 if (string.IsNullOrEmpty(pathConfig))
                 {
-                    pathConfig = "C:\\";
+                    // pathConfig = "C:\\";                   
+                    pathConfig = Environment.GetLogicalDrives()[0]; // expect C:\\
                 }
 
                 //
                 // check path is exist
                 // if not exist, create new folder
+
+                // document template
+                // yyyyMM\\Documents\\dd\\123
                 var docPath = _docBusiness.GetDocumentPath(documentISN, addedDate);
                 fullPath = Path.Combine(pathConfig, docPath);
 
@@ -317,28 +280,24 @@ namespace debt_fe.Controllers
                     try
                     {
                         Directory.CreateDirectory(fullPath);
+
+                        fullPath = Path.Combine(fullPath.TrimEnd('/', '\\'), document.FileName);
+
+                        //
+                        // save file if create folder success
+                        try
+                        {
+                            viewModel.UploadedFile.SaveAs(fullPath);
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.Error("Cannot save image to " + fullPath, ex);
+                        }
                     }
                     catch (Exception ex)
-                    {
-                        // canSave = false;
-                        Debug.WriteLine(ex.Message);
+                    {   
                         _logger.Error("Cannot create directory", ex);
                     }
-                }
-
-                fullPath = Path.Combine(fullPath.TrimEnd('/', '\\'), document.FileName);
-
-
-                //
-                // save file if create folder success
-                try
-                {
-                    viewModel.UploadedFile.SaveAs(fullPath);
-                }
-                catch (Exception ex)
-                {
-                    _logger.Error("Cannot save image " + fullPath, ex);
-                    Debug.WriteLine(ex.Message);
                 }
             }
             #endregion
