@@ -31,7 +31,7 @@ namespace debt_fe.Businesses
         /// <returns>a list of document model</returns>
         public List<DocumentModel> GetDocuments(int memberISN)
         {
-            var query = "select * from Vw_DebtExt_Document where MemberISN=@LoginISN";
+            var query = "select * from Vw_DebtExt_Document where MemberISN=@LoginISN  order by docAddedDate desc";
 
             var parameters = new Hashtable();
             parameters.Add("LoginISN", memberISN);
@@ -90,18 +90,24 @@ namespace debt_fe.Businesses
             doc.Desc = row["docDesc"].ToString();
             doc.CreditorName = row["cdtName"].ToString();
             doc.AddedDate = DateTime.Parse(row["docAddedDate"].ToString());
-            doc.Public = row["docPublic"].ToString().Equals("1") ? true : false;
 
+            doc.Public = false;
+            var isPublic = row["docPublic"].ToString();
+            if (!string.IsNullOrEmpty(isPublic) && !string.IsNullOrWhiteSpace(isPublic))
+            {
+                if (isPublic.Trim().Equals("1"))
+                {
+                    doc.Public = true;
+                }
+            }
+                        
+            doc.CanSign = false;
             var canSign = row["docSignatureStatus"].ToString();
             if (!string.IsNullOrEmpty(canSign))
             {
-                if (canSign.Equals("1"))
+                if (canSign.Trim().Equals("1"))
                 {
                     doc.CanSign = true;
-                }
-                else
-                {
-                    doc.CanSign = false;
                 }
             }
 
@@ -162,6 +168,7 @@ namespace debt_fe.Businesses
         public int UploadDocument(DocumentModel document)
         {
             _logger.InfoFormat("[upload_document] prepare data");
+
             //
             // Insert Into Document(
             //			

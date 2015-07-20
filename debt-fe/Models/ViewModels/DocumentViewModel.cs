@@ -25,7 +25,8 @@ namespace debt_fe.Models.ViewModels
         public DateTime? AddedDate { get; set; }
 
 		private List<CreditorModel> _creditors;
-		public int SelectedCreditorID { get; set; }
+
+		public int? SelectedCreditorID { get; set; }
 
 		public IEnumerable<SelectListItem> CreditorItems
 		{

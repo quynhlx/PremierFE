@@ -14,14 +14,21 @@ namespace debt_fe.Models
 		public string ViewName
 		{
 			get
-			{
-				return string.Format("{0} {1}", this.Name, this.AccountNumber);
+			{				
+                if (string.IsNullOrEmpty(this.AccountNumber))
+                {
+                    return string.Format("{0}", this.Name);
+                }
+                else
+                {
+                    return string.Format("{0} ({1})", this.Name, this.AccountNumber);
+                }
 			}
 		}
 
 		public override string ToString()
 		{
-			return string.Format("{0} {1}",this.Name,this.AccountNumber);
+			return string.Format("{0} ({1})",this.Name,this.AccountNumber);
 		}
 	}
 }

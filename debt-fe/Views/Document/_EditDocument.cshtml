@@ -8,7 +8,7 @@
 {
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-		<h4 class="modal-title" id="modalDocument">Upload Document</h4>
+		<h4 class="modal-title" id="modalDocument">Edit Document</h4>
 	</div>
 	<div class="modal-body">
 
@@ -23,7 +23,8 @@
 
 		<div class="form-group">
 			<label class="control-label col-md-3">File</label>
-			<div class="col-md-9">
+			<div class="col-md-9">                
+                <span id="helpBlock" class="help-block">@Model.OldFileName</span>
 				@Html.TextBoxFor(m => m.UploadedFile, new { @class = "form-control", type = "file" })
 			</div>
 		</div>
@@ -31,7 +32,7 @@
 		<div class="form-group">
 			<label class="control-label col-md-3">Creditor</label>
 			<div class="col-md-9">
-				@Html.DropDownListFor(m => m.SelectedCreditorID, Model.CreditorItems, new { @class = "form-control" })
+				@Html.DropDownListFor(m => m.SelectedCreditorID, Model.CreditorItems, "Select One",new { @class = "form-control" })
 			</div>
 		</div>
 

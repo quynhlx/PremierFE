@@ -143,12 +143,19 @@ namespace debt_fe.Controllers
 
             var document = new DocumentModel();
 
+            document.Public = true;
             document.ID = viewModel.DocumentISN;
             document.MemberISN = this.MemberISN;
             document.Desc = viewModel.Notes;
-            document.CreditorISN = viewModel.SelectedCreditorID;
+            
             document.DocName = viewModel.DocName;
-            document.CreditorName = viewModel.GetCreditorName(viewModel.SelectedCreditorID, this.MemberISN);
+
+            if (viewModel.SelectedCreditorID != null)
+            {
+                document.CreditorISN = viewModel.SelectedCreditorID.Value;
+                document.CreditorName = viewModel.GetCreditorName(viewModel.SelectedCreditorID.Value, this.MemberISN);
+            }
+            
             document.AddedDate = viewModel.AddedDate;
 
             //
@@ -238,11 +245,18 @@ namespace debt_fe.Controllers
 
             var document = new DocumentModel();
 
+            document.Public = true;
             document.MemberISN = this.MemberISN;
             document.DocName = viewModel.DocName;
             document.Desc = viewModel.Notes;
-            document.CreditorISN = viewModel.SelectedCreditorID;
-            document.CreditorName = viewModel.GetCreditorName(viewModel.SelectedCreditorID, this.MemberISN);
+
+            if (viewModel.SelectedCreditorID != null)
+            {
+                document.CreditorISN = viewModel.SelectedCreditorID.Value;
+                document.CreditorName = viewModel.GetCreditorName(viewModel.SelectedCreditorID.Value, this.MemberISN);
+            }
+
+            
 
             var addedDate = DateTime.Now;
 

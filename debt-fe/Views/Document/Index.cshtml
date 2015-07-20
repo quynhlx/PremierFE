@@ -75,15 +75,15 @@
                         <td class="text-center">@(no++)</td>
                         <td>@Utility.Truncate(doc.DocName)</td>
                         <td>
-                            @if (!doc.CanSign)
+                            @if (doc.CanSign)
                             {
-                                <a href='@Url.Action("Signature", "Document", new { documentISN=doc.ID})' class="btn btn-primary btn-sign btn-sm display-block mb" data-document-id="@doc.ID">Sign</a>
-                                @*<a href='#' class="btn btn-primary btn-sign btn-sm display-block mb" data-document-id="@doc.ID">Sign</a>*@
+                                @*<a href='@Url.Action("Signature", "Document", new { documentISN=doc.ID})' class="btn btn-primary btn-sign btn-sm display-block mb" data-document-id="@doc.ID">Sign</a>*@
+                                <a href='#' class="btn btn-primary btn-sign btn-sm display-block mb" data-document-id="@doc.ID">Sign</a>
                             }
 
                             @if (!string.IsNullOrEmpty(doc.FileName))
                             {
-                                <a href='@Url.Action("DownloadDocument", "Document", new { documentISN = doc.ID})' data-toggle="tooltip" data-placement="right" title="download" class="btn-download-file">@Utility.Truncate(doc.FileName, 10)</a>
+                                <a href='@Url.Action("DownloadDocument", "Document", new { documentISN = doc.ID})' data-toggle="tooltip" data-placement="right" title="@doc.FileName" class="btn-download-file">@Utility.Truncate(doc.FileName, 10)</a>
                             }
                         </td>
 
@@ -101,13 +101,6 @@
                 }
             }
         </tbody>
-
-
-
-
-
-
-
     </table>
 </div>
 
@@ -124,8 +117,8 @@
                 "pageLength": 7, // record per page
                 "lengthChange": false, // no record per page change
                 "info": false, // no entities info
-                aoColumnDefs: [{ "bSortable": false, "aTargets": [6] }], // disable sort in last column,
-                "order": [[5, "desc"]] // set default sort by column 5 (added date)
+                aoColumnDefs: [{ "bSortable": false, "aTargets": [6] }] // disable sort in last column,
+                // "order": [[5, "desc"]] // set default sort by column 5 (added date)
             });
 
             //
