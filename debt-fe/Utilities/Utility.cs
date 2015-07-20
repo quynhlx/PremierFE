@@ -224,7 +224,8 @@ namespace debt_fe.Utilities
                 return null;
             }
 
-            using (var stream = new StreamReader(xmlData))
+            
+            using (var stream = new StringReader(xmlData))
             {
                 using (var reader = new XmlTextReader(stream))
                 {
@@ -242,7 +243,8 @@ namespace debt_fe.Utilities
                     }
                 }
             }
-            /*
+
+           /*
             StringReader stream = null;
             XmlTextReader reader = null;
             try
@@ -262,7 +264,8 @@ namespace debt_fe.Utilities
             {
                 if (reader != null) reader.Close();
             }
-             */ 
+            */ 
+            
         }
 
         /// <summary>

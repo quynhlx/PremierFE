@@ -1,9 +1,5 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using debt_fe.Controllers;
-using debt_fe.Models.ViewModels;
-using System.Web.Mvc;
-using debt_fe.Models;
 
 namespace debt.test
 {
@@ -13,8 +9,8 @@ namespace debt.test
 		[TestMethod]
 		public void TestUploadDocument()
 		{
-            var controller = new DocumentController();
-            var viewModel = new DocumentViewModel();
+            // var controller = new DocumentController();
+            // var viewModel = new DocumentViewModel();
 
             // viewModel.UploadedFile = new HttpPostedFileBase
 

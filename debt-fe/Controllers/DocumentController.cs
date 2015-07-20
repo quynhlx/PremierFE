@@ -26,20 +26,25 @@ namespace debt_fe.Controllers
         {
             get
             {
-                var session = Session["debt_member_isn"];
+                //
+                // first, try to get from url
+                var isn = Session["debt_member_isn"];
                 
-                if (session == null)
-                { 
-                    return -1; 
-                }
-
-                if (session != null && string.IsNullOrEmpty(session.ToString()))
+                //
+                // if session empty, try to get from request url
+                if (isn == null)
                 {
-                    return -2;
+                    var isnFromUrl = Request["memberISN"];
+
+                    if (string.IsNullOrEmpty(isnFromUrl))
+                    {
+                        return -1; 
+                    }
+
+                    isn = isnFromUrl;
                 }
 
-                return int.Parse(session.ToString());
-
+                return int.Parse(isn.ToString());
             }
             set
             {
@@ -163,7 +168,8 @@ namespace debt_fe.Controllers
                 var pathConfig = ConfigurationManager.AppSettings["UploadFolder"];
                 if (string.IsNullOrEmpty(pathConfig))
                 {
-                    pathConfig = "C:\\";
+                    // pathConfig = "C:\\";
+                    pathConfig = Environment.GetLogicalDrives()[0]; // expect C:\\
                 }
 
                 //
@@ -184,7 +190,8 @@ namespace debt_fe.Controllers
                     catch (Exception ex)
                     {
                         canSave = false;
-                        Debug.WriteLine(ex.Message);
+                        _logger.ErrorFormat("Cannot create directory {0}. Error message: {1}",fullPath, ex.Message);
+                        // Debug.WriteLine(ex.Message);
                     }
                 }
 
@@ -361,6 +368,13 @@ namespace debt_fe.Controllers
         {
             //
             // step 01: get template isn from vw_debtext_document
+            // step 02: get signature id
+            // step 03: get template
+            //
+            
+
+            //
+            // step 01
             var templateISN = _docBusiness.GetTemplateId(documentISN);
             if (templateISN < 0)
             {
@@ -369,19 +383,49 @@ namespace debt_fe.Controllers
 
             var signName = string.Format("RightSigntureDoc_{0}_{1}", documentISN, DateTime.Now.ToString("MMddyyyy"));
 
+            //
+            // step 02
             var signId = _docBusiness.GetSignatureId(documentISN, this.MemberISN, signName);
 
-            var template = _docBusiness.GetTemplateByDocumentId(documentISN,null);
+            // 
+            // step 03
+            var template = _docBusiness.GetTemplateByDocumentId(documentISN,this.MemberISN, signId);
+
+            if (template == null)
+            {
+                return Json(new { code = -1, msg = "Template not found" }, JsonRequestBehavior.AllowGet);
+            }
+
+            var apiKey = ConfigurationManager.AppSettings["RightSignatureApiKey"];
+            if (string.IsNullOrEmpty(apiKey))
+            {
+                return Json(new {code=-4,msg="api key not found" }, JsonRequestBehavior.AllowGet);
+            }
+
+            RightSignature.SetApiKey(apiKey);
 
             var docKey = RightSignature.Embedded(
-                    Guid_Template: "",
-                    RoleName: "",
-                    mergeFields: null,
-                    NameFile: "",
-                    url_redirect: "",
-                    RightSign_ISN: "");
+                    Guid_Template: template.SignGuid,
+                    RoleName: template.SignerRole,
+                    mergeFields: template.MergeFields,
+                    NameFile: signName,
+                    url_redirect: Url.Action("Index", "Home", new { memberISN = this.MemberISN}),
+                    RightSign_ISN: signId.ToString());
 
-            return Json(new { code=-2,msg="test"},JsonRequestBehavior.AllowGet);
+            if (string.IsNullOrEmpty(docKey) || string.IsNullOrWhiteSpace(docKey))
+            {
+                return Json(new { code = -3, msg = "embedded signature fail" }, JsonRequestBehavior.AllowGet);
+            }
+
+            if (docKey.Equals("-2"))
+            {
+                return Json(new { code = -2, msg = "cannot embedded signature" }, JsonRequestBehavior.AllowGet);
+            }
+            
+            var signUrlBase = ConfigurationManager.AppSettings["Url_RightSignature"];
+            var signUrl = string.Format("{0}?height=700&rt={1}",signUrlBase, docKey);
+
+            return Json(new { code=1, msg="success", data=signUrl}, JsonRequestBehavior.AllowGet);
         }
     }
 }

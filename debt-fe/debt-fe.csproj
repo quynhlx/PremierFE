@@ -181,6 +181,7 @@
     <Compile Include="Models\DocumentModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\MemberModel.cs" />
     <Compile Include="Models\TemplateModel.cs" />
     <Compile Include="Models\ViewModels\DocumentViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

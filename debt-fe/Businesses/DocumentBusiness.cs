@@ -2,6 +2,7 @@
 using debt_fe.Models;
 using debt_fe.Utilities;
 using log4net;
+using RightSignatures;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -280,14 +281,15 @@ namespace debt_fe.Businesses
             return signId;
         }
 
-        public TemplateModel GetTemplateByDocumentId(int documentId, int? signId)
+        public TemplateModel GetTemplateByDocumentId(int documentId, int memberISN, int? signId)
         {
             var templateId = GetTemplateId(documentId);
             if (templateId <= 0)
             {
                 return null;
             }
-            
+
+            templateId = 1;
 
             var query = "select * from Vw_DebtTemplate where TemplateISN = @templateId";
             var parameters = new Hashtable();
@@ -306,14 +308,14 @@ namespace debt_fe.Businesses
                 return null;
             }
 
-            var template = GetTemplateFromRow(table.Rows[0]);
+            var template = GetTemplateFromRow(table.Rows[0], memberISN);
 
             
 
             return template;
         }
 
-        private TemplateModel GetTemplateFromRow(DataRow row)
+        private TemplateModel GetTemplateFromRow(DataRow row, int memberISN)
         {
             if (row.Table.Rows.Count==0||row.Table.Columns.Count==0)
             {
@@ -350,14 +352,64 @@ namespace debt_fe.Businesses
             model.UpdatedName = row["updatedName"].ToString();
 
             var mergeField = row["tplMergeFields"].ToString();
-            if (string.IsNullOrEmpty(mergeField))
+            if (!string.IsNullOrEmpty(mergeField))
             {
                 model.MergeFields = new List<RightSignatures.Structs.MergeField>();
-                var ds = Utility.ConvertXMLToDataSet(mergeField);
+                DataSet ds = null;
 
-                if (ds != null && ds.Tables[0].Rows.Count>0)
+                try
                 {
-                    
+                    ds = Utility.ConvertXMLToDataSet(mergeField);
+
+                    /*
+                       <root>
+                          <item attID="fistname" attValue="memFirstName" />
+                          <item attID="lastname" attValue="memLastName" />
+                          <item attID="address" attValue="memAddress" />
+                          <item attID="phone" attValue="memPhone" />
+                          <item attID="test" attValue="memZip" />
+                        </root>
+                     */
+
+                }
+                catch(Exception ex)
+                {
+                    _logger.Error("Cannot convert xml to dataset. Error message = "+ex.Message, ex);
+                }
+                
+                //
+                // LOL, it's very complicated
+
+                if (ds != null && ds.Tables.Count>0 && ds.Tables[0].Rows.Count>0)
+                {
+                    var tableMapField = ds.Tables[0];
+
+                    var parameters = new Hashtable();
+                    parameters.Add("MemberISN", memberISN);
+
+                    var userInfo = _data.ExecuteQuery("select * from Member where MemberISN=@MemberISN", parameters: parameters);
+
+                    if (userInfo != null && userInfo.Rows.Count>0)
+                    {
+                        var rowUser = userInfo.Rows[0];
+
+                        foreach (DataRow rowMapField in tableMapField.Rows)
+                        {
+                            var field = new Structs.MergeField();
+
+                            try
+                            {
+                                field.name = rowMapField["attID"].ToString();
+                                field.value = rowUser[rowMapField["attValue"].ToString()].ToString();
+
+                                model.MergeFields.Add(field);
+                            }
+                            catch(Exception ex)
+                            {
+                                _logger.ErrorFormat("Cannot get column value. Error message: {0}",ex.Message);
+                            }
+                        }
+                    }
                 }
 
             }
