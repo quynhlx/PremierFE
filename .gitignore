@@ -22,7 +22,7 @@ x86/
 build/
 bld/
 [Bb]in/
-![Bb]in/RightSignatures.dll
+!/[Bb]in/RightSignatures.dll
 [Oo]bj/
 !debt-fe/bin/RightSignatures.dll
 

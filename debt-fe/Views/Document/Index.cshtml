@@ -75,10 +75,10 @@
                         <td class="text-center">@(no++)</td>
                         <td>@Utility.Truncate(doc.DocName)</td>
                         <td>
-                            @if (doc.CanSign)
+                            @if (!doc.CanSign)
                             {
-                                @*<a href='@Url.Action("Signature", "Document", new { documentISN=doc.ID})' class="btn btn-primary btn-sign btn-sm display-block mb" data-document-id="@doc.ID">Sign</a>*@
-                                <a href='#' class="btn btn-primary btn-sign btn-sm display-block mb" data-document-id="@doc.ID">Sign</a>
+                                <a href='@Url.Action("Signature", "Document", new { documentISN=doc.ID})' class="btn btn-primary btn-sign btn-sm display-block mb" data-document-id="@doc.ID">Sign</a>
+                                @*<a href='#' class="btn btn-primary btn-sign btn-sm display-block mb" data-document-id="@doc.ID">Sign</a>*@
                             }
 
                             @if (!string.IsNullOrEmpty(doc.FileName))
