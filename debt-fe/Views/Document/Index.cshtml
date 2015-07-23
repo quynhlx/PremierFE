@@ -75,9 +75,9 @@
                         <td class="text-center">@(no++)</td>
                         <td>@Utility.Truncate(doc.DocName)</td>
                         <td>
-                            @if (!doc.CanSign)
+                            @if (doc.CanSign)
                             {
-                                <a href='@Url.Action("Signature", "Document", new { documentISN=doc.ID})' class="btn btn-primary btn-sign btn-sm display-block mb" data-document-id="@doc.ID">Sign</a>
+                                <a href='@Url.Action("Signature", "Document", new { documentISN=doc.ID})' target="_blank" class="btn btn-primary btn-sign btn-sm display-block mb" data-document-id="@doc.ID">Sign</a>
                                 @*<a href='#' class="btn btn-primary btn-sign btn-sm display-block mb" data-document-id="@doc.ID">Sign</a>*@
                             }
 
@@ -103,6 +103,8 @@
         </tbody>
     </table>
 </div>
+
+<div class="modal-backdrop fade in hidden" id="modal-loading"><div class="loader">Loading...</div></div>
 
 <script src="~/Scripts/plugins/dropzone.js"></script>
 
@@ -159,6 +161,8 @@
                         backdrop: 'static'
                     });
                 });
+
+                
             });
 
             //
@@ -233,6 +237,13 @@
 
                 var url = self.prop('href');
 
+                var backdrop = $("<div class='modal-backdrop fade in'></div>");
+                var loading = $('#modal-loading');
+
+                loading.removeClass('hidden');
+                $('body').append(backdrop);
+
+
                 //
                 // get sign partial view
                 var req = $.ajax({ url: url });
@@ -242,6 +253,8 @@
                 });
 
                 req.done(function (resp) {
+
+                    console.log(resp);
 
                     if (resp === undefined || resp === null) {
                         toastr.error('Unexpected error occurred. Please try again.');
@@ -255,10 +268,25 @@
                         return;
                     }
 
+                    // window.open(resp.data);
 
+                    var iframe = $('<iframe>');
+                    iframe.prop('src', resp.data);
+
+                    var modal = $('#modal-document');
+
+                    modal.find('.modal-dialog').css('width', '728px');
+                    
+                    modal.find('.modal-content').html(iframe).css('padding', '8px');
+                    modal.modal({ backdrop: 'static' });
 
                 });
 
+                req.complete(function () {
+                    // console.log('completed');
+                    backdrop.remove();
+                    loading.addClass('hidden');
+                });
             });
         });
     </script>

@@ -321,6 +321,7 @@
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Document\_UploadDocument.cshtml" />
     <Content Include="Views\Document\_EditDocument.cshtml" />
+    <Content Include="Views\Document\_Signature.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

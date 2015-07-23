@@ -103,6 +103,7 @@ namespace debt_fe.Businesses
                         
             doc.CanSign = false;
             var canSign = row["docSignatureStatus"].ToString();
+
             if (!string.IsNullOrEmpty(canSign))
             {
                 if (canSign.Trim().Equals("1"))
@@ -181,7 +182,7 @@ namespace debt_fe.Businesses
             parameters.Add("docStatus", document.Status);
             parameters.Add("docDesc", document.Desc);
             parameters.Add("docLastAction", document.LastAction);
-            parameters.Add("docSignatureStatus", document.SignatureStatus);
+            parameters.Add("docSignatureStatus", document.CanSign);
             parameters.Add("CreditorISN", document.CreditorISN);
             parameters.Add("updatedBy", document.UpdatedBy);
             // parameters.Add("docAddedBy", document.AddedBy);

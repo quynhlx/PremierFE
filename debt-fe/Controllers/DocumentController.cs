@@ -246,6 +246,7 @@ namespace debt_fe.Controllers
             var document = new DocumentModel();
 
             document.Public = true;
+            document.CanSign = true;
             document.MemberISN = this.MemberISN;
             document.DocName = viewModel.DocName;
             document.Desc = viewModel.Notes;
@@ -389,14 +390,15 @@ namespace debt_fe.Controllers
 
             //
             // step 01
+
             var templateISN = _docBusiness.GetTemplateId(documentISN);
+
+            templateISN = 32;
+
             if (templateISN < 0)
             {
                 return Json(new { code=-1,msg="Templale not found" }, JsonRequestBehavior.AllowGet);
             }
-
-
-            templateISN = 32;
 
             var signName = string.Format("RightSigntureDoc_{0}_{1}", documentISN, DateTime.Now.ToString("MMddyyyy"));
 
@@ -414,6 +416,9 @@ namespace debt_fe.Controllers
             }
 
             var apiKey = ConfigurationManager.AppSettings["RightSignatureApiKey"];
+
+            apiKey = "19g28X7WLKzW279vq6Z0NrBaWOE3Hs8IztBXe6ND";
+
             if (string.IsNullOrEmpty(apiKey))
             {
                 return Json(new {code=-4,msg="api key not found" }, JsonRequestBehavior.AllowGet);
@@ -426,13 +431,19 @@ namespace debt_fe.Controllers
                     RoleName: template.SignerRole,
                     mergeFields: template.MergeFields,
                     NameFile: signName,
-                    url_redirect: Url.Action("Index", "Home", new { memberISN = this.MemberISN}),
+                    // url_redirect: Url.Action("Index", "Home", new { memberISN = this.MemberISN},),
+                    url_redirect: Request.Url.ToString(),
                     RightSign_ISN: signId.ToString());
+
+            
 
             if (string.IsNullOrEmpty(docKey) || string.IsNullOrWhiteSpace(docKey))
             {
                 return Json(new { code = -3, msg = "embedded signature fail" }, JsonRequestBehavior.AllowGet);
             }
+
+            // docKey = "cf59658aa34144bc9de20765eea8f133";
+            // docKey = "19g28X7WLKzW279vq6Z0NrBaWOE3Hs8IztBXe6ND";
 
             if (docKey.Equals("-2"))
             {
@@ -442,7 +453,22 @@ namespace debt_fe.Controllers
             var signUrlBase = ConfigurationManager.AppSettings["Url_RightSignature"];
             var signUrl = string.Format("{0}?height=700&rt={1}",signUrlBase, docKey);
 
-            return Json(new { code=1, msg="success", data=signUrl}, JsonRequestBehavior.AllowGet);
+            ViewBag.iFrameSrc = signUrl;
+
+            // return PartialView("_Signature");
+
+            return Json(new { code = 1, msg = "success", data = signUrl, absUri=Request.Url.AbsoluteUri, absPath=Request.Url.AbsolutePath, Url=Request.Url.ToString() }, JsonRequestBehavior.AllowGet);
+
+            /*
+             * on submit
+             * 
+             * request data in 'select * from RightSignature_Document where RightSignature_Document_ISN=@signId order by createddate desc'
+             * 
+             * if sign_status=='signed' && sign_document_guid != ''
+             * 
+             * then download data
+             * 
+             * */
         }
     }
 }
