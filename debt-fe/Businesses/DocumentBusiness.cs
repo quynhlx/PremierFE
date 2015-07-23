@@ -288,8 +288,9 @@ namespace debt_fe.Businesses
             return signId;
         }
 
-        public TemplateModel GetTemplateByDocumentId(int documentId, int memberISN, int? signId)
+        public TemplateModel GetTemplateByDocumentId(int documentId, int memberISN, int templateId, int? signId)
         {
+            /*
             var templateId = GetTemplateId(documentId);
             if (templateId <= 0)
             {
@@ -297,6 +298,7 @@ namespace debt_fe.Businesses
             }
 
             templateId = 1;
+             */ 
 
             var query = "select * from Vw_DebtTemplate where TemplateISN = @templateId";
             var parameters = new Hashtable();

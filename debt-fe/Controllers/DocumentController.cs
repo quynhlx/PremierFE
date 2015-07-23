@@ -395,6 +395,9 @@ namespace debt_fe.Controllers
                 return Json(new { code=-1,msg="Templale not found" }, JsonRequestBehavior.AllowGet);
             }
 
+
+            templateISN = 32;
+
             var signName = string.Format("RightSigntureDoc_{0}_{1}", documentISN, DateTime.Now.ToString("MMddyyyy"));
 
             //
@@ -403,7 +406,7 @@ namespace debt_fe.Controllers
 
             // 
             // step 03
-            var template = _docBusiness.GetTemplateByDocumentId(documentISN,this.MemberISN, signId);
+            var template = _docBusiness.GetTemplateByDocumentId(documentISN,this.MemberISN, templateISN, signId);
 
             if (template == null)
             {
