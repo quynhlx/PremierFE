@@ -7,10 +7,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Web;
 
 namespace debt_fe.Businesses
 {
@@ -101,14 +99,15 @@ namespace debt_fe.Businesses
                 }
             }
                         
-            doc.CanSign = false;
+            doc.IsSignatureDocument = false;
+           
             var canSign = row["docSignatureStatus"].ToString();
 
             if (!string.IsNullOrEmpty(canSign))
             {
                 if (canSign.Trim().Equals("1"))
                 {
-                    doc.CanSign = true;
+                    doc.IsSignatureDocument = true;                    
                 }
             }
 
@@ -118,7 +117,6 @@ namespace debt_fe.Businesses
                 doc.CreditorISN = int.Parse(creditorISN);
             }
 
-
             return doc;
         }
 
@@ -126,7 +124,7 @@ namespace debt_fe.Businesses
         public string GetDocumentPath(int documentISN, DateTime? addedDate)
         {
             var path = string.Empty;
-
+            
             DocumentModel document = null;
 
             if (addedDate == null)
@@ -147,10 +145,11 @@ namespace debt_fe.Businesses
                 {
                     _logger.Info("cannot get document path", ex);
 
-                    return string.Empty;
+                    addedDate = DateTime.Now;
+
+                    // return string.Empty;
                 }
             }
-
 
             path = Path.Combine(
                     addedDate.Value.ToString("yyyyMM"),
@@ -182,7 +181,7 @@ namespace debt_fe.Businesses
             parameters.Add("docStatus", document.Status);
             parameters.Add("docDesc", document.Desc);
             parameters.Add("docLastAction", document.LastAction);
-            parameters.Add("docSignatureStatus", document.CanSign);
+            parameters.Add("docSignatureStatus", document.IsSignatureDocument);
             parameters.Add("CreditorISN", document.CreditorISN);
             parameters.Add("updatedBy", document.UpdatedBy);
             // parameters.Add("docAddedBy", document.AddedBy);
@@ -198,6 +197,34 @@ namespace debt_fe.Businesses
             return documentISN;
         }
 
+        /// <summary>
+        /// update document which type of signature document after sign
+        /// </summary>
+        /// <param name="filename">a string of download file</param>
+        /// <param name="documentId">a number of document isn</param>
+        /// <returns></returns>
+        public bool EditSignatureDocument(string filename, int documentId)
+        {
+            var query = "update Vw_DebtExt_Document set docFileName=@filename where DocumentISN=@docId";
+
+            var parameters = new Hashtable();
+            parameters.Add("filename",filename);
+            parameters.Add("docId",documentId);
+
+            try
+            {
+                _data.ExecuteNonQuery(query, parameters);
+
+                return true;
+            }
+            catch(Exception ex)
+            {
+                _logger.Error(ex.Message, ex);
+
+                return false;
+            }
+        }
+
         public bool EditDocument(DocumentModel document)
         {
             _logger.InfoFormat("[edit_document] prepare data");
@@ -207,8 +234,6 @@ namespace debt_fe.Businesses
             //    _logger.Info("Cannot edit document cuz duplicated name");
             //    return false;
             //}
-
-
 
             var query = string.Format("update Document set MemberISN=@memberISN, docName=@name, docDesc=@desc, CreditorISN=@creditorISN ");
             var parameters = new Hashtable();

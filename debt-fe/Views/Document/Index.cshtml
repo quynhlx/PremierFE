@@ -23,6 +23,17 @@
     </div>
 </div>
 
+<div class="hidden" id="modal-wrapper">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Right Signature</h4>
+    </div>
+    <div class="modal-body">
+        
+    </div>
+</div>
+
+
 @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
 {
     <div class="col-md-12">
@@ -31,7 +42,6 @@
             <strong>Error!</strong> @ViewBag.ErrorMessage
         </div>
     </div>
-
 }
 
 @if (!string.IsNullOrEmpty(ViewBag.SuccessMessage))
@@ -75,18 +85,22 @@
                         <td class="text-center">@(no++)</td>
                         <td>@Utility.Truncate(doc.DocName)</td>
                         <td>
-                            @if (doc.CanSign)
+                            @if (doc.IsSignatureDocument)
                             {
-                                <a href='@Url.Action("Signature", "Document", new { documentISN=doc.ID})' target="_blank" class="btn btn-primary btn-sign btn-sm display-block mb" data-document-id="@doc.ID">Sign</a>
-                                @*<a href='#' class="btn btn-primary btn-sign btn-sm display-block mb" data-document-id="@doc.ID">Sign</a>*@
+                                if (string.IsNullOrEmpty(doc.FileName))
+                                {
+                                    <a href='@Url.Action("Signature", "Document", new { documentISN=doc.ID})' target="_blank" class="btn btn-primary btn-sign btn-sm display-block mb" data-document-id="@doc.ID">Sign</a>
+                                }
+                                else
+                                {
+                                    <a href='@Url.Action("DownloadDocument", "Document", new { documentISN = doc.ID})' data-toggle="tooltip" data-placement="right" title="@doc.FileName" class="btn-download-file">@Utility.Truncate(doc.FileName, 10)</a>
+                                }
                             }
-
-                            @if (!string.IsNullOrEmpty(doc.FileName))
+                            else
                             {
                                 <a href='@Url.Action("DownloadDocument", "Document", new { documentISN = doc.ID})' data-toggle="tooltip" data-placement="right" title="@doc.FileName" class="btn-download-file">@Utility.Truncate(doc.FileName, 10)</a>
                             }
                         </td>
-
                         <td>@Utility.Truncate(doc.CreditorName)</td>
                         <td>@Utility.Truncate(doc.Desc)</td>
                         <td class="text-center">@string.Format("{0:MM/dd/yyyy}", doc.AddedDate)<br />@string.Format("{0:hh:mm tt}", doc.AddedDate)</td>
@@ -263,7 +277,7 @@
                     }
 
                     if (!$.isNumeric(resp.code) || resp.code < 0) {
-                        toastr.info('Assigned template not found');
+                        toastr.error('Signer Role Not Mapping');
 
                         return;
                     }
@@ -274,10 +288,19 @@
                     iframe.prop('src', resp.data);
 
                     var modal = $('#modal-document');
+                    var content = modal.find('.modal-content');
+                    content.css('padding', '8px');
 
                     modal.find('.modal-dialog').css('width', '728px');
                     
-                    modal.find('.modal-content').html(iframe).css('padding', '8px');
+                    // var form = $("<form>", {action:'/Document/'});
+                    var wrapper = $('#modal-wrapper').clone().removeClass('hidden').removeAttr('id');
+                    wrapper.find('.modal-body').html(iframe);
+                    // .appendTo(content);
+                    content.append(wrapper);
+
+                    
+                    // modal.find('.modal-content').html(iframe).css('padding', '8px');
                     modal.modal({ backdrop: 'static' });
 
                 });

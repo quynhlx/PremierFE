@@ -1,16 +1,18 @@
 ﻿using debt_fe.Businesses;
 using debt_fe.Models;
 using debt_fe.Models.ViewModels;
-using debt_fe.Utilities;
 using log4net;
 using System;
 using System.Linq;
 using System.Configuration;
-using System.Diagnostics;
 using System.IO;
 using System.Web.Mvc;
-using System.Web;
 using RightSignatures;
+using System.Threading;
+using System.Net;
+using System.Collections.Generic;
+using System.Collections;
+using System.Threading.Tasks;
 
 namespace debt_fe.Controllers
 {
@@ -18,6 +20,8 @@ namespace debt_fe.Controllers
     public class DocumentController : Controller
     {
         private DocumentBusiness _docBusiness;
+        private SignatureBusiness _signBusiness;
+
         private static readonly ILog _logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         private int _memberISN;
@@ -25,9 +29,7 @@ namespace debt_fe.Controllers
         public int MemberISN
         {
             get
-            {
-                //
-                // first, try to get from url
+            {   
                 var isn = Session["debt_member_isn"];
                 
                 //
@@ -57,12 +59,17 @@ namespace debt_fe.Controllers
         public DocumentController()
         {
             _docBusiness = new DocumentBusiness();
+            _signBusiness = new SignatureBusiness();
         }
 
         public ActionResult Index(int? memberISN)
         {
+            // TempData["info"] = "Hello world";
+
             //
             // add member isn to session
+            #region get member isn
+
             if (memberISN == null)
             {
                 memberISN = this.MemberISN;
@@ -75,12 +82,14 @@ namespace debt_fe.Controllers
             else
             {
                 this.MemberISN = memberISN.Value;
-            }
+            } 
+            #endregion
 
             //
             // view message when upload document failed
             var doc = (int?)Session["debt_document_isn"];
 
+            #region check session
             if (doc != null)
             {
                 var editMode = (bool?)Session["debt_document_edit"];
@@ -111,6 +120,7 @@ namespace debt_fe.Controllers
 
                 Session.Remove("debt_document_isn");
             }
+            #endregion
 
             var documents = _docBusiness.GetDocuments(this.MemberISN);
 
@@ -174,8 +184,7 @@ namespace debt_fe.Controllers
 
                 var pathConfig = ConfigurationManager.AppSettings["UploadFolder"];
                 if (string.IsNullOrEmpty(pathConfig))
-                {
-                    // pathConfig = "C:\\";
+                {                    
                     pathConfig = Environment.GetLogicalDrives()[0]; // expect C:\\
                 }
 
@@ -185,6 +194,7 @@ namespace debt_fe.Controllers
 
                 // var path = Server.MapPath("~/" + pathConfig);
                 var docPath = _docBusiness.GetDocumentPath(viewModel.DocumentISN, document.AddedDate);
+
                 fullPath = Path.Combine(pathConfig, docPath);
 
                 if (!Directory.Exists(fullPath))
@@ -198,7 +208,6 @@ namespace debt_fe.Controllers
                     {
                         canSave = false;
                         _logger.ErrorFormat("Cannot create directory {0}. Error message: {1}",fullPath, ex.Message);
-                        // Debug.WriteLine(ex.Message);
                     }
                 }
 
@@ -246,7 +255,7 @@ namespace debt_fe.Controllers
             var document = new DocumentModel();
 
             document.Public = true;
-            document.CanSign = true;
+            document.IsSignatureDocument = false;
             document.MemberISN = this.MemberISN;
             document.DocName = viewModel.DocName;
             document.Desc = viewModel.Notes;
@@ -256,8 +265,6 @@ namespace debt_fe.Controllers
                 document.CreditorISN = viewModel.SelectedCreditorID.Value;
                 document.CreditorName = viewModel.GetCreditorName(viewModel.SelectedCreditorID.Value, this.MemberISN);
             }
-
-            
 
             var addedDate = DateTime.Now;
 
@@ -340,12 +347,13 @@ namespace debt_fe.Controllers
             var pathConfig = ConfigurationManager.AppSettings["UploadFolder"];
             if (string.IsNullOrEmpty(pathConfig))
             {
-                pathConfig = "C:\\";
+                pathConfig = Environment.GetLogicalDrives()[0]; // expect C:\\
             }
 
             //
             // get document folder and combine to root folder
             var docPath = _docBusiness.GetDocumentPath(documentISN, doc.AddedDate);
+
             var fullPath = Path.Combine(pathConfig, docPath);
 
             //
@@ -354,7 +362,10 @@ namespace debt_fe.Controllers
 
             if (!System.IO.File.Exists(fullPath))
             {
-                return HttpNotFound();
+                // return HttpNotFound();
+                TempData["error"] = string.Format("File not found");
+
+                return RedirectToAction("Index");
             }
 
 
@@ -373,7 +384,10 @@ namespace debt_fe.Controllers
             {
                 _logger.Error(ex.Message, ex);
 
-                return HttpNotFound();
+                // return HttpNotFound();
+                TempData["error"] = string.Format("Cannot download file",fileDownloadName);
+
+                return RedirectToAction("Index");
             }
 
             return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileDownloadName);
@@ -417,7 +431,7 @@ namespace debt_fe.Controllers
 
             var apiKey = ConfigurationManager.AppSettings["RightSignatureApiKey"];
 
-            apiKey = "19g28X7WLKzW279vq6Z0NrBaWOE3Hs8IztBXe6ND";
+            // apiKey = "19g28X7WLKzW279vq6Z0NrBaWOE3Hs8IztBXe6ND";
 
             if (string.IsNullOrEmpty(apiKey))
             {
@@ -426,27 +440,32 @@ namespace debt_fe.Controllers
 
             RightSignature.SetApiKey(apiKey);
 
+            var auth = Request.Url.Authority;            
+            var scheme = Request.Url.Scheme;
+            //
+            // http://localhost:47854/Document/Signature?documentISN=486
+            var redirect = string.Format("{0}://{1}/Document/SignatureDownload?signId={2}", scheme, auth, signId);
+
             var docKey = RightSignature.Embedded(
                     Guid_Template: template.SignGuid,
                     RoleName: template.SignerRole,
+                    RecipientName:"Premier",                   
                     mergeFields: template.MergeFields,
-                    NameFile: signName,
-                    // url_redirect: Url.Action("Index", "Home", new { memberISN = this.MemberISN},),
-                    url_redirect: Request.Url.ToString(),
+                    NameFile: signName,                    
+                    url_redirect: redirect,
                     RightSign_ISN: signId.ToString());
-
-            
 
             if (string.IsNullOrEmpty(docKey) || string.IsNullOrWhiteSpace(docKey))
             {
+                _logger.Error(string.Format("Cannot get document key. Embedded signature fail."));
+
                 return Json(new { code = -3, msg = "embedded signature fail" }, JsonRequestBehavior.AllowGet);
             }
 
-            // docKey = "cf59658aa34144bc9de20765eea8f133";
-            // docKey = "19g28X7WLKzW279vq6Z0NrBaWOE3Hs8IztBXe6ND";
-
             if (docKey.Equals("-2"))
             {
+                _logger.Error(string.Format("Cannot get document key '{0}'. Embedded signature fail.", docKey));
+
                 return Json(new { code = -2, msg = "cannot embedded signature" }, JsonRequestBehavior.AllowGet);
             }
             
@@ -455,9 +474,7 @@ namespace debt_fe.Controllers
 
             ViewBag.iFrameSrc = signUrl;
 
-            // return PartialView("_Signature");
-
-            return Json(new { code = 1, msg = "success", data = signUrl, absUri=Request.Url.AbsoluteUri, absPath=Request.Url.AbsolutePath, Url=Request.Url.ToString() }, JsonRequestBehavior.AllowGet);
+            return Json(new { code = 1, msg = "success", data = signUrl, signId=signId }, JsonRequestBehavior.AllowGet);
 
             /*
              * on submit
@@ -470,5 +487,158 @@ namespace debt_fe.Controllers
              * 
              * */
         }
+
+        public ActionResult SignatureDownload(int signId)
+        {            
+            var matchId = string.Empty;
+            var docId = 0;
+            var fileName = string.Empty;
+
+            for (int i = 0; i < 10; i++)
+            {
+                var signTemp = _signBusiness.GetSignatures(this.MemberISN);
+
+                SignatureModel model = null;
+
+                try
+                {
+                    model = signTemp.Where(s => s.Id == signId).First(s => s.IsSigned && !string.IsNullOrEmpty(s.DocumentGuid));
+
+                    matchId = model.DocumentGuid;
+                    fileName = model.DocumentName;
+                    
+                    if (model.DocumentId!=null)
+                    {
+                        docId = model.DocumentId.Value;
+                    }
+
+                    break;
+                }
+                catch(Exception)
+                {
+                    //
+                    // not sign yet, give it a try
+                    Thread.Sleep(3000);
+                }                
+            }
+
+            if (string.IsNullOrEmpty(matchId))
+            {
+                TempData["info"] = "Document Id not found";
+
+                return RedirectToAction("Index");
+            }
+
+            var strFileName = string.Format("RightSignatureDoc_{0}.pdf", DateTime.Now.ToString("MMddyyyyhhmmss"));
+            var uploadFolder = ConfigurationManager.AppSettings["UploadFolder"];
+            var docPath = _docBusiness.GetDocumentPath(docId, null);
+
+            //
+            // update signature filename after sign
+            _docBusiness.EditSignatureDocument(strFileName, docId);
+
+            var urlSigned = RightSignature.GetURLPDFSigned(matchId);
+
+            try
+            {
+                uploadFolder = Path.Combine(uploadFolder, docPath);
+            }
+            catch(Exception ex)
+            {
+                _logger.Error(ex.Message,ex);
+            }
+            
+            if (!Directory.Exists(uploadFolder))
+            {
+                try
+                {
+                    Directory.CreateDirectory(uploadFolder);
+                }
+                catch(Exception ex)
+                {
+                    _logger.Error(ex.Message, ex);
+                }
+            }
+
+            var savePath = Path.Combine(uploadFolder, strFileName);
+
+            /*
+            var thread = new Thread(new ParameterizedThreadStart(DownloadSignatureAsync));
+            thread.IsBackground = true;
+            thread.Start(new ArrayList { urlSigned, savePath });
+             * */
+
+            DownloadSignatureAsync(urlSigned, savePath);
+
+            #region
+            /*
+            using (var client = new WebClient())
+            {                 
+                try
+                {
+                    client.DownloadFile(urlSigned.UrlFileSigned, savePath);
+                }
+                catch(Exception ex)
+                {
+                    _logger.Error(ex.Message, ex);
+                }
+            }
+             */ 
+
+            //
+            // read file and return to download
+            /*
+            byte[] fileBytes = null;
+
+            try
+            {
+                fileBytes = System.IO.File.ReadAllBytes(savePath);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message, ex);
+            }
+            */
+            // return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, strFileName);
+            #endregion
+
+            return RedirectToAction("Index");
+        }
+
+        /*
+        private async void DownloadSignatureAsync(object parameters)
+        {
+            var arr = parameters as ArrayList;
+
+            var url = arr[0] as UrlAfterSigned;
+            var savePath = (string)arr[1];
+
+            var client = new WebClient();
+
+            await client.DownloadFileTaskAsync(url.UrlFileSigned, savePath);
+        }
+         */ 
+
+        private void DownloadSignatureAsync(UrlAfterSigned url, string fullPath)
+        {
+            Task.Factory.StartNew(new Action(() =>
+            {
+                using (var client = new WebClient())
+                {
+                    try
+                    {
+                        client.DownloadFileTaskAsync(url.UrlFileSigned, fullPath);
+                    }
+                    catch (Exception ex)
+                    {
+                        TempData["error"] = "Cannot download file";
+                        _logger.Error(ex.Message, ex);
+                    }
+                }
+            }));
+
+            
+        }
+
     }
 }
