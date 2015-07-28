@@ -224,6 +224,12 @@ input[type=file].form-control {
         // padding: 20px 0;
         border-bottom: 1px solid #eee;
         position: relative;
+        &.active {
+            & a {
+                background-color: @main-blue;
+                color: #fff;   
+            }
+        }
         & > a {
             & span {
                 .transition(@properties: transform);
