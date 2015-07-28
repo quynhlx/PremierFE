@@ -19,11 +19,7 @@
                 <div class="navLeft pull-left ">
                     <div class="logo pull-left"><a href="#"><img src='@Url.Content("~/Content/images/logo.png")' /></a></div>
                     <div class="clear">
-                        <ul class="menu">
-                            <li><a href='#'><span class="glyphicon glyphicon-user"></span> MY ACCOUNT</a></li>
-                            <li><a href='#'><span class="glyphicon glyphicon-credit-card"></span> MAKE PAYMENT</a></li>
-                            <li><a href='@Url.Action("Index","Document")'><span class="glyphicon glyphicon-file"></span> DOCUMENTS</a></li>
-                        </ul>
+                        @Html.Partial("_Menu")
                     </div>
                 </div>
                 <div class="Rcontent pull-left">
