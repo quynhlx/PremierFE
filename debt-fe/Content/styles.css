@@ -156,4 +156,7 @@ input[type=file].form-control {
     height: 5em;
   }
 }
+.blueBackground {
+  background-color: #3fa4b5 !important;
+}
 /*# sourceMappingURL=styles.css.map */

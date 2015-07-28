@@ -1,4 +1,6 @@
-﻿.border-radius (@radius) {
+﻿@main-blue: #3fa4b5;
+
+.border-radius (@radius) {
     -webkit-border-radius: @radius;
     -moz-border-radius: @radius;
     -ms-border-radius: @radius;
@@ -186,4 +188,12 @@ input[type=file].form-control {
     box-shadow: 0 -2em #ffffff;
     height: 5em;
   }
+}
+
+
+//
+// custom theme
+//
+.blueBackground {
+    background-color: @main-blue !important;
 }
