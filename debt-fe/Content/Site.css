@@ -11,17 +11,35 @@ a:hover{color:#474a54; text-decoration:none}
 .account{width:auto; margin:15px 0 0 0; color:#fff; margin-right:-70px}
 .account a {background:url(../images/user.png) no-repeat; padding:20px 20px 20px 60px; color:#fff;}
 .navLeft{width:20%; min-height:600px; border-right:1px solid #dbdfec}
-.navLeft ul{margin:0; padding:0 }
-.navLeft ul li{margin:0; padding:20px 0; list-style-type:none; border-bottom:1px solid #eeeeee; position:relative }
-.navLeft ul li a{padding:0 0; color:#808080; font-family:calibri, Arial, Helvetica, sans-seri; font-size:18px}
-.navLeft ul li a:hover{color:#27b2bc; text-decoration:none}
-.navLeft ul li a:hover ul{display:block}
-.navLeft ul li a.active{padding:0 0; color:#27b2bc; text-decoration:none}
-.navLeft ul li.myaccount{background:rgba(249,249,249,1)url(../images/ico-MyAccount.png) no-repeat 15px 13px}
-.navLeft ul li.setting{background:url(../images/ico-setting.png) no-repeat 15px 13px}
-.navLeft ul li a i{font-size:8px}
-.navLeft ul li a.moreaccount{color:#3399cc !important; text-decoration:none}
-.navLeft ul li a:hover.moreaccount{color:#808080 !important; text-decoration:none}
+
+/*
+.navLeft > ul{margin:0; padding:0 }
+.navLeft > ul > li{margin:0; padding:20px 0; list-style-type:none; border-bottom:1px solid #eeeeee; position:relative }
+.navLeft > ul > li > a{padding:0 0; color:#808080; font-family:calibri, Arial, Helvetica, sans-seri; font-size:18px}
+.navLeft > ul > li > a:hover{color:#27b2bc; text-decoration:none}
+.navLeft > ul > li > a:hover ul{display:block}
+.navLeft > ul > li > a.active{padding:0 0; color:#27b2bc; text-decoration:none}
+.navLeft > ul > li.myaccount{background:rgba(249,249,249,1)url(../images/ico-MyAccount.png) no-repeat 15px 13px}
+.navLeft > ul > li.setting{background:url(../images/ico-setting.png) no-repeat 15px 13px}
+.navLeft > ul > li > a i{font-size:8px}
+.navLeft > ul > li > a.moreaccount{color:#3399cc !important; text-decoration:none}
+.navLeft > ul > li > a:hover.moreaccount{color:#808080 !important; text-decoration:none}
+    */
+
+/*
+.navLeft ul.menu {margin:0; padding:0 }
+.navLeft ul.menu > li{margin:0; padding:20px 0; list-style-type:none; border-bottom:1px solid #eeeeee; position:relative }
+.navLeft ul.menu > li > a{padding:0 0; color:#808080; font-family:calibri, Arial, Helvetica, sans-seri; font-size:18px}
+.navLeft ul.menu > li > a:hover{color:#27b2bc; text-decoration:none}
+.navLeft ul.menu > li > a:hover ul{display:block}
+.navLeft ul.menu > li > a.active{padding:0 0; color:#27b2bc; text-decoration:none}
+.navLeft ul.menu > li.myaccount{background:rgba(249,249,249,1)url(../images/ico-MyAccount.png) no-repeat 15px 13px}
+.navLeft ul.menu > li.setting{background:url(../images/ico-setting.png) no-repeat 15px 13px}
+.navLeft ul.menu > li > a i{font-size:8px}
+.navLeft ul.menu > li > a.moreaccount{color:#3399cc !important; text-decoration:none}
+.navLeft ul.menu > li > a:hover.moreaccount{color:#808080 !important; text-decoration:none}
+    */
+    
 .complateBox{margin:0 20px}
 .complateBox h3{font-size:13px; font-weight:bold; margin-bottom:10px }
 .complateBox p{font-size:12px;}

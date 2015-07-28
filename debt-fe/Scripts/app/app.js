@@ -88,6 +88,19 @@
         });
         */
 
+        //
+        // toggle sub menu
+        //
+        $('.menu').on('click', '.has-sub > a', function (e) {
+
+            e.preventDefault();
+
+            var self = $(this);
+
+            self.toggleClass('active').next('.sub-menu').slideToggle();
+
+        });
+
     });
 
 })();

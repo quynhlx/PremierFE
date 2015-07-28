@@ -8,6 +8,21 @@
     border-radius: @radius;
 }
 
+.transition (@properties: all, @time: 0.5s, @timing: ease-in-out) {
+    -moz-transition: @arguments;
+    -o-transition: @arguments;
+    -webkit-transition: @arguments;
+    transition: @arguments;
+}
+
+.rotate(@degree: 90deg) {
+    -moz-transform: rotate(@degree);
+    -ms-transform: rotate(@degree);
+    -o-transform: rotate(@degree);
+    -webkit-transform: rotate(@degree);
+    transform: rotate(@degree);
+}
+
 .font-weight (@weight) {
     font-weight: @weight;
 }
@@ -196,4 +211,62 @@ input[type=file].form-control {
 //
 .blueBackground {
     background-color: @main-blue !important;
+}
+
+@menu-link-color: #27b2bc;
+.menu {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    & > li {
+        margin: 0;
+        // padding: 20px 0;
+        border-bottom: 1px solid #eee;
+        position: relative;
+        & > a {
+            & span {
+                .transition();
+            }
+            &.active {
+                & span.pull-right {
+                    .rotate(90deg);
+                }
+            }
+        }
+        & .sub-menu {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: none;
+            & li {
+                &:first-child {
+                    border-bottom: 1px solid #eee;
+                    border-top: 1px solid #eee;
+                }
+                & a {
+                    padding-left:16px;
+                }
+            }
+        }
+    }
+
+    & a {
+        display: block;
+        padding: 20px 8px;
+        text-transform: uppercase;
+        font-family:calibri, Arial, Helvetica, sans-seri; 
+        font-size:18px;
+        color: #808080;
+        // padding-left: 8px;
+        text-decoration: none;
+        &:hover {
+            // color: @menu-link-color;
+            background-color: @main-blue;
+            color: #fff;            
+        }
+        & i, & span {
+            // font-size: 8px;
+        }
+    }
 }
