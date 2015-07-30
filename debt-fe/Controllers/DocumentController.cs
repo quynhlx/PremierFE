@@ -10,9 +10,8 @@ using System.Web.Mvc;
 using RightSignatures;
 using System.Threading;
 using System.Net;
-using System.Collections.Generic;
-using System.Collections;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace debt_fe.Controllers
 {
@@ -29,7 +28,24 @@ namespace debt_fe.Controllers
         public int MemberISN
         {
             get
-            {   
+            {
+				var debt = Request.Cookies["debt_extension"];
+				
+				if (debt == null)
+				{
+					return -1;
+				}
+
+				var memberId = debt.Values["memberId"];
+
+				if (string.IsNullOrEmpty(memberId))
+				{
+					return -2;
+				}
+
+				return int.Parse(memberId);
+
+				/*
                 var isn = Session["debt_member_isn"];
                 
                 //
@@ -47,12 +63,25 @@ namespace debt_fe.Controllers
                 }
 
                 return int.Parse(isn.ToString());
+				 */ 
             }
             set
             {
                 _memberISN = value;
 
-                Session["debt_member_isn"] = _memberISN;
+                // Session["debt_member_isn"] = _memberISN;
+				var debt = Request.Cookies["debt_extension"];
+				if (debt==null)
+				{
+					debt = new HttpCookie("debt_extension");
+					debt.Expires.AddDays(7);
+					// debt.Values["memberId"] = _memberISN.ToString();
+
+					// Response.AppendCookie(debt);
+				}
+
+				debt.Values["memberId"] = _memberISN.ToString();
+				Response.AppendCookie(debt);
             }
         }
 
@@ -62,7 +91,7 @@ namespace debt_fe.Controllers
             _signBusiness = new SignatureBusiness();
         }
 
-        public ActionResult Index(int? memberISN)
+        public ActionResult Index()
         {
             // TempData["info"] = "Hello world";
 
@@ -70,20 +99,35 @@ namespace debt_fe.Controllers
             // add member isn to session
             #region get member isn
 
+			// var memberISN = this.MemberISN;
+
+			/*
             if (memberISN == null)
             {
-                memberISN = this.MemberISN;
+				return RedirectToAction("Login", "Account");
+
+                
+				memberISN = this.MemberISN;
 
                 if (memberISN < 0)
                 {
                     return RedirectToAction("Login", "Account");
                 }
+				
             }
             else
             {
                 this.MemberISN = memberISN.Value;
             } 
+			*/
             #endregion
+
+			var memberId = this.MemberISN;
+
+			if (memberId<0)
+			{
+				return RedirectToAction("Login", "Account");
+			}
 
             //
             // view message when upload document failed
@@ -122,7 +166,7 @@ namespace debt_fe.Controllers
             }
             #endregion
 
-            var documents = _docBusiness.GetDocuments(this.MemberISN);
+            var documents = _docBusiness.GetDocuments(memberId);
 
             return View(documents);
         }
@@ -445,7 +489,8 @@ namespace debt_fe.Controllers
             //
             // http://localhost:47854/Document/Signature?documentISN=486
             var redirect = string.Format("{0}://{1}/Document/SignatureDownload?signId={2}", scheme, auth, signId);
-
+						
+			/*
             var docKey = RightSignature.Embedded(
                     Guid_Template: template.SignGuid,
                     RoleName: template.SignerRole,
@@ -454,6 +499,8 @@ namespace debt_fe.Controllers
                     NameFile: signName,                    
                     url_redirect: redirect,
                     RightSign_ISN: signId.ToString());
+			*/
+			var docKey = "";
 
             if (string.IsNullOrEmpty(docKey) || string.IsNullOrWhiteSpace(docKey))
             {

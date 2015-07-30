@@ -1,17 +1,13 @@
 ﻿using debt_fe.DataAccessHelper;
 using debt_fe.Models;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using debt_fe.Utilities;
-using System.Web.Security;
 using System.Security.Claims;
 using Microsoft.AspNet.Identity;
-using debt_fe.Businesses;
 
 namespace debt_fe.Controllers
 {
@@ -67,6 +63,13 @@ namespace debt_fe.Controllers
 
 				authenticationManager.SignIn(id);
 
+				var cookie = new HttpCookie("debt_extension");
+				cookie.Expires.AddDays(7);
+				// cookie.Values.Add("memberId", clientISN.ToString());
+				cookie.Values["memberId"] = clientISN.ToString();
+
+				Response.AppendCookie(cookie);
+
 				//
 				// login success
 				return RedirectToAction("Index", "Document", routeValues: new { memberISN = clientISN});
@@ -100,6 +103,15 @@ namespace debt_fe.Controllers
             var ctx = Request.GetOwinContext();
             var authenticationManager = ctx.Authentication;
             authenticationManager.SignOut();
+
+			//
+			// delete cookie
+			var cookie = Request.Cookies["debt_extension"];
+			if (cookie != null && !string.IsNullOrEmpty(cookie.Values["memberId"]))
+			{
+				cookie.Expires.AddDays(-1);
+				Response.AppendCookie(cookie);
+			}
 
             return RedirectToAction("Login", "Account");
         }

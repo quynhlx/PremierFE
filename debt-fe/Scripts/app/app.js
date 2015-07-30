@@ -72,7 +72,7 @@
         $('.menu > li').each(function (i, li) {
 
             var a = $(li).children('a');
-            var href = a.prop('href')
+            var href = a.prop('href');
 
             
 
