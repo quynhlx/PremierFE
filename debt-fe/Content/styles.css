@@ -173,8 +173,12 @@ input[type=file].form-control {
   background-color: #3fa4b5;
   color: #fff;
 }
-.menu > li.active:not(.has-sub) .sub-menu {
+.menu > li.active .sub-menu {
   display: block;
+}
+.menu > li.active .sub-menu a.active {
+  background-color: #3fa4b5;
+  color: #fff;
 }
 .menu > li > a span {
   -moz-transition: transform 0.5s ease-in-out;

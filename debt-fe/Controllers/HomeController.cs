@@ -13,14 +13,14 @@ namespace debt_fe.Controllers
             return View();
         }
 
-        public ActionResult About()
+        public ActionResult HowTo()
         {
             ViewBag.Message = "Your application description page.";
 
             return View();
         }
 
-        public ActionResult Contact()
+        public ActionResult Support()
         {
             ViewBag.Message = "Your contact page.";
 

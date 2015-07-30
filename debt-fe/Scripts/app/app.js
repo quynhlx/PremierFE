@@ -67,27 +67,50 @@
 
         //
         // active menu
-        //     
-        
-        $('.menu > li').each(function (i, li) {
+        //             
+        $('.menu > li').each(function (i, ele) {
 
-            var a = $(li).children('a');
-            var href = a.prop('href');
+        	var li = $(ele);
+        	var href = li.children('a').prop('href');
 
-            
+        	var controller = li.data('controller');
+        	var action = li.children('a').data('action');
 
-            console.log(href);
-            
-            // console.log('href', href);
+        	if (action === undefined || action === null) {
+				action = '';
+        	}
 
-            var controller = getController(href);
+        	var winHref = window.location.href;
+        	var pathName = window.location.pathname;
 
+        	if (winHref.indexOf(controller) >= 0) {
 
-            if (window.location.href.indexOf(controller) >= 0) {
-                // console.log('controller =[%s]', controller);
-                a.addClass('active');                
+        		if (controller === 'Profile') {
+        			
+        			var arr = li.children('.sub-menu').find('a');
+
+        			$(arr).each(function (i, ale) {
+        				
+        				var actionSub = $(ale).data('action');
+        				if (pathName.indexOf(actionSub) >= 0) {
+        					$(ale).addClass('active').closest('.has-sub').addClass('active');        					
+        				}
+        			});
+        		}
+
+            	if (pathName.indexOf(action) >= 0) {
+            		li.addClass('active');
+            	} else {
+            		if (action.toLowerCase() === 'index') {
+            			li.addClass('active');
+            		}
+            	}
             } else {
-                a.removeClass('active');
+            	if (controller.toLowerCase() === 'document' && pathName.replace('/','') === '') {
+            		li.addClass('active');
+            	} else {
+            		li.removeClass('active');
+            	}
             }
             
         });
@@ -103,9 +126,6 @@
             var self = $(this);
 
             self.toggleClass('active').next('.sub-menu').slideToggle();
-
-            self.closest('.has-sub').toggleClass('active');
-
         });
 
     });

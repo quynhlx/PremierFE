@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using debt_fe.Utilities;
 using System.Security.Claims;
 using Microsoft.AspNet.Identity;
+using System;
 
 namespace debt_fe.Controllers
 {
@@ -62,17 +63,22 @@ namespace debt_fe.Controllers
 				var authenticationManager = context.Authentication;
 
 				authenticationManager.SignIn(id);
+				
+				var cookie = Request.Cookies["debt_extension"];
+				if (cookie==null)
+				{
+					cookie = new HttpCookie("debt_extension");
+				}
 
-				var cookie = new HttpCookie("debt_extension");
-				cookie.Expires.AddDays(7);
-				// cookie.Values.Add("memberId", clientISN.ToString());
+				cookie.Expires = DateTime.Now.AddDays(7);				
 				cookie.Values["memberId"] = clientISN.ToString();
 
 				Response.AppendCookie(cookie);
 
 				//
 				// login success
-				return RedirectToAction("Index", "Document", routeValues: new { memberISN = clientISN});
+				// return RedirectToAction("Index", "Document", routeValues: new { memberISN = clientISN });
+				return RedirectToAction("Index", "Document");
 			}
 			else
 			{
@@ -107,9 +113,12 @@ namespace debt_fe.Controllers
 			//
 			// delete cookie
 			var cookie = Request.Cookies["debt_extension"];
-			if (cookie != null && !string.IsNullOrEmpty(cookie.Values["memberId"]))
+			
+			if (cookie != null && cookie.Values.HasKeys())
 			{
-				cookie.Expires.AddDays(-1);
+				// cookie.Values[""].ad
+
+				cookie.Expires = DateTime.Now.AddDays(-1);
 				Response.AppendCookie(cookie);
 			}
 

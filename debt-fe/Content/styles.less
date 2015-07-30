@@ -228,11 +228,20 @@ input[type=file].form-control {
             & > a {
                 background-color: @main-blue;
                 color: #fff;   
-            }
-            & .sub-menu {
-                display: block;
-            }
+            }            
         }
+		&.active {
+			& .sub-menu {
+				display: block;
+				& a {
+					&.active {
+						background-color: @main-blue;
+						color: #fff;   
+					}
+				}
+
+			}
+		}
         & > a {
             & span {
                 .transition(@properties: transform);

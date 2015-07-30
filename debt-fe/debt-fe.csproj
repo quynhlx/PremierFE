@@ -169,9 +169,11 @@
     <Compile Include="Businesses\SignatureBusiness.cs" />
     <Compile Include="Controllers\Account2Controller.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\DebtController.cs" />
     <Compile Include="Controllers\DocumentController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\MessageController.cs" />
     <Compile Include="Controllers\MyAccountController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="DataAccessHelper\DataProvider.cs" />
@@ -298,8 +300,8 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
+    <Content Include="Views\Home\HowTo.cshtml" />
+    <Content Include="Views\Home\Support.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Account2\_ExternalLoginsListPartial.cshtml" />
     <Content Include="Views\Account2\ConfirmEmail.cshtml" />
@@ -332,6 +334,8 @@
     <Content Include="Views\Shared\_Menu.cshtml" />
     <Content Include="Views\Profile\ContactInformation.cshtml" />
     <Content Include="Views\Profile\BankAccount.cshtml" />
+    <Content Include="Views\Debt\Index.cshtml" />
+    <Content Include="Views\Message\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

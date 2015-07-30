@@ -31,20 +31,23 @@ namespace debt_fe.Controllers
             {
 				var debt = Request.Cookies["debt_extension"];
 				
-				if (debt == null)
+				if (debt == null || string.IsNullOrEmpty(debt.Values["memberId"]))
 				{
 					return -1;
 				}
 
 				var memberId = debt.Values["memberId"];
 
+				/*
 				if (string.IsNullOrEmpty(memberId))
 				{
 					return -2;
 				}
+				 */ 
 
 				return int.Parse(memberId);
 
+				#region session
 				/*
                 var isn = Session["debt_member_isn"];
                 
@@ -63,8 +66,9 @@ namespace debt_fe.Controllers
                 }
 
                 return int.Parse(isn.ToString());
-				 */ 
-            }
+				 */
+				#endregion
+			}
             set
             {
                 _memberISN = value;
@@ -74,13 +78,11 @@ namespace debt_fe.Controllers
 				if (debt==null)
 				{
 					debt = new HttpCookie("debt_extension");
-					debt.Expires.AddDays(7);
-					// debt.Values["memberId"] = _memberISN.ToString();
-
-					// Response.AppendCookie(debt);
+					debt.Expires = DateTime.Now.AddDays(7);					
 				}
 
 				debt.Values["memberId"] = _memberISN.ToString();
+
 				Response.AppendCookie(debt);
             }
         }
@@ -683,8 +685,6 @@ namespace debt_fe.Controllers
                     }
                 }
             }));
-
-            
         }
 
     }
