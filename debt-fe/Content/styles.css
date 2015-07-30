@@ -212,4 +212,7 @@ input[type=file].form-control {
   background-color: #3fa4b5;
   color: #fff;
 }
+label.label-bold {
+  font-weight: bold;
+}
 /*# sourceMappingURL=styles.css.map */

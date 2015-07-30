@@ -133,8 +133,8 @@
                 "pageLength": 7, // record per page
                 "lengthChange": false, // no record per page change
                 "info": false, // no entities info
-                aoColumnDefs: [{ "bSortable": false, "aTargets": [6] }] // disable sort in last column,
-                // "order": [[5, "desc"]] // set default sort by column 5 (added date)
+                "order": [[5, "desc"]], // set default sort by column 5 (added date)
+                aoColumnDefs: [{ "bSortable": false, "aTargets": [6] }] // disable sort in last column                
             });
 
             //
@@ -154,11 +154,21 @@
 
                 var href = self.prop('href');
 
+                var backdrop = $("<div class='modal-backdrop fade in'></div>");
+                var loading = $('#modal-loading');
+
+                loading.removeClass('hidden');
+                $('body').append(backdrop);
 
                 var req = $.ajax({ url: href });
 
                 req.fail(function (jqXHR) {
+
+                    loading.hide();
+                    backdrop.remove();
+
                     console.log('load modal error', jqXHR);
+                    toastr.error('Cannot upload new document. Please try again later.');
                 });
 
                 req.done(function (resp) {
@@ -171,9 +181,10 @@
                     // load partial into modal content
                     modal.find('.modal-content').html(resp);
 
-                    modal.modal({
-                        backdrop: 'static'
-                    });
+                    loading.hide();
+                    backdrop.remove();
+
+                    modal.modal({ backdrop: 'static' });
                 });
 
                 
@@ -203,12 +214,21 @@
                     return;
                 }
 
+                var backdrop = $("<div class='modal-backdrop fade in'></div>");
+                var loading = $('#modal-loading');
+
+                loading.removeClass('hidden');
+                $('body').append(backdrop);
+
 
                 var req = $.ajax({ url: href });
 
                 req.fail(function (jqXHR) {
                     // err.removeClass('hide').find('#error-msg').html('Unexpected error occurred. Please try again.');
                     toastr.error('Request error. Please try again.');
+
+                    loading.hide();
+                    backdrop.remove();
                 });
 
                 req.done(function (resp) {
@@ -223,6 +243,9 @@
                     //
                     // load partial into modal content
                     modal.find('.modal-content').html(resp);
+
+                    loading.hide();
+                    backdrop.remove();
 
                     modal.modal({
                         backdrop: 'static'
