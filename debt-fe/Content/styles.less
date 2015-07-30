@@ -224,10 +224,13 @@ input[type=file].form-control {
         // padding: 20px 0;
         border-bottom: 1px solid #eee;
         position: relative;
-        &.active {
-            & a {
+        &.active:not(.has-sub) {
+            & > a {
                 background-color: @main-blue;
                 color: #fff;   
+            }
+            & .sub-menu {
+                display: block;
             }
         }
         & > a {

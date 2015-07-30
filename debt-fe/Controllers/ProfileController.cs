@@ -9,7 +9,7 @@ namespace debt_fe.Controllers
     public class ProfileController : Controller
     {
         // GET: Profile
-        public ActionResult Index()
+        public ActionResult BankAccount()
         {
             return View();
         }

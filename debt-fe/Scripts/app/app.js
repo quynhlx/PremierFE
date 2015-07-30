@@ -24,7 +24,8 @@
         return (results && results[1]) || undefined;
     }
 
-    function getController(href) {
+    function getController(href) {        
+
         if (href === undefined || href === '') {
             return '';
         }
@@ -67,11 +68,15 @@
         //
         // active menu
         //     
-        /*
-        $('.menu').children().each(function (i, e) {
+        
+        $('.menu > li').each(function (i, li) {
 
-            var a = $(e).children('a');
-            var href = a.prop('href');
+            var a = $(li).children('a');
+            var href = a.prop('href')
+
+            
+
+            console.log(href);
             
             // console.log('href', href);
 
@@ -79,14 +84,14 @@
 
 
             if (window.location.href.indexOf(controller) >= 0) {
-                console.log('controller =', controller);
+                // console.log('controller =[%s]', controller);
                 a.addClass('active');                
             } else {
                 a.removeClass('active');
             }
             
         });
-        */
+        
 
         //
         // toggle sub menu
@@ -98,6 +103,8 @@
             var self = $(this);
 
             self.toggleClass('active').next('.sub-menu').slideToggle();
+
+            self.closest('.has-sub').toggleClass('active');
 
         });
 
