@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<UpdateHistory>
+    <Update>
+        <By>Rose1 (D:Premier)</By>
+        <UpdatedDate>07/29/2015 02:15:PM</UpdatedDate>
+        <Details>
+            <HomePhone>714-702-5067</HomePhone>
+            <MobilePhone>213-393-0528</MobilePhone>
+            <Preferred>Mobile Phone</Preferred>
+            <BestTimeToContact>10 AM</BestTimeToContact>
+            <Email>oclockvn@gmail.com</Email>
+            <Address>25 PALATINE APT 210, IRVINE, CA 92614</Address>
+        </Details>
+    </Update>
+    <Update>
+        <By>Rose2 (D:Premier)</By>
+        <UpdatedDate>07/29/2015 02:15:PM</UpdatedDate>
+        <Details>
+            <Preferred>Mobile Phone</Preferred>
+        </Details>
+    </Update>
+    <Update>
+        <By>Rose3 (D:Premier)</By>
+        <UpdatedDate>07/29/2015 02:15:PM</UpdatedDate>
+        <Details>
+            <HomePhone>714-702-5067</HomePhone>
+            <MobilePhone>213-393-0528</MobilePhone>
+            <Preferred>Mobile Phone</Preferred>
+        </Details>
+    </Update>    
+</UpdateHistory>

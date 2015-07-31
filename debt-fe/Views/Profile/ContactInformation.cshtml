@@ -2,6 +2,7 @@
 <button type="button" class="btn btn-primary btn-lg hidden" data-toggle="modal" data-target="#myModal">
     Launch demo modal
 </button>
+
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
@@ -24,7 +25,8 @@
 
 <div class="p+ clearfix">
     <button class="btn btn-primary text-uppercase">save</button>
-    <button class="btn btn-link text-capitalize" data-toggle="modal" data-target="#myModal">view history</button>
+    <button class="btn btn-link text-capitalize" id="btn-view-update-history" data-toggle="modal" data-target="#myModal">view history</button>
+    <a href='@Url.Action("LoadUpdateHistory", "Profile")'>View History</a>
 </div>
 
 <div class="row ph+ mb+">
@@ -130,3 +132,19 @@
         </div>
     </div>
 </div>
+
+@section scripts {
+<script>
+    $(document).ready(function () {
+
+        $('#btn-view-update-history').click(function (e) {
+
+            e.preventDefault();
+
+
+
+        });
+
+    });
+    </script>
+}
