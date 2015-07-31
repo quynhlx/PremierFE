@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<UpdateHistory>
+		<Update>
+				<UpdatedBy>tienquang</UpdatedBy>
+				<UpdatedDate>7/31/2015 5:33:09 PM</UpdatedDate>
+				<UpdateDetail>
+						<ID>1</ID>
+						<HomePhone>123-456-789</HomePhone>
+						<WorkPhone />
+						<MobilePhone>000-111-222</MobilePhone>
+						<Address />
+						<City>Ho Chi Minh</City>
+						<State>CA</State>
+						<Zip>123456</Zip>
+						<Email>oclockvn@gmail.com</Email>
+						<BestTimeToContact>10 AM</BestTimeToContact>
+						<Preferred>1</Preferred>
+				</UpdateDetail>
+		</Update>
+		<Update>
+				<UpdatedBy>tienquang</UpdatedBy>
+				<UpdatedDate>7/31/2015 5:33:09 PM</UpdatedDate>
+				<UpdateDetail>
+						<ID>2</ID>
+						<HomePhone>123-456-789</HomePhone>
+						<WorkPhone />
+						<MobilePhone />
+						<Address />
+						<City />
+						<State>CA</State>
+						<Zip />
+						<Email />
+						<BestTimeToContact>10 AM</BestTimeToContact>
+						<Preferred>1</Preferred>
+				</UpdateDetail>
+		</Update>
+		<Update>
+				<UpdatedBy>tienquang</UpdatedBy>
+				<UpdatedDate>7/31/2015 5:33:09 PM</UpdatedDate>
+				<UpdateDetail>
+						<ID>3</ID>
+						<HomePhone>123-456-789</HomePhone>
+						<WorkPhone />
+						<MobilePhone>000-111-222</MobilePhone>
+						<Address />
+						<City />
+						<State />
+						<Zip />
+						<Email>oclockvn@gmail.com</Email>
+						<BestTimeToContact>10 AM</BestTimeToContact>
+						<Preferred>0</Preferred>
+				</UpdateDetail>
+		</Update>
+</UpdateHistory>

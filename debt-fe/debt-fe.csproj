@@ -181,6 +181,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\ContactInformationModel.cs" />
+    <Compile Include="Models\ContactInformationUpdateHistoryModel.cs" />
     <Compile Include="Models\CreditorModel.cs" />
     <Compile Include="Models\DocumentModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -188,6 +190,8 @@
     <Compile Include="Models\MemberModel.cs" />
     <Compile Include="Models\SignatureModel.cs" />
     <Compile Include="Models\TemplateModel.cs" />
+    <Compile Include="Models\ViewModels\ContactInformationUpdateHistoryViewModel.cs" />
+    <Compile Include="Models\ViewModels\ContactInformationViewModel.cs" />
     <Compile Include="Models\ViewModels\DocumentViewModel.cs" />
     <Compile Include="Models\ViewModels\SignatureViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -195,6 +199,7 @@
     <Compile Include="Utilities\Utility.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\contacts.xml" />
     <Content Include="App_Data\ContactUpdateHistory.xml" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />

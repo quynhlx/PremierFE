@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections;
 using System.IO;
+using System.Xml;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace debt.methods
 {
@@ -13,6 +15,83 @@ namespace debt.methods
 	{
 		static void Main(string[] args)
 		{
+			var contacts = new List<ContactInformationModel>
+			{
+				new ContactInformationModel
+				{
+					Id=1,
+					HomePhone="123-456-789",
+					WorkPhone="",
+					MobilePhone="000-111-222",
+					Email="oclockvn@gmail.com",
+					City="Ho Chi Minh",
+					Zip="123456",
+					State="CA",
+					Preferred=1,
+					BestTimeToContact="10 AM"
+				},
+				new ContactInformationModel
+				{
+					Id=2,
+					HomePhone="123-456-789",
+					WorkPhone="",					
+					State="CA",
+					Preferred=1,
+					BestTimeToContact="10 AM"
+				},
+				new ContactInformationModel
+				{
+					Id=3,
+					HomePhone="123-456-789",
+					WorkPhone="",
+					MobilePhone="000-111-222",
+					Email="oclockvn@gmail.com",					
+					BestTimeToContact="10 AM"
+				}
+			};
+
+			using (XmlWriter writer = XmlWriter.Create("contacts3.xml"))
+			{
+				writer.WriteStartDocument();
+				writer.WriteStartElement("UpdateHistory");
+
+				
+
+				foreach (ContactInformationModel contact in contacts)  // <-- This is new
+				{
+
+					writer.WriteStartElement("Update"); // <-- Write employee element
+					
+
+					writer.WriteElementString("UpdatedBy", "tienquang");
+					writer.WriteElementString("UpdatedDate", DateTime.Now.ToString());
+
+					writer.WriteStartElement("UpdateDetail"); // <-- Write employee element
+
+					writer.WriteElementString("ID", contact.Id.ToString());   // <-- These are new
+					writer.WriteElementString("HomePhone", contact.HomePhone);
+					writer.WriteElementString("WorkPhone", contact.WorkPhone);
+					writer.WriteElementString("MobilePhone", contact.MobilePhone);
+					writer.WriteElementString("Address", contact.StreetAddress);
+					writer.WriteElementString("City", contact.City);
+					writer.WriteElementString("State", contact.State);
+					writer.WriteElementString("Zip", contact.Zip);
+					writer.WriteElementString("Email", contact.Email);
+					writer.WriteElementString("BestTimeToContact", contact.BestTimeToContact);
+					writer.WriteElementString("Preferred", contact.Preferred.ToString());
+
+
+					writer.WriteEndElement();
+
+					writer.WriteEndElement();
+				}
+
+				writer.WriteEndElement();
+				writer.WriteEndDocument();
+			}
+
+			return;
+
             var p = Directory.GetLogicalDrives()[0];
             var p1 = Environment.GetLogicalDrives()[0];
             var p2 = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
@@ -75,5 +154,36 @@ namespace debt.methods
 		public int ID { get; set; }
 		public string Name { get; set; }
 		public string Desc { get; set; }
+	}
+
+	[Serializable()]
+	public class ContactInformationModel
+	{
+		public int Id { get; set; }
+		public string HomePhone { get; set; }
+		public string WorkPhone { get; set; }
+		public string MobilePhone { get; set; }
+		public int Preferred { get; set; }
+		/*
+		 * preferred code
+		 * 
+		 * 1: home phone
+		 * 2: work phone
+		 * 3: mobile phone
+		 * 
+		 * */
+		public string Email { get; set; }
+		public string BestTimeToContact { get; set; }
+		public string StreetAddress { get; set; }
+		public string City { get; set; }
+		public string Zip { get; set; }
+		public string State { get; set; }
+	}
+
+	public class ContactInformationUpdateHistoryModel
+	{
+		public string UpdatedBy { get; set; }
+		public DateTime UpdatedDate { get; set; }
+		public int? ContactInformationId { get; set; }
 	}
 }

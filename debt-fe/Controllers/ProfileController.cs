@@ -33,19 +33,11 @@ namespace debt_fe.Controllers
              * 
              * -1: file not found
              * -2: cannot read xml file
+			 * -3: data not found
              * */
 
-            var xmlPath = @Url.Content("~/App_Data/ContactUpdateHistory.xml");
-            var updateHistoryPath = string.Empty;
-
-            try
-            {
-                updateHistoryPath = Server.MapPath(xmlPath);
-            }
-            catch(Exception)
-            {
-                return Json(new {code=-3,msg="Cannot find folder path" }, JsonRequestBehavior.AllowGet);
-            }
+            var xmlPath = @Url.Content("~/App_Data/contacts.xml");
+            var updateHistoryPath = Server.MapPath(xmlPath);
 
 
             if (!System.IO.File.Exists(updateHistoryPath))
@@ -65,6 +57,11 @@ namespace debt_fe.Controllers
             }
 
             var ds = Utility.ConvertXMLToDataSet(xml);
+
+			if (ds == null)
+			{
+				return Json(new { code = -3, msg = "Data not found" }, JsonRequestBehavior.AllowGet);
+			}
 
             return Json(new { code=1}, JsonRequestBehavior.AllowGet);
 
