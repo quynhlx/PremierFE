@@ -201,8 +201,7 @@
     <Compile Include="Utilities\Utility.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\contacts.xml" />
-    <Content Include="App_Data\ContactUpdateHistory.xml" />
+    <Content Include="App_Data\UpdateHistory.xml" />
     <Content Include="App_Data\USAState.xml" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
