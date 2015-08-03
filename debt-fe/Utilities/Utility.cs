@@ -1,4 +1,5 @@
-﻿using System;
+﻿using debt_fe.Models;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
@@ -309,5 +310,61 @@ namespace debt_fe.Utilities
 
             return exist;
         }
+
+		/// <summary>
+		/// get state depend on input xml
+		/// </summary>
+		/// <param name="xml">a string of xml states</param>
+		/// <returns>a list of state model</returns>
+		public static List<StateModel> GetStates()
+		{
+			//
+			// todo: get from xml
+			// var states = new List<StateModel>();
+
+			var xml = string.Empty;
+			var path = HttpContext.Current.Server.MapPath("~/App_Data/USAState.xml");
+
+			//
+			// catch error
+			using (var reader = new StreamReader(path))
+			{
+				xml = reader.ReadToEnd();
+			}
+
+			if (string.IsNullOrEmpty(xml))
+			{
+				return null;
+			}
+
+			var ds = ConvertXMLToDataSet(xml);
+
+			if (ds == null || ds.Tables.Count==0)
+			{
+				return null;
+			}
+
+			var tableStates = ds.Tables["State"];
+
+			if (tableStates.Rows.Count==0)
+			{
+				return null;
+			}
+
+			var states = new List<StateModel>();
+
+			foreach (DataRow row in tableStates.Rows)
+			{
+				var state = new StateModel
+				{
+					Code = row["value"].ToString(),
+					Name = row["text"].ToString()
+				};
+
+				states.Add(state);
+			}
+
+			return states;
+		}
 	}
 }

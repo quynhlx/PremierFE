@@ -189,7 +189,9 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MemberModel.cs" />
     <Compile Include="Models\SignatureModel.cs" />
+    <Compile Include="Models\StateModel.cs" />
     <Compile Include="Models\TemplateModel.cs" />
+    <Compile Include="Models\ViewModels\BankAccountViewModel.cs" />
     <Compile Include="Models\ViewModels\ContactInformationUpdateHistoryViewModel.cs" />
     <Compile Include="Models\ViewModels\ContactInformationViewModel.cs" />
     <Compile Include="Models\ViewModels\DocumentViewModel.cs" />
@@ -201,6 +203,7 @@
   <ItemGroup>
     <Content Include="App_Data\contacts.xml" />
     <Content Include="App_Data\ContactUpdateHistory.xml" />
+    <Content Include="App_Data\USAState.xml" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />

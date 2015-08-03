@@ -1,10 +1,9 @@
-﻿<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary btn-lg hidden" data-toggle="modal" data-target="#myModal">
-    Launch demo modal
-</button>
+﻿@{
+	ViewBag.Title = "Contact Information";
+}
 
 <!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade" id="modal-update-history" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -12,8 +11,27 @@
                 <h4 class="modal-title" id="myModalLabel">Contact Information Update History</h4>
             </div>
             <div class="modal-body">
-                ...
-            </div>
+				<p>
+					*** Update by <strong>rose1 (D: Premier)</strong> [07/29/2015, 02:15 PM]<br />
+					Email: allen.pham@@gmail.com
+				</p>
+				<div>
+					=================================================================
+				</div>
+				<p>
+					*** Update by <strong>Client</strong> [07/29/2015, 02:15 PM]<br />
+					Work Phone: 678-678-6789
+				</p>
+				<div>
+					=================================================================
+				</div>
+				<p>
+					*** Update by <strong>Client</strong> [07/29/2015, 02:15 PM]<br />
+					Work Phone: 678-678-6789<br />
+					Preferred: Mobile Phone<br />
+					Address: 25 Palatine APT 210, Irvine, CA 92614
+				</p>
+			</div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary hidden">Save changes</button>
@@ -22,11 +40,34 @@
     </div>
 </div>
 
+<!-- modal for validate info -->
+<!-- this is just temporary, modal body should be loaded fom partial view by ajax -->
+<div class="modal fade" id="modal-validate-contact" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel">Validate Contact Information</h4>
+			</div>
+			<div class="modal-body">
+				<p class="small pb">An email was sent to your email address. Please enter the validation code from your email below.</p>
+				<div class="form-group">
+					<label class="sr-only">validation code</label>
+					<input type="text" class="form-control" placeholder="Validation Code" />
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+				<button type="button" class="btn btn-primary">Confirm</button>
+			</div>
+		</div>
+	</div>
+</div>
 
 <div class="p+ clearfix">
-    <button class="btn btn-primary text-uppercase">save</button>
-    <button class="btn btn-link text-capitalize" id="btn-view-update-history" data-toggle="modal" data-target="#myModal">view history</button>
-    <a href='@Url.Action("LoadUpdateHistory", "Profile")'>View History</a>
+	<button class="btn btn-primary text-uppercase" data-toggle="modal" data-target="#modal-validate-contact">save</button>
+	<button class="btn btn-link text-capitalize" id="btn-view-update-history" data-toggle="modal" data-target="#modal-update-history">view history</button>
+    @*<a href='@Url.Action("LoadUpdateHistory", "Profile")' class="btn btn-link text-capitalize" id="btn-view-update-history23">View History</a>*@
 </div>
 
 <div class="row ph+ mb+">
@@ -42,8 +83,8 @@
                 <label class="sr-only">Preferred</label>
                 <div class="radio">
                     <label>
-                        <input type="radio" aria-label="preferred home phone" />
-                    </label>
+                        <input type="radio" aria-label="preferred home phone" name="preferred" checked="checked" /> Preferred
+                    </label> 
                 </div>
             </div>
         </div>
@@ -57,7 +98,7 @@
                 <label class="sr-only">Preferred</label>
                 <div class="radio">
                     <label>
-                        <input type="radio" aria-label="preferred work phone" />
+						<input type="radio" aria-label="preferred work phone" name="preferred" /> Preferred
                     </label>
                 </div>
             </div>
@@ -72,7 +113,7 @@
                 <label class="sr-only">Preferred</label>
                 <div class="radio">
                     <label>
-                        <input type="radio" aria-label="preferred mobile phone" />
+						<input type="radio" aria-label="preferred mobile phone" name="preferred" /> Preferred
                     </label>
                 </div>
             </div>
@@ -122,12 +163,7 @@
         <div class="form-inline mt+">
             <div class="form-group">
                 <label class="sr-only">State</label>
-                <select class="form-control">
-                    <option>abc</option>
-                    <option>abc</option>
-                    <option>abc</option>
-                    <option>abc</option>
-                </select>
+				@Html.DropDownList("state", ViewBag.States as SelectList, new { @class="form-control"})
             </div>
         </div>
     </div>
@@ -137,11 +173,40 @@
 <script>
     $(document).ready(function () {
 
-        $('#btn-view-update-history').click(function (e) {
+        $('#btn-view-update-history2').click(function (e) {
 
-            e.preventDefault();
+        	//
+			// rename id for official event
 
+        	e.preventDefault();
 
+        	var self = $(this);
+        	var modal = $('#modal-update-history');
+        	var content = modal.find('.modal-body');
+
+        	var href = self.prop('href');			
+
+        	var req = $.ajax({ url: href });
+
+        	req.fail(function (jqXHR, stt, err) {
+        		//
+				// todo: log error
+        	});
+
+        	req.done(function (resp, stt, jqXHR) {
+
+				// todo: check error
+
+        		console.log('response', resp);
+
+        		$(resp).each(function (i, history) {
+        			//
+					// todo: append history here
+        		});
+
+				// show modal
+        		modal.modal({ backdrop: 'static' });
+        	});
 
         });
 

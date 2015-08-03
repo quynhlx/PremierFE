@@ -1,4 +1,8 @@
-﻿<div class="clearfix p+">
+﻿@{
+	ViewBag.Title = "Bank Account";
+}
+
+<div class="clearfix p+">
     <button class="btn btn-primary">Validate</button>
 </div>
 
@@ -28,11 +32,11 @@
 
     <div class="col-md-6">
         <div class="form-group">
-            <label class="label-bold">Bank Routing Number</label>
+            <label class="label-bold">Bank Account Type</label>
             <select class="form-control">
-                <option>asd</option>
-                <option>asd</option>
-                <option>asd</option>
+				<option>Select One</option>
+                <option>Checking</option>
+                <option>Savings</option>
             </select>
         </div>
     </div>
@@ -43,9 +47,7 @@
         <div class="form-group">
             <label class="label-bold">Bank Account Owner</label>
             <select class="form-control">
-                <option>asd</option>
-                <option>asd</option>
-                <option>asd</option>
+                <option>Client owns account</option>                
             </select>
         </div>
     </div>
@@ -94,14 +96,9 @@
             <label class="label-bold sr-only">Zip</label>
             <input type="text" placeholder="Zip" class="form-control" />
         </div>
-        <div class="form-group">
-            <label class="label-bold sr-only">State</label>
-            <select class="form-control">
-                <option>asd</option>
-                <option>asd</option>
-                <option>asd</option>
-                <option>asd</option>
-            </select>
-        </div>
+		<div class="form-group form-inline">
+			<label class="label-bold sr-only">State</label>
+			@Html.DropDownList("state", ViewBag.States as SelectList, new { @class = "form-control" })
+		</div>
     </div>
 </div>

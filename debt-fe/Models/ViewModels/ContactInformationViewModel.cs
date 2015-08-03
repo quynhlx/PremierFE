@@ -1,6 +1,8 @@
-﻿using System;
+﻿using debt_fe.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Web;
 
@@ -43,6 +45,30 @@ namespace debt_fe.Models.ViewModels
 			info.Email = row["Email"].ToString();
 
 			return info;
+		}
+
+		public List<StateModel> GetStates()
+		{
+			//
+			// todo: get from xml
+
+			/*
+			var states = new List<StateModel>();
+
+			var xml = string.Empty;
+			var path = HttpContext.Current.Server.MapPath("~/App_Data/USAState.xml");
+
+			//
+			// catch error
+			using (var reader = new StreamReader(path))
+			{
+				xml = reader.ReadToEnd();
+			}
+
+			return Utility.GetStates();
+			 * */
+
+			return null;
 		}
 	}
 }

@@ -10,5 +10,6 @@ namespace debt_fe.Models
 		public string UpdatedBy { get; set; }
 		public DateTime UpdatedDate { get; set; }
 		public int? ContactInformationId { get; set; }
+		public virtual ContactInformationModel ContactInfo { get; set; } // only for preview, skip on 
 	}
 }

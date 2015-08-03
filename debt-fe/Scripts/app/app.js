@@ -93,9 +93,12 @@
         				
         				var actionSub = $(ale).data('action');
         				if (pathName.indexOf(actionSub) >= 0) {
-        					$(ale).addClass('active').closest('.has-sub').addClass('active');        					
+        					$(ale).addClass('active').closest('.has-sub').addClass('active in');        					
+        					// $(ale).closest('.has-sub').addClass('active');
+        				} else {
+        					// $(ale).removeClass('active');
         				}
-        			});
+        			}); // each item on sub menu
         		}
 
             	if (pathName.indexOf(action) >= 0) {

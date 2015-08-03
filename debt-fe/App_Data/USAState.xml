@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<USAState>
+		<State text ="Select One" value ="" />
+		<State text ="Alaska" value="AK" />
+		<State text ="Alabama" value="AL" />
+		<State text ="Arkansas" value="AR" />
+		<State text ="American Samoa" value="AS" />
+		<State text ="Arizona" value="AZ" />
+		<State text ="California" value="CA" />
+		<State text ="Colorado" value="CO" />
+		<State text ="Connecticut" value="CT" />
+		<State text ="District of Colombia" value="DC" />
+		<State text ="Delaware" value="DE" />
+		<State text ="Florida" value="FL" />
+		<State text ="Federateds" value="FM" />
+		<State text ="Georgia" value="GA" />
+		<State text ="Guam" value="GU" />
+		<State text ="Hawaii" value="HI" />
+		<State text ="Iowa" value="IA" />
+		<State text ="Idaho" value="ID" />
+		<State text ="Illinois" value="IL" />
+		<State text ="Indiana" value="IN" />
+		<State text ="Kansas" value="KS" />
+		<State text ="Kentucky" value="KY" />
+		<State text ="Louisiana" value="LA" />
+		<State text ="Massachusetts" value="MA" />
+		<State text ="Maryland" value="MD" />
+		<State text ="Maine" value="ME" />
+		<State text ="Michigan" value="MI" />
+		<State text ="Minnesota" value="MN" />
+		<State text ="Missouri" value="MO" />
+		<State text ="Mississippi" value="MS" />
+		<State text ="Montana" value="MT" />
+		<State text ="North Carolina" value="NC" />
+		<State text ="North Dakota" value="ND" />
+		<State text ="Nebraska" value="NE" />
+		<State text ="New Hampshire" value="NH" />
+		<State text ="New Jersey" value="NJ" />
+		<State text ="New Mexico" value="NM" />
+		<State text ="Nevada" value="NV" />
+		<State text ="New York" value="NY" />
+		<State text ="Ohio" value="OH" />
+		<State text ="Oklahoma" value="OK" />
+		<State text ="Oregon" value="OR" />
+		<State text ="Pennsylvania" value="PA" />
+		<State text ="Puerto Rico" value="PR" />
+		<State text ="Rhode Island" value="RI" />
+		<State text ="South Calorina" value="SC" />
+		<State text ="South Dakota" value="SD" />
+		<State text ="Tennessee" value="TN" />
+		<State text ="Texas" value="TX" />
+		<State text ="Utah" value="UT" />
+		<State text ="Virgin Island" value="VI" />
+		<State text ="Vermont" value="VT" />
+		<State text ="Virginia" value="VA" />
+		<State text ="Washington" value="WA" />
+		<State text ="Wisconsin" value="WI" />
+		<State text ="West Virginia" value="WV" />
+		<State text ="Wyoming" value="WY" />
+		<State text ="Outside US" value="NonUS" />
+</USAState>
