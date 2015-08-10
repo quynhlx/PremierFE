@@ -573,9 +573,10 @@ namespace debt_fe.Controllers
             }
 
            var urlRedirect = Url.Action("SignatureDownload", "Document", new { signId =signId});
+           var scheme = Request.Url.Scheme;
             var host = Request.Url.Host;
             // var redirect = string.Format("{0}://{1}/client/Document/SignatureDownload?signId={2}", scheme, auth, signId);
-            var redirect = string.Format("{0}/{1}",host.TrimEnd('/'), urlRedirect.TrimStart('/'));
+            var redirect = string.Format("{0}://{1}/{2}",scheme,host.TrimEnd('/'), urlRedirect.TrimStart('/'));
 
             var docKey = RightSignature.Embedded(
                     Guid_Template: template.SignGuid,
