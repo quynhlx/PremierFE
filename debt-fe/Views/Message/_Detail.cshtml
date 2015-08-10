@@ -1,0 +1,47 @@
+﻿@using debt_fe.Models
+@model MessageModels
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title" id="modalDocument">Reply Message</h4>
+</div>
+<div class="modal-body">
+    <div class="row">
+        <div class="col-md-3"><p class="text-right">Subject:</p></div>
+        <div class="col-md-9"><p class="text-left text-bold">@Model.Subject</p></div>
+    </div>
+    <div class="row">
+        <div class="col-md-3"><p class="text-right">Last receive date:</p></div>
+        <div class="col-md-9">
+            <p class="text-left text-bold">
+                07/29/2015, 02:15 PM by rose1 (D: Premier)
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3"><p class="text-right">Last message:</p></div>
+        <div class="col-md-9">
+            <p class="text-left">
+                @Model.Message
+            </p>
+        </div>
+    </div>
+    <hr />
+    @using (Html.BeginForm("Reply", "Message", FormMethod.Post, htmlAttributes: new { @class = "form-horizontal", id = "reply-message" }))
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <h6 class="text-bold">
+                    Reply Message
+                </h6>
+            </div>
+            <div class="col-md-12">
+                @Html.TextArea("message-content", new { cols = "77", rows = "8", wrap = "soft" })
+            </div>
+        </div>
+    }
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+    <button type="submit" class="btn btn-primary">Send</button>
+</div>

@@ -1,4 +1,141 @@
-﻿
+﻿@using debt_fe.Models
+@model IEnumerable<DebtModel>
 @{
     ViewBag.Title = "Debts";
+}
+<div class="modal fade modal-message" tabindex="-1" role="dialog" aria-labelledby="modalDetail">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content no-border-radius">
+
+        </div>
+    </div>
+</div>
+
+<div class="col-md-12 mt+++">
+    <table class="table table-bordered" id="table-documents">
+        <thead>
+            <tr>
+                <th>No.</th>
+                <th>Name</th>
+                <th>Creditor</th>
+                <th>Account#</th>
+                <th>Debt Amount($)</th>
+                <th>Current Collector</th>
+                <th>Current Status</th>
+                <th>Delinquency</th>
+                <th>Graduation</th>
+                <th>History / Last Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (DebtModel debt in Model)
+            {
+                <tr>
+                    <td>@debt.Id</td>
+                    <td>@debt.Name</td>
+                    <td>@debt.Creditor</td>
+                    <td>@debt.AccountNumber</td>
+                    <td>@debt.DebtAmount</td>
+                    <td>@debt.CurrentCollector</td>
+                    <td>@debt.CurrentStatus</td>
+                    <td>@debt.Delinquency</td>
+                    <td>@debt.Graduation</td>
+                    <td>
+                        <a href="@Url.Action("Detail", "Debt", new { id = debt.Id })" class="mr pull-right detail-view" data-isn="@debt.Id">@debt.History</a>
+                        - by @debt.By
+                    </td>
+                </tr>
+                
+            }
+        </tbody>
+    </table>
+</div>
+<div class="modal-backdrop fade in hidden" id="modal-loading"><div class="loader">Loading...</div></div>
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+
+            //
+            // init datatable
+            //
+            $('#table-documents').DataTable({
+                "pageLength": 5, // record per page
+                "lengthChange": false, // no record per page change
+                "info": false, // no entities info
+                "order": [[9, "desc"]], // set default sort by column 5 (added date)
+                aoColumnDefs: [{ "bSortable": false, "aTargets": [9] }] // disable sort in last column   
+            });
+
+            //
+            // add class form-control to datatable search
+            $('.dataTables_filter').find('input').addClass('form-control inline');
+
+            //
+            // button edit document
+            //
+            $('#table-documents').on('click', '.detail-view', function (e) {
+
+                e.preventDefault();
+                e.stopPropagation();
+
+                var self = $(this);
+
+                console.log('button reply clicked');
+
+                var modal = $('.modal-message');
+                var err = $('#error-msg-container');
+                debugger;
+                var href = self.prop('href');
+                //var isn = self.data('isn');
+
+                //if (isn === '') {
+                //    // err.removeClass('hide').find('#error-msg').html('Document ISN not found');
+                //    toastr.info('Document ISN not found');
+                //    return;
+                //}
+
+                var backdrop = $("<div class='modal-backdrop fade in'></div>");
+                var loading = $('#modal-loading');
+
+                loading.removeClass('hidden');
+                $('body').append(backdrop);
+
+
+                var req = $.ajax({ url: href });
+
+                req.fail(function (jqXHR) {
+                    // err.removeClass('hide').find('#error-msg').html('Unexpected error occurred. Please try again.');
+                    toastr.error('Request error. Please try again.');
+
+                    loading.hide();
+                    backdrop.remove();
+                });
+
+                req.done(function (resp) {
+
+                    // console.log('response',resp);
+
+                    if (resp === undefined || resp == '') {
+                        toastr.info('Unexpected error occurred. Please try again !!!');
+                        return;
+                    }
+
+                    //
+                    // load partial into modal content
+                    modal.find('.modal-content').html(resp);
+
+                    loading.hide();
+                    backdrop.remove();
+
+                    modal.modal({
+                        backdrop: 'static'
+                    });
+                });
+
+            });
+
+        });
+</script>
+
 }

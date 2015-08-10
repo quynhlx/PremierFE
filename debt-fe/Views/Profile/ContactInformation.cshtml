@@ -58,15 +58,35 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-				<button type="button" class="btn btn-primary">Confirm</button>
+                <button type="button" class="btn btn-primary btn-confirm" data-dismiss="modal" aria-label="Close">Confirm</button>
 			</div>
 		</div>
 	</div>
 </div>
-
+<div class="modal fade" id="modal-validate-phone" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Validate Contact Information</h4>
+            </div>
+            <div class="modal-body">
+                <p class="small pb">A sms was sent to you. Please enter the validation code below.</p>
+                <div class="form-group">
+                    <label class="sr-only">validation code</label>
+                    <input type="text" class="form-control" placeholder="Validation Code" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary btn-confirm" data-dismiss="modal" aria-label="Close">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="p+ clearfix">
-	<button class="btn btn-primary text-uppercase" data-toggle="modal" data-target="#modal-validate-contact">save</button>
-	<button class="btn btn-link text-capitalize" id="btn-view-update-history" data-toggle="modal" data-target="#modal-update-history">view history</button>
+    <button class="btn btn-primary text-uppercase btn-save" data-toggle="modal" data-target="#modal-validate-contact">save</button>
+	<button class="btn btn-link text-capitalize" id="btn-view-update-history" data-toggle="modal" data-target="#modal-update-history">[view history]</button>
     @*<a href='@Url.Action("LoadUpdateHistory", "Profile")' class="btn btn-link text-capitalize" id="btn-view-update-history23">View History</a>*@
 </div>
 
@@ -83,10 +103,13 @@
                 <label class="sr-only">Preferred</label>
                 <div class="radio">
                     <label>
-                        <input type="radio" aria-label="preferred home phone" name="preferred" checked="checked" /> Preferred
+                        <input type="radio" aria-label="preferred home phone" name="preferred"  /> 
                     </label> 
                 </div>
             </div>
+            @*<div class="form-group">
+                <a href="#" data-toggle="modal" data-target="#modal-validate-phone">Validate</a>
+            </div>*@
         </div>
 
         <div class="form-inline mv">
@@ -98,35 +121,44 @@
                 <label class="sr-only">Preferred</label>
                 <div class="radio">
                     <label>
-						<input type="radio" aria-label="preferred work phone" name="preferred" /> Preferred
+						<input type="radio" aria-label="preferred work phone" name="preferred" /> 
                     </label>
                 </div>
             </div>
+            @*<div class="form-group">
+                <a href="#" data-toggle="modal" data-target="#modal-validate-phone">Validate</a>
+            </div>*@
         </div>
 
         <div class="form-inline">
             <div class="form-group">
                 <label class="sr-only">Mobile Phone</label>
-                <input type="text" class="form-control" placeholder="Mobile Phone" />
+                <input type="text" class="form-control" placeholder="Mobile Phone" value="213-393-0528" />
             </div>
             <div class="form-group">
                 <label class="sr-only">Preferred</label>
                 <div class="radio">
                     <label>
-						<input type="radio" aria-label="preferred mobile phone" name="preferred" /> Preferred
+                        <input type="radio" aria-label="preferred mobile phone" name="preferred" checked="checked" /> Preferred
                     </label>
                 </div>
             </div>
+            @*<div class="form-group">
+                <a href="#" data-toggle="modal" data-target="#modal-validate-phone">Validate</a>
+            </div>*@
         </div>
     </div>
 
     <!-- email -->
     <div class="col-md-6">
+
         <div class="form-group">
             <label class="label-bold">Email</label>
-            <input type="email" class="form-control" placeholder="Email Address" />
+            <input type="email" class="form-control" placeholder="Email Address" value="allen.pham@gmail.com" />
         </div>
-
+        @*<div class="form-group">
+            <a href="#" data-toggle="modal" data-target="#modal-validate-contact">Validate</a>
+        </div>*@
         <div class="form-group">
             <label class="label-bold">Best Time to Contact</label>
             <input type="text" class="form-control" />
@@ -211,5 +243,9 @@
         });
 
     });
+
+    //$(".btn-confirm").click(function () {
+    //    $(".btn-save").removeClass("disabled");
+    //})
     </script>
 }
