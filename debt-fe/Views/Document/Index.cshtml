@@ -286,6 +286,7 @@
                 var req = $.ajax({ url: url });
 
                 req.fail(function (jqXHR, stt, err) {
+                    console.log(jqXHR);
                     toastr.error('Request error occurred. Please try again.');
                 });
 
