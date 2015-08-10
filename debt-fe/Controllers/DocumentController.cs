@@ -500,9 +500,14 @@ namespace debt_fe.Controllers
 
             RightSignature.SetApiKey(apiKey);
 
-            var auth = Request.Url.Authority;            
-            var scheme = Request.Url.Scheme;            
-            var redirect = string.Format("{0}://{1}/Document/SignatureDownload?signId={2}", scheme, auth, signId);
+            // var auth = Request.Url.Authority;            
+            // var scheme = Request.Url.Scheme;            
+            // http://localhost:47854/Document/SignatureDownload?signId=123456
+            var urlRedirect = Url.Action("SignatureDownload", "Document", new { signId =signId});
+            var urlPreferred = Request.UrlReferrer.AbsoluteUri;
+
+            // var redirect = string.Format("{0}://{1}/Document/SignatureDownload?signId={2}", scheme, auth, signId);
+            var redirect = string.Format("{0}/{1}",urlPreferred.TrimEnd('/'),urlRedirect.TrimStart('/'));
 
             var docKey = RightSignature.Embedded(
                     Guid_Template: template.SignGuid,
@@ -532,7 +537,7 @@ namespace debt_fe.Controllers
 
             ViewBag.iFrameSrc = signUrl;
 
-            return Json(new { code = 1, msg = "success", data = signUrl, signId=signId }, JsonRequestBehavior.AllowGet);
+            return Json(new { code = 1, msg = "success", data = signUrl, signId=signId, redirect=redirect }, JsonRequestBehavior.AllowGet);
 
             /*
              * on submit
