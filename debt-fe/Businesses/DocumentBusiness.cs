@@ -309,7 +309,14 @@ namespace debt_fe.Businesses
             parameters.Add("entityISN", memberISN);
             parameters.Add("documentISN", documentISN);
 
-            signId = (int)_data.ExecuteStoreProcedure("xp_rightsignature_document_insupd", parameters);
+            try
+            {
+                signId = (int)_data.ExecuteStoreProcedure("xp_rightsignature_document_insupd", parameters);
+            }
+            catch(Exception ex)
+            {
+                _logger.Error(ex.Message, ex);
+            }
 
             return signId;
         }

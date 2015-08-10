@@ -467,7 +467,7 @@ namespace debt_fe.Controllers
 
             var templateISN = _docBusiness.GetTemplateId(documentISN);
 
-            templateISN = 32;
+            // templateISN = 32;
 
             if (templateISN < 0)
             {
@@ -501,9 +501,7 @@ namespace debt_fe.Controllers
             RightSignature.SetApiKey(apiKey);
 
             var auth = Request.Url.Authority;            
-            var scheme = Request.Url.Scheme;
-            //
-            // http://localhost:47854/Document/Signature?documentISN=486
+            var scheme = Request.Url.Scheme;            
             var redirect = string.Format("{0}://{1}/Document/SignatureDownload?signId={2}", scheme, auth, signId);
 
             var docKey = RightSignature.Embedded(
