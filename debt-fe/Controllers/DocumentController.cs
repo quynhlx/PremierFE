@@ -96,6 +96,46 @@ namespace debt_fe.Controllers
 
         public ActionResult Index()
         {
+            _logger.InfoFormat("Url: {0}\r\n, abs = {1}\r\n, uri = {2}\r\n, aut = {3}\r\n, fragment = {4}\r\n, host = {5}\r\n, local = {6}\r\n, original = {7}\r\n, port = {8}\r\n, query = {9}\r\n, scheme = {10}\r\n, info = {11}\r\n",
+                Request.Url.ToString(),
+                Request.Url.AbsolutePath,
+                Request.Url.AbsoluteUri,
+                Request.Url.Authority,
+                Request.Url.Fragment,
+                Request.Url.Host,
+                Request.Url.LocalPath,
+                Request.Url.OriginalString,
+                Request.Url.Port,
+                Request.Url.Query,
+                Request.Url.Scheme,
+                Request.Url.UserInfo);
+
+            if (Request.UrlReferrer != null && !string.IsNullOrEmpty(Request.UrlReferrer.ToString()))
+            {
+                _logger.InfoFormat("Referred Url: {0}\r\n, abs = {1}\r\n, uri = {2}\r\n, aut = {3}\r\n, fragment = {4}\r\n, host = {5}\r\n, local = {6}\r\n, original = {7}\r\n, port = {8}\r\n, query = {9}\r\n, scheme = {10}\r\n, info = {11}\r\n",
+                    Request.UrlReferrer.ToString(),
+                    Request.UrlReferrer.AbsolutePath,
+                    Request.UrlReferrer.AbsoluteUri,
+                    Request.UrlReferrer.Authority,
+                    Request.UrlReferrer.Fragment,
+                    Request.UrlReferrer.Host,
+                    Request.UrlReferrer.LocalPath,
+                    Request.UrlReferrer.OriginalString,
+                    Request.UrlReferrer.Port,
+                    Request.UrlReferrer.Query,
+                    Request.UrlReferrer.Scheme,
+                    Request.UrlReferrer.UserInfo);
+
+                var urlRedirect = Url.Action("SignatureDownload", "Document", new { signId = 1 });
+                var urlPreferred = Request.UrlReferrer.AbsoluteUri;
+
+
+                _logger.InfoFormat("url redirect = {0}", urlRedirect);
+                _logger.InfoFormat("url referred = {0}", urlPreferred);
+            }
+
+            
+
 
            
             // TempData["info"] = "Hello world";
@@ -500,14 +540,42 @@ namespace debt_fe.Controllers
 
             RightSignature.SetApiKey(apiKey);
 
-            // var auth = Request.Url.Authority;            
-            // var scheme = Request.Url.Scheme;            
-            // http://localhost:47854/Document/SignatureDownload?signId=123456
-            var urlRedirect = Url.Action("SignatureDownload", "Document", new { signId =signId});
-            var urlPreferred = Request.UrlReferrer.AbsoluteUri;
 
-            // var redirect = string.Format("{0}://{1}/Document/SignatureDownload?signId={2}", scheme, auth, signId);
-            var redirect = string.Format("{0}/{1}",urlPreferred.TrimEnd('/'),urlRedirect.TrimStart('/'));
+            _logger.InfoFormat("Url: {0}\r\n, abs = {1}\r\n, uri = {2}\r\n, aut = {3}\r\n, fragment = {4}\r\n, host = {5}\r\n, local = {6}\r\n, original = {7}\r\n, port = {8}\r\n, query = {9}\r\n, scheme = {10}\r\n, info = {11}\r\n",
+                Request.Url.ToString(),
+                Request.Url.AbsolutePath,
+                Request.Url.AbsoluteUri,
+                Request.Url.Authority,
+                Request.Url.Fragment,
+                Request.Url.Host,
+                Request.Url.LocalPath,
+                Request.Url.OriginalString,
+                Request.Url.Port,
+                Request.Url.Query,
+                Request.Url.Scheme,
+                Request.Url.UserInfo);
+
+            if (Request.UrlReferrer != null && !string.IsNullOrEmpty(Request.UrlReferrer.ToString()))
+            {
+                _logger.InfoFormat("Referred Url: {0}\r\n, abs = {1}\r\n, uri = {2}\r\n, aut = {3}\r\n, fragment = {4}\r\n, host = {5}\r\n, local = {6}\r\n, original = {7}\r\n, port = {8}\r\n, query = {9}\r\n, scheme = {10}\r\n, info = {11}\r\n",
+                    Request.UrlReferrer.ToString(),
+                    Request.UrlReferrer.AbsolutePath,
+                    Request.UrlReferrer.AbsoluteUri,
+                    Request.UrlReferrer.Authority,
+                    Request.UrlReferrer.Fragment,
+                    Request.UrlReferrer.Host,
+                    Request.UrlReferrer.LocalPath,
+                    Request.UrlReferrer.OriginalString,
+                    Request.UrlReferrer.Port,
+                    Request.UrlReferrer.Query,
+                    Request.UrlReferrer.Scheme,
+                    Request.UrlReferrer.UserInfo);
+            }
+
+           var urlRedirect = Url.Action("SignatureDownload", "Document", new { signId =signId});
+            var host = Request.Url.Host;
+            // var redirect = string.Format("{0}://{1}/client/Document/SignatureDownload?signId={2}", scheme, auth, signId);
+            var redirect = string.Format("{0}/{1}",host.TrimEnd('/'), urlRedirect.TrimStart('/'));
 
             var docKey = RightSignature.Embedded(
                     Guid_Template: template.SignGuid,
