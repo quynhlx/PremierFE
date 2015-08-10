@@ -15,6 +15,10 @@ namespace debt.methods
 	{
 		static void Main(string[] args)
 		{
+
+            var pass = "1";
+            var md5 = ToMD5Hash(pass);
+
 			var contacts = new List<ContactInformationModel>
 			{
 				new ContactInformationModel
@@ -99,8 +103,7 @@ namespace debt.methods
             var path2 = Path.GetDirectoryName("C");
             var path3 = Environment.SpecialFolder.MyComputer;
 
-			var pass = "1";
-			var md5 = ToMD5Hash(pass);
+			
 
 
 

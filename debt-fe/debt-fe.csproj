@@ -185,6 +185,7 @@
     <Compile Include="Models\ContactInformationModel.cs" />
     <Compile Include="Models\ContactInformationUpdateHistoryModel.cs" />
     <Compile Include="Models\CreditorModel.cs" />
+    <Compile Include="Models\DebtModel.cs" />
     <Compile Include="Models\DocumentModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
