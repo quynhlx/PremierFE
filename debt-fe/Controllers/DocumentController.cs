@@ -12,7 +12,6 @@ using System.Threading;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web;
-using System.Collections.Generic;
 
 namespace debt_fe.Controllers
 {
@@ -531,8 +530,6 @@ namespace debt_fe.Controllers
 
             var apiKey = ConfigurationManager.AppSettings["RightSignatureApiKey"];
 
-            // apiKey = "19g28X7WLKzW279vq6Z0NrBaWOE3Hs8IztBXe6ND";
-
             if (string.IsNullOrEmpty(apiKey))
             {
                 return Json(new {code=-4,msg="api key not found" }, JsonRequestBehavior.AllowGet);
@@ -572,10 +569,9 @@ namespace debt_fe.Controllers
                     Request.UrlReferrer.UserInfo);
             }
 
-           var urlRedirect = Url.Action("SignatureDownload", "Document", new { signId =signId});
+           var urlRedirect = Url.Action("SignatureDownload", "Document", new { signId =signId});           
            var scheme = Request.Url.Scheme;
-            var host = Request.Url.Host;
-            // var redirect = string.Format("{0}://{1}/client/Document/SignatureDownload?signId={2}", scheme, auth, signId);
+            var host = Request.Url.Host;           
             var redirect = string.Format("{0}://{1}/{2}",scheme,host.TrimEnd('/'), urlRedirect.TrimStart('/'));
 
             var docKey = RightSignature.Embedded(
