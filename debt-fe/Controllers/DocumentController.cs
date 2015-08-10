@@ -442,8 +442,19 @@ namespace debt_fe.Controllers
             return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileDownloadName);
         }
 
-        public ActionResult Signature(int documentISN)
+        public ActionResult Signature(string documentISNStr)
         {
+            _logger.Info("---start signature---");
+
+            _logger.Info("Document ISN = "+documentISNStr);
+
+            if (string.IsNullOrEmpty(documentISNStr) || string.IsNullOrWhiteSpace(documentISNStr))
+            {
+                return Json(new { code=-5,msg="Document ISN not found"}, JsonRequestBehavior.AllowGet);
+            }
+
+            var documentISN = int.Parse(documentISNStr);
+
             //
             // step 01: get template isn from vw_debtext_document
             // step 02: get signature id

@@ -89,7 +89,7 @@
                             {
                                 if (string.IsNullOrEmpty(doc.FileName))
                                 {
-                                    <a href='@Url.Action("Signature", "Document", new { documentISN=doc.ID})' target="_blank" class="btn btn-primary btn-sign btn-sm display-block mb" data-document-id="@doc.ID">Sign</a>
+                                    <a href='@Url.Action("Signature", "Document", new { documentISNStr=doc.ID})' target="_blank" class="btn btn-primary btn-sign btn-sm display-block mb" data-document-id="@doc.ID">Sign</a>
                                 }
                                 else
                                 {
