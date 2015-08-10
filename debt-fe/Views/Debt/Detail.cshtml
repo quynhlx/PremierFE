@@ -1,0 +1,36 @@
+﻿@using debt_fe.Models
+@model DebtModel
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title" id="modalDocument">Updated History</h4>
+</div>
+<div class="modal-body">
+    <div class="row">
+        <div class="col-md-12"><p class="text-left text-bold">***Reply by @Model.By [@Model.History]</p></div>
+        <div class="col-md-12"><p class="text-left">Status: @Model.CurrentStatus</p></div>
+    </div>
+    <hr class="hr-2line" />
+    <div class="row">
+        <div class="col-md-12"><p class="text-left text-bold">***Reply by @Model.By [@Model.History]</p></div>
+        <div class="col-md-12"><p class="text-left">Debt Amount: @Model.DebtAmount</p></div>
+    </div>
+    <hr class="hr-2line" />
+    <div class="row">
+        <div class="col-md-12"><p class="text-left text-bold">***Added by @Model.By [@Model.History]</p></div>
+        <br />
+        <div class="col-md-12"><p class="text-left">Debt Name: @Model.Name</p></div>
+        <div class="col-md-12"><p class="text-left">Creditor: @Model.Creditor</p></div>
+        <div class="col-md-12"><p class="text-left">Account #: @Model.AccountNumber</p></div>
+        <div class="col-md-12"><p class="text-left">Debt Amount: @Model.DebtAmount</p></div>
+        <div class="col-md-12"><p class="text-left">Current Collector: @Model.CurrentCollector</p></div>
+        <div class="col-md-12"><p class="text-left">Status: @Model.CurrentStatus</p></div>
+
+    </div>
+    
+
+</div>
+<div class="modal-footer">
+
+</div>
+

@@ -1,23 +1,42 @@
 ﻿@{
 	ViewBag.Title = "Bank Account";
 }
-
+<style>
+    .progress-bar.animate {
+    width: 100%;
+    }
+    .label {
+        font-size : 100%;
+    }
+</style>
 <div class="clearfix p+">
-    <button class="btn btn-primary">Validate</button>
+    <button class="btn btn-primary btn-validate">Submit</button>
+    <label class="mt++ label label-danger center-block msg hidden"></label>
 </div>
-
+<div class="modal js-loading-bar">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header center-block"><h4 class="text-center">Validating ...</h4></div>
+            <div class="modal-body">
+                <div class="progress progress-popup">
+                    <div class="progress-bar"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="row ph+">
     <div class="col-md-6">
         <div class="form-group">
             <label class="label-bold">Bank Name</label>
-            <input type="text" class="form-control" />
+            <input type="text" class="form-control" value="Citi Bank" />
         </div>
     </div>
 
     <div class="col-md-6">
         <div class="form-group">
             <label class="label-bold">Bank Routing Number</label>
-            <input type="text" class="form-control" placeholder="Client Bank Routing Number" />
+            <input type="text" class="form-control" placeholder="Client Bank Routing Number" value="322271724" />
         </div>
     </div>
 </div>
@@ -26,7 +45,7 @@
     <div class="col-md-6">
         <div class="form-group">
             <label class="label-bold">Bank Account Number</label>
-            <input type="text" class="form-control" placeholder="Client Bank Account Number" />
+            <input type="text" class="form-control" placeholder="Client Bank Account Number" value="42009694573" />
         </div>
     </div>
 
@@ -34,8 +53,7 @@
         <div class="form-group">
             <label class="label-bold">Bank Account Type</label>
             <select class="form-control">
-				<option>Select One</option>
-                <option>Checking</option>
+                <option selected>Checking</option>
                 <option>Savings</option>
             </select>
         </div>
@@ -47,7 +65,12 @@
         <div class="form-group">
             <label class="label-bold">Bank Account Owner</label>
             <select class="form-control">
-                <option>Client owns account</option>                
+                <option>Client owns account</option>
+                <option>Co-Client owns account</option>
+                <option>Separated party owns account</option>
+              
+               
+
             </select>
         </div>
     </div>
@@ -55,7 +78,7 @@
     <div class="col-md-6">
         <div class="form-group">
             <label class="label-bold">Name Account Owner</label>
-            <input type="text" class="form-control" />
+            <input type="text" class="form-control" disabled />
         </div>
     </div>
 </div>
@@ -64,14 +87,14 @@
     <div class="col-md-6">
         <div class="form-group">
             <label class="label-bold">SSN Account Owner</label>
-            <input type="text" class="form-control" placeholder="SSN Number" />
+            <input type="text" class="form-control" placeholder="SSN Number" disabled />
         </div>
     </div>
 
     <div class="col-md-6">
         <div class="form-group">
             <label class="label-bold">Email Account Owner</label>
-            <input type="email" placeholder="Email Address" class="form-control" />
+            <input type="email" placeholder="Email Address" class="form-control" disabled />
         </div>
     </div>
 </div>
@@ -83,22 +106,100 @@
     <div class="col-md-6">
         <div class="form-group">
             <label class="label-bold sr-only">Street Address</label>
-            <input type="text" class="form-control" placeholder="Street Address" />
+            <input type="text" class="form-control" placeholder="Street Address" disabled />
         </div>
         <div class="form-group">
             <label class="label-bold sr-only">City</label>
-            <input type="text" class="form-control" placeholder="City" />
+            <input type="text" class="form-control" placeholder="City" disabled />
         </div>
     </div>
 
     <div class="col-md-6">
         <div class="form-group form-inline">
             <label class="label-bold sr-only">Zip</label>
-            <input type="text" placeholder="Zip" class="form-control" />
+            <input type="text" placeholder="Zip" class="form-control" disabled />
         </div>
 		<div class="form-group form-inline">
 			<label class="label-bold sr-only">State</label>
-			@Html.DropDownList("state", ViewBag.States as SelectList, new { @class = "form-control" })
+			@Html.DropDownList("state", ViewBag.States as SelectList, new { @class = "form-control", disabled = "disabled" })
 		</div>
     </div>
 </div>
+
+@section scripts{
+    <script>
+        var count = 2;
+        //$(".btn-validate").click(handlerValidate);
+
+        function handlerValidate() {
+            if (count == 0)
+                $(".msg").addClass("label-danger");
+                $(".msg").removeClass("label-success");
+                $(".msg").html("Your bank information is not valid.");
+                $(".msg").removeClass("hidden");
+                $(".btn-validate").html("Validate");
+            if (count == 1)
+            {
+                $(".msg").addClass("label-danger");
+                $(".msg").removeClass("label-success");
+                $(".msg").html("Your bank information is not valid. Please call 800-xxx-xxxx.");
+                $(".msg").removeClass("hidden");
+                $(".btn-validate").html("Validate");
+
+            }
+            if (count == 2) {
+                $(".btn-validate").html("Save");
+                $(".msg").html("Your bank information is valid");
+                $(".msg").removeClass("hidden");
+                $(".msg").removeClass("label-danger");
+                $(".msg").addClass("label-success");
+            }
+            if (count == 3) {
+                $(".btn-validate").html("Validate");
+                $(".msg").html("Your bank information saved");
+                $(".msg").removeClass("hidden");
+                $(".msg").removeClass("label-danger");
+                $(".msg").addClass("label-success");
+
+                count = 2;
+            }
+            count++;
+        };
+    </script>
+
+    <script>
+        // Setup
+        this.$('.js-loading-bar').modal({
+            backdrop: 'static',
+            show: false
+        });
+
+        $('.btn-validate').click(function () {
+
+            if (count < 3)
+            {
+            var $modal = $('.js-loading-bar'),
+                $bar = $modal.find('.progress-bar');
+
+            $modal.modal('show');
+            $bar.addClass('animate');
+
+            setTimeout(function () {
+                $bar.removeClass('animate');
+                $modal.modal('hide');
+                handlerValidate();
+            }, 1500);
+            }
+            if (count == 3) {
+                $(".btn-validate").html("Submit");
+                $(".msg").html("Your bank information save successfull.");
+                $(".msg").removeClass("hidden");
+                $(".msg").removeClass("label-danger");
+                $(".msg").addClass("label-success");
+
+                count = 2;
+            }
+           
+        });
+    </script>
+}

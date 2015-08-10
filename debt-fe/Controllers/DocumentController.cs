@@ -12,6 +12,7 @@ using System.Threading;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web;
+using System.Collections.Generic;
 
 namespace debt_fe.Controllers
 {
@@ -95,6 +96,8 @@ namespace debt_fe.Controllers
 
         public ActionResult Index()
         {
+
+           
             // TempData["info"] = "Hello world";
 
             //
@@ -491,8 +494,7 @@ namespace debt_fe.Controllers
             //
             // http://localhost:47854/Document/Signature?documentISN=486
             var redirect = string.Format("{0}://{1}/Document/SignatureDownload?signId={2}", scheme, auth, signId);
-						
-			
+
             var docKey = RightSignature.Embedded(
                     Guid_Template: template.SignGuid,
                     RoleName: template.SignerRole,
@@ -501,9 +503,6 @@ namespace debt_fe.Controllers
                     NameFile: signName,                    
                     url_redirect: redirect,
                     RightSign_ISN: signId.ToString());
-		
-			
-			// var docKey = "";
 
             if (string.IsNullOrEmpty(docKey) || string.IsNullOrWhiteSpace(docKey))
             {
@@ -655,6 +654,10 @@ namespace debt_fe.Controllers
             return RedirectToAction("Index");
         }
 
+        public ActionResult Message ()
+        {
+            return View();
+        }
         /*
         private async void DownloadSignatureAsync(object parameters)
         {
@@ -687,6 +690,7 @@ namespace debt_fe.Controllers
                 }
             }));
         }
-
+        
+        
     }
 }

@@ -29,6 +29,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -45,7 +46,7 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="RightSignatures, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\RightSignatures.dll</HintPath>
+      <HintPath>..\packages\RightSignatures.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -188,6 +189,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MemberModel.cs" />
+    <Compile Include="Models\MessageModels.cs" />
     <Compile Include="Models\SignatureModel.cs" />
     <Compile Include="Models\StateModel.cs" />
     <Compile Include="Models\TemplateModel.cs" />
@@ -203,6 +205,7 @@
   <ItemGroup>
     <Content Include="App_Data\UpdateHistory.xml" />
     <Content Include="App_Data\USAState.xml" />
+    <Content Include="ClientTracking.html" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -246,6 +249,7 @@
     </Content>
     <Content Include="Content\extensions\toastr.css" />
     <Content Include="Content\toastr.min.css" />
+    <Content Include="Content\Videos\Premier-Docs-v3-01.mp4" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -268,6 +272,11 @@
     </Content>
     <Content Include="Content\toastr.scss" />
     <Content Include="Content\toastr.less" />
+    <Content Include="LeadTracking.html" />
+    <Content Include="XMLData\Message.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="XMLData\DebtData.xml" />
     <None Include="Properties\PublishProfiles\tienquang.pubxml" />
     <None Include="Scripts\jquery-1.11.3.intellisense.js" />
     <Content Include="Icon.png" />
@@ -344,6 +353,10 @@
     <Content Include="Views\Profile\BankAccount.cshtml" />
     <Content Include="Views\Debt\Index.cshtml" />
     <Content Include="Views\Message\Index.cshtml" />
+    <Content Include="Views\Document\Message.cshtml" />
+    <Content Include="Views\Message\_Detail.cshtml" />
+    <Content Include="Views\Message\_ViewAll.cshtml" />
+    <Content Include="Views\Debt\Detail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Uploads\" />

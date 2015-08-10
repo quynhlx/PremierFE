@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Debt>
+  <DebtModel>
+    <Id>1</Id>
+    <Name>Debt1</Name>
+    <Creditor>Creditor1</Creditor>
+    <AccountNumber>1234</AccountNumber>
+    <DebtAmount>50,000.00</DebtAmount>
+    <CurrentCollector>Collector1</CurrentCollector>
+    <CurrentStatus>P1 Sent</CurrentStatus>
+    <Delinquency></Delinquency>
+    <Graduation></Graduation>
+    <History>04/17/2015, 9:13 AM</History>
+    <By>username</By>
+  </DebtModel>
+  <DebtModel>
+    <Id>2</Id>
+    <Name>Debt2</Name>
+    <Creditor>Creditor2</Creditor>
+    <AccountNumber>6751</AccountNumber>
+    <DebtAmount>60,000.00</DebtAmount>
+    <CurrentCollector>Collector2</CurrentCollector>
+    <CurrentStatus>P2 Sent</CurrentStatus>
+    <Delinquency></Delinquency>
+    <Graduation></Graduation>
+    <History>04/16/2015, 5:13 AM</History>
+    <By>username</By>
+  </DebtModel>
+  <DebtModel>
+    <Id>3</Id>
+    <Name>Debt3</Name>
+    <Creditor>Creditor3</Creditor>
+    <AccountNumber>2222</AccountNumber>
+    <DebtAmount>50,000.00</DebtAmount>
+    <CurrentCollector>Collector3</CurrentCollector>
+    <CurrentStatus>NOIR</CurrentStatus>
+    <Delinquency></Delinquency>
+    <Graduation></Graduation>
+    <History>04/12/2015, 11:13 AM</History>
+    <By>username</By>
+  </DebtModel>
+  <DebtModel>
+    <Id>4</Id>
+    <Name>Debt4</Name>
+    <Creditor>Creditor4</Creditor>
+    <AccountNumber>4355</AccountNumber>
+    <DebtAmount>50,000.00</DebtAmount>
+    <CurrentCollector>Collector4</CurrentCollector>
+    <CurrentStatus>
+      Sommon Received
+    </CurrentStatus>
+    <Delinquency></Delinquency>
+    <Graduation></Graduation>
+    <History>03/17/2015, 9:13 AM</History>
+    <By>username</By>
+    
+  </DebtModel>
+  <DebtModel>
+    <Id>5</Id>
+    <Name>Debt5</Name>
+    <Creditor>Creditor5</Creditor>
+    <AccountNumber>7657</AccountNumber>
+    <DebtAmount>20,000.00</DebtAmount>
+    <CurrentCollector>Collector5</CurrentCollector>
+    <CurrentStatus>
+      Fully Disputed
+    </CurrentStatus>
+    <Delinquency></Delinquency>
+    <Graduation></Graduation>
+    <History>02/17/2015, 9:13 AM</History>
+    <By>username</By>
+
+  </DebtModel>
+</Debt>
+
