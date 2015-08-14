@@ -1,14 +1,14 @@
 ﻿<ul class="menu">
-    <li data-controller="Message"><a href='@Url.Action("Index","Message")' data-action="Index"><span class="glyphicon glyphicon-user"></span> messages</a></li>
-    <li data-controller="Profile" class="has-sub">
+    <li data-controller="Message" id="menu-mes"><a href='@Url.Action("Index","Message")' data-action="Index"><span class="glyphicon glyphicon-user"></span> messages</a></li>
+    <li data-controller="Profile" id="menu-pro" class="has-sub">
         <a href='#'><span class="glyphicon glyphicon-credit-card"></span> my profile <span class="glyphicon glyphicon-menu-right pull-right"></span></a>
         <ul class="sub-menu">
-            <li><a href='@Url.Action("BankAccount","Profile")' data-action="BankAccount"><span class="glyphicon glyphicon-menu-right"></span> bank account</a></li>
-            <li><a href='@Url.Action("ContactInformation","Profile")' data-action="ContactInformation"><span class="glyphicon glyphicon-menu-right"></span> contact information</a></li>
+            <li id="menu-bank"><a href='@Url.Action("BankAccount","Profile")' data-action="BankAccount"><span class="glyphicon glyphicon-menu-right"></span> bank account</a></li>
+            <li id="menu-info"><a href='@Url.Action("ContactInformation","Profile")' data-action="ContactInformation"><span class="glyphicon glyphicon-menu-right"></span> contact information</a></li>
         </ul>
     </li>
-    <li data-controller="Document"><a href='@Url.Action("Index","Document")' data-action="Index"><span class="glyphicon glyphicon-file"></span> my documents</a></li>
-    <li data-controller="Debt"><a href='@Url.Action("Index","Debt")' data-action="Index"><span class="glyphicon glyphicon-usd"></span> my debts</a></li>
-    <li data-controller="Home"><a href='@Url.Action("Support","Home")' data-action="Support"><span class="glyphicon glyphicon-briefcase"></span> what we do for you</a></li>
-    <li data-controller="Home"><a href='@Url.Action("HowTo","Home")' data-action="HowTo"><span class="glyphicon glyphicon-question-sign"></span> how to</a></li>
+    <li data-controller="Document" id="menu-doc"><a href='@Url.Action("Index","Document")' data-action="Index"><span class="glyphicon glyphicon-file"></span> my documents</a></li>
+    <li data-controller="Debt" id="menu-debt"><a href='@Url.Action("Index","Debt")' data-action="Index"><span class="glyphicon glyphicon-usd"></span> my debts</a></li>
+    <li data-controller="Home" id="menu-support"><a href='@Url.Action("Support","Home")' data-action="Support"><span class="glyphicon glyphicon-briefcase"></span> what we do for you</a></li>
+    <li data-controller="Home" id="menu-how"><a href='@Url.Action("HowTo","Home")' data-action="HowTo"><span class="glyphicon glyphicon-question-sign"></span> how to</a></li>
 </ul>

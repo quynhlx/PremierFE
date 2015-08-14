@@ -48,7 +48,6 @@
 
 <div class="modal-backdrop fade in hidden" id="modal-loading"><div class="loader">Loading...</div></div>
 @section scripts{
-    <script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
     <script>
         $(document).ready(function () {
 
@@ -133,5 +132,8 @@
 
         });
 </script>
-
+<script>
+    $(".menu > li").removeClass("active");
+    $('#menu-mes').addClass("active");
+</script>
 }

@@ -65,58 +65,59 @@
 
         settings();
 
+        
         //
         // active menu
         //             
-        $('.menu > li').each(function (i, ele) {
+        //$('.menu > li').each(function (i, ele) {
 
-        	var li = $(ele);
-        	var href = li.children('a').prop('href');
+        //	var li = $(ele);
+        //	var href = li.children('a').prop('href');
 
-        	var controller = li.data('controller');
-        	var action = li.children('a').data('action');
+        //	var controller = li.data('controller');
+        //	var action = li.children('a').data('action');
 
-        	if (action === undefined || action === null) {
-				action = '';
-        	}
+        //	if (action === undefined || action === null) {
+		//		action = '';
+        //	}
 
-        	var winHref = window.location.href;
-        	var pathName = window.location.pathname;
+        //	var winHref = window.location.href;
+        //	var pathName = window.location.pathname;
 
-        	if (winHref.indexOf(controller) >= 0) {
+        //	if (winHref.indexOf(controller) >= 0) {
 
-        		if (controller === 'Profile') {
+        //		if (controller === 'Profile') {
         			
-        			var arr = li.children('.sub-menu').find('a');
+        //			var arr = li.children('.sub-menu').find('a');
 
-        			$(arr).each(function (i, ale) {
+        //			$(arr).each(function (i, ale) {
         				
-        				var actionSub = $(ale).data('action');
-        				if (pathName.indexOf(actionSub) >= 0) {
-        					$(ale).addClass('active').closest('.has-sub').addClass('active in');        					
-        					// $(ale).closest('.has-sub').addClass('active');
-        				} else {
-        					// $(ale).removeClass('active');
-        				}
-        			}); // each item on sub menu
-        		}
+        //				var actionSub = $(ale).data('action');
+        //				if (pathName.indexOf(actionSub) >= 0) {
+        //					$(ale).addClass('active').closest('.has-sub').addClass('active in');        					
+        //					// $(ale).closest('.has-sub').addClass('active');
+        //				} else {
+        //					// $(ale).removeClass('active');
+        //				}
+        //			}); // each item on sub menu
+        //		}
 
-            	if (pathName.indexOf(action) >= 0) {
-            		li.addClass('active');
-            	} else {
-            		if (action.toLowerCase() === 'index') {
-            			li.addClass('active');
-            		}
-            	}
-            } else {
-            	if (controller.toLowerCase() === 'document' && pathName.replace('/','') === '') {
-            		li.addClass('active');
-            	} else {
-            		li.removeClass('active');
-            	}
-            }
+        //    	if (pathName.indexOf(action) >= 0) {
+        //    		li.addClass('active');
+        //    	} else {
+        //    		if (action.toLowerCase() === 'index') {
+        //    			li.addClass('active');
+        //    		}
+        //    	}
+        //    } else {
+        //    	if (controller.toLowerCase() === 'document' && pathName.replace('/','') === '') {
+        //    		li.addClass('active');
+        //    	} else {
+        //    		li.removeClass('active');
+        //    	}
+        //    }
             
-        });
+        //});
         
 
         //
