@@ -506,7 +506,7 @@ namespace debt_fe.Controllers
 
             var templateISN = _docBusiness.GetTemplateId(documentISN);
 
-            // templateISN = 32;
+             //templateISN = 32;
 
             if (templateISN < 0)
             {
@@ -574,7 +574,7 @@ namespace debt_fe.Controllers
             var host = Request.Url.Host;           
             var redirect = string.Format("{0}://{1}/{2}",scheme,host.TrimEnd('/'), urlRedirect.TrimStart('/'));
 
-            //redirect = string.Format("http://localhost:{0}/{1}", Request.Url.Port, urlRedirect);
+            redirect = string.Format("http://localhost:{0}/{1}", Request.Url.Port, urlRedirect);
 
             // http://localhost:47854/Debt/Index
 
@@ -606,6 +606,7 @@ namespace debt_fe.Controllers
 
             ViewBag.iFrameSrc = signUrl;
 
+            
             return Json(new { code = 1, msg = "success", data = signUrl, signId=signId, redirect=redirect }, JsonRequestBehavior.AllowGet);
 
             /*
@@ -619,7 +620,10 @@ namespace debt_fe.Controllers
              * 
              * */
         }
+        private void UpdateLeadStatus()
+        {
 
+        }
         public ActionResult SignatureDownload(int signId)
         {            
             var matchId = string.Empty;
@@ -668,7 +672,7 @@ namespace debt_fe.Controllers
             //
             // update signature filename after sign
             _docBusiness.EditSignatureDocument(strFileName, docId);
-
+            _docBusiness.UpdateLeadStatus(this.MemberISN, "Contract Received", MemberISN);
             var urlSigned = RightSignature.GetURLPDFSigned(matchId);
 
             try

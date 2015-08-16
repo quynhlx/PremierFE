@@ -41,6 +41,15 @@ namespace debt_fe.Businesses
             return documents;
         }
 
+        public void UpdateLeadStatus (int memberISN, string status, int by)
+        {
+            var store = "xp_debt_lead_status_upd";
+            var parameters = new Hashtable();
+            parameters.Add("MemberISN", memberISN);
+            parameters.Add("Status", status);
+            parameters.Add("updatedBy", by);
+            var table = _data.ExecuteStoreProcedure(store, parameters);
+        }
         private List<DocumentModel> GetDocumentsFromTable(DataTable table)
         {
             var documents = new List<DocumentModel>();
