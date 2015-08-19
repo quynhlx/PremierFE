@@ -181,6 +181,10 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Html\SendEmail.aspx.cs">
+      <DependentUpon>SendEmail.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ContactInformationModel.cs" />
     <Compile Include="Models\ContactInformationUpdateHistoryModel.cs" />
@@ -275,11 +279,20 @@
     </Content>
     <Content Include="Content\toastr.scss" />
     <Content Include="Content\toastr.less" />
+    <Content Include="Html\about.html" />
+    <Content Include="Html\businessservices.html" />
+    <Content Include="Html\contact.html" />
+    <Content Include="Html\index.html" />
+    <Content Include="Html\personalservices.html" />
+    <Content Include="Html\privacypolicy.html" />
+    <Content Include="Html\SendEmail.aspx" />
+    <Content Include="Html\Terms.html" />
     <Content Include="LeadTracking.html" />
     <Content Include="XMLData\Message.xml">
       <SubType>Designer</SubType>
     </Content>
     <Content Include="XMLData\DebtData.xml" />
+    <Content Include="Html\Web.config" />
     <None Include="Properties\PublishProfiles\Debt-vn2.valuecomusa.pubxml" />
     <None Include="Properties\PublishProfiles\tienquang.pubxml" />
     <None Include="Properties\PublishProfiles\Debt-Local.pubxml" />
