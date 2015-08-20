@@ -27,5 +27,14 @@ namespace debt_fe.Models
 		public string LastAction { get; set; }
 		public string SignatureStatus { get; set; }
 		public bool IsSignatureDocument { get; set; }
+
+
+        private string _customFileName;
+
+        public string CustomFileName
+        {
+            get { return _customFileName; }
+            set { _customFileName = value; }
+        }
 	}
 }

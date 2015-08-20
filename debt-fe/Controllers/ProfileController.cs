@@ -49,7 +49,18 @@ namespace debt_fe.Controllers
 
             return View();
         }
+        public ActionResult MyProfile ()
+        {
+            var states = Utility.GetStates();
 
+            if (states == null)
+            {
+                states = new List<StateModel>();
+            }
+
+            ViewBag.States = new SelectList(states, "Code", "Name");
+            return View();
+        }
         public ActionResult LoadUpdateHistory()
         {
 			/*

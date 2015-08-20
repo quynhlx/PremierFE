@@ -23,9 +23,9 @@
                 <th>Debt Amount($)</th>
                 <th>Current Collector</th>
                 <th>Current Status</th>
-                <th>Delinquency</th>
+                @*<th>Delinquency</th>
                 <th>Graduation</th>
-                <th>History / Last Action</th>
+                <th>History / Last Action</th>*@
             </tr>
         </thead>
         <tbody>
@@ -39,12 +39,12 @@
                     <td>@debt.DebtAmount</td>
                     <td>@debt.CurrentCollector</td>
                     <td>@debt.CurrentStatus</td>
-                    <td>@debt.Delinquency</td>
+                    @*<td>@debt.Delinquency</td>
                     <td>@debt.Graduation</td>
                     <td>
                         <a href="@Url.Action("Detail", "Debt", new { id = debt.Id })" class="mr pull-right detail-view" data-isn="@debt.Id">@debt.History</a>
                         - by @debt.By
-                    </td>
+                    </td>*@
                 </tr>
                 
             }
@@ -61,11 +61,11 @@
             // init datatable
             //
             $('#table-documents').DataTable({
-                "pageLength": 5, // record per page
+                "pageLength":8, // record per page
                 "lengthChange": false, // no record per page change
                 "info": false, // no entities info
-                "order": [[9, "desc"]], // set default sort by column 5 (added date)
-                aoColumnDefs: [{ "bSortable": false, "aTargets": [9] }] // disable sort in last column   
+                "order": [[0, "asc"]], // set default sort by column 5 (added date)
+                aoColumnDefs: [{ "bSortable": false, "aTargets": [] }] // disable sort in last column   
             });
 
             //

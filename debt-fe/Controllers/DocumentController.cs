@@ -29,6 +29,7 @@ namespace debt_fe.Controllers
         {
             get
             {
+                
 				var debt = Request.Cookies["debt_extension"];
 				
 				if (debt == null || string.IsNullOrEmpty(debt.Values["memberId"]))
@@ -513,7 +514,7 @@ namespace debt_fe.Controllers
                 return Json(new { code=-1,msg="Templale not found" }, JsonRequestBehavior.AllowGet);
             }
 
-            var signName = string.Format("RightSigntureDoc_{0}_{1}", documentISN, DateTime.Now.ToString("MMddyyyy"));
+            var signName = string.Format("Contract{0}_{1}", documentISN, DateTime.Now.ToString("MMddyyyy"));
 
             //
             // step 02
@@ -574,7 +575,7 @@ namespace debt_fe.Controllers
             var host = Request.Url.Host;           
             var redirect = string.Format("{0}://{1}/{2}",scheme,host.TrimEnd('/'), urlRedirect.TrimStart('/'));
 
-            //redirect = string.Format("http://localhost:{0}/{1}", Request.Url.Port, urlRedirect);
+            redirect = string.Format("http://localhost:{0}/{1}", Request.Url.Port, urlRedirect);
 
             // http://localhost:47854/Debt/Index
 

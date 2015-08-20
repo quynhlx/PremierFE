@@ -1,0 +1,66 @@
+﻿
+@{
+    ViewBag.Title = "Activity";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="modal fade modal-message" tabindex="-1" role="dialog" aria-labelledby="modalDetail">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content no-border-radius">
+
+        </div>
+    </div>
+</div>
+<div class="col-md-12 mt+++">
+    <table class="table table-bordered" id="table-documents">
+        <thead>
+            <tr>
+                <th>Content</th>
+                <th>Date</th>
+                <th>By</th>
+               
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0 ; i < 10 ; i ++)
+            {
+                <tr>
+                    <td>%Content%</td>
+                    <td>@DateTime.Today.AddDays(-i).ToShortDateString()</td>
+                    <td>Rose @i</td>
+                </tr>
+
+            }
+        </tbody>
+    </table>
+</div>
+<div class="modal-backdrop fade in hidden" id="modal-loading"><div class="loader">Loading...</div></div>
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+
+            //
+            // init datatable
+            //
+            $('#table-documents').DataTable({
+                "pageLength": 8, // record per page
+                "lengthChange": false, // no record per page change
+                "info": false, // no entities info
+                "order": [[1, "desc"]], // set default sort by column 5 (added date)
+                aoColumnDefs: [{ "bSortable": false, "aTargets": [0,2] }] // disable sort in last column
+            });
+
+            //
+            // add class form-control to datatable search
+            $('.dataTables_filter').find('input').addClass('form-control inline');
+
+           
+
+        });
+    </script>
+
+    <script>
+    $(".menu > li").removeClass("active");
+    $('#menu-activity').addClass("active");
+    </script>
+}
