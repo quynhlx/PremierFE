@@ -73,7 +73,7 @@
                 <th>Notes</th>
                 <th>Date Added</th>
                 <th class="text-center">
-                    <a href='@Url.Action("Upload","Document")' class="btn btn-sm btn-primary" id="btn-upload-document">Upload</a>
+                    
                 </th>
             </tr>
         </thead>
@@ -107,7 +107,7 @@
                         <td class="text-center">@string.Format("{0:MM/dd/yyyy}", doc.AddedDate)<br />@string.Format("{0:hh:mm tt}", doc.AddedDate)</td>
                         <td>
                             <div class="text-center">
-                                <a href='@Url.Action("Edit", "Document", new { documentISN = doc.ID})' data-toggle="tooltip" data-placement="top" title="edit" data-isn="@doc.ID" class="btn btn-primary btn-sm btn-edit-document">
+                                <a href='@Url.Action("Edit", "Document", new { documentISN = doc.ID})' data-toggle="tooltip" data-placement="top" title="edit" data-isn="@doc.ID" class="btn btn-sm btn-edit-document">
                                     <span class="glyphicon glyphicon-pencil"></span>
                                 </a>
                             </div>
@@ -121,227 +121,229 @@
 
 <div class="modal-backdrop fade in hidden" id="modal-loading"><div class="loader">Loading...</div></div>
 
-<script src="~/Scripts/plugins/dropzone.js"></script>
 
 @section scripts{
     <script>
-        $(document).ready(function () {
+    $(document).ready(function () {
 
-            //
-            // init datatable
-            //
-            $('#table-documents').DataTable({
-                "pageLength": 7, // record per page
-                "lengthChange": false, // no record per page change
-                "info": false, // no entities info
-                "order": [[5, "desc"]], // set default sort by column 5 (added date)
-                aoColumnDefs: [{ "bSortable": false, "aTargets": [6] }] // disable sort in last column                
+        //
+        // init datatable
+        //
+        $('#table-documents').DataTable({
+            "pageLength": 7, // record per page
+            "lengthChange": false, // no record per page change
+            "info": false, // no entities info
+            "order": [[5, "desc"]], // set default sort by column 5 (added date)
+            aoColumnDefs: [{ "bSortable": false, "aTargets": [6] }] // disable sort in last column
+        });
+
+        //
+        // add class form-control to datatable search
+        $('.dataTables_filter').find('input').addClass('form-control inline');
+        //
+
+
+        var btnupload ="<a href='@Url.Action("Upload","Document")' class='btn btn-primary pull-left' id='btn-upload-document'>Upload</a>"
+            $("#table-documents_filter").before(btnupload);
+        // button upload document click
+        //
+        $('#btn-upload-document').click(function (e) {
+
+            e.preventDefault();
+            e.stopPropagation();
+
+            var self = $(this);
+            var modal = $('#modal-document');
+
+            var href = self.prop('href');
+
+            var backdrop = $("<div class='modal-backdrop fade in'></div>");
+            var loading = $('#modal-loading');
+
+            loading.removeClass('hidden');
+            $('body').append(backdrop);
+
+            var req = $.ajax({ url: href });
+
+            req.fail(function (jqXHR) {
+
+                loading.hide();
+                backdrop.remove();
+
+                console.log('load modal error', jqXHR);
+                toastr.error('Cannot upload new document. Please try again later.');
             });
 
-            //
-            // add class form-control to datatable search
-            $('.dataTables_filter').find('input').addClass('form-control inline');
-
-            //
-            // button upload document click
-            //
-            $('#btn-upload-document').click(function (e) {
-
-                e.preventDefault();
-                e.stopPropagation();
-
-                var self = $(this);
-                var modal = $('#modal-document');
-
-                var href = self.prop('href');
-
-                var backdrop = $("<div class='modal-backdrop fade in'></div>");
-                var loading = $('#modal-loading');
-
-                loading.removeClass('hidden');
-                $('body').append(backdrop);
-
-                var req = $.ajax({ url: href });
-
-                req.fail(function (jqXHR) {
-
-                    loading.hide();
-                    backdrop.remove();
-
-                    console.log('load modal error', jqXHR);
-                    toastr.error('Cannot upload new document. Please try again later.');
-                });
-
-                req.done(function (resp) {
-                    if (resp === undefined || resp == '') {
-                        toastr.info('Unexpected error occurred. Please try again !!!');
-                        return;
-                    }
-
-                    //
-                    // load partial into modal content
-                    modal.find('.modal-content').html(resp);
-
-                    loading.hide();
-                    backdrop.remove();
-
-                    modal.modal({ backdrop: 'static' });
-                });
-
-                
-            });
-
-            //
-            // button edit document
-            //
-            $('#table-documents').on('click', '.btn-edit-document', function (e) {
-
-                e.preventDefault();
-                e.stopPropagation();
-
-                var self = $(this);
-
-                console.log('button edit clicked');
-
-                var modal = $('#modal-document');
-                var err = $('#error-msg-container');
-
-                var href = self.prop('href');
-                var isn = self.data('isn');
-
-                if (isn === '') {
-                    // err.removeClass('hide').find('#error-msg').html('Document ISN not found');
-                    toastr.info('Document ISN not found');
+            req.done(function (resp) {
+                if (resp === undefined || resp == '') {
+                    toastr.info('Unexpected error occurred. Please try again !!!');
                     return;
                 }
 
-                var backdrop = $("<div class='modal-backdrop fade in'></div>");
-                var loading = $('#modal-loading');
+                //
+                // load partial into modal content
+                modal.find('.modal-content').html(resp);
 
-                loading.removeClass('hidden');
-                $('body').append(backdrop);
+                loading.hide();
+                backdrop.remove();
 
-
-                var req = $.ajax({ url: href });
-
-                req.fail(function (jqXHR) {
-                    // err.removeClass('hide').find('#error-msg').html('Unexpected error occurred. Please try again.');
-                    toastr.error('Request error. Please try again.');
-
-                    loading.hide();
-                    backdrop.remove();
-                });
-
-                req.done(function (resp) {
-
-                    // console.log('response',resp);
-
-                    if (resp === undefined || resp == '') {
-                        toastr.info('Unexpected error occurred. Please try again !!!');
-                        return;
-                    }
-
-                    //
-                    // load partial into modal content
-                    modal.find('.modal-content').html(resp);
-
-                    loading.hide();
-                    backdrop.remove();
-
-                    modal.modal({
-                        backdrop: 'static'
-                    });
-                });
-
+                modal.modal({ backdrop: 'static' });
             });
 
-            //
-            // button sign
-            //
-            $('#table-documents').on('click', '.btn-sign', function (e) {
 
-                e.preventDefault();
+        });
 
-                var self = $(this);
+        //
+        // button edit document
+        //
+        $('#table-documents').on('click', '.btn-edit-document', function (e) {
+
+            e.preventDefault();
+            e.stopPropagation();
+
+            var self = $(this);
+
+            console.log('button edit clicked');
+
+            var modal = $('#modal-document');
+            var err = $('#error-msg-container');
+
+            var href = self.prop('href');
+            var isn = self.data('isn');
+
+            if (isn === '') {
+                // err.removeClass('hide').find('#error-msg').html('Document ISN not found');
+                toastr.info('Document ISN not found');
+                return;
+            }
+
+            var backdrop = $("<div class='modal-backdrop fade in'></div>");
+            var loading = $('#modal-loading');
+
+            loading.removeClass('hidden');
+            $('body').append(backdrop);
+
+
+            var req = $.ajax({ url: href });
+
+            req.fail(function (jqXHR) {
+                // err.removeClass('hide').find('#error-msg').html('Unexpected error occurred. Please try again.');
+                toastr.error('Request error. Please try again.');
+
+                loading.hide();
+                backdrop.remove();
+            });
+
+            req.done(function (resp) {
+
+                // console.log('response',resp);
+
+                if (resp === undefined || resp == '') {
+                    toastr.info('Unexpected error occurred. Please try again !!!');
+                    return;
+                }
 
                 //
-                // check document id is not empty
-                var docId = self.data('document-id');
-                if (docId === undefined || docId === '') {
-                    toastr.info('Document ISN not found!');
+                // load partial into modal content
+                modal.find('.modal-content').html(resp);
+
+                loading.hide();
+                backdrop.remove();
+
+                modal.modal({
+                    backdrop: 'static'
+                });
+            });
+
+        });
+
+        //
+        // button sign
+        //
+        $('#table-documents').on('click', '.btn-sign', function (e) {
+
+            e.preventDefault();
+
+            var self = $(this);
+
+            //
+            // check document id is not empty
+            var docId = self.data('document-id');
+            if (docId === undefined || docId === '') {
+                toastr.info('Document ISN not found!');
+
+                return;
+            }
+
+            var url = self.prop('href');
+
+            var backdrop = $("<div class='modal-backdrop fade in'></div>");
+            var loading = $('#modal-loading');
+
+            loading.removeClass('hidden');
+            $('body').append(backdrop);
+
+
+            //
+            // get sign partial view
+            var req = $.ajax({ url: url });
+
+            req.fail(function (jqXHR, stt, err) {
+                console.log(jqXHR);
+                toastr.error('Request error occurred. Please try again.');
+            });
+
+            req.done(function (resp) {
+
+                console.log(resp);
+
+                if (resp === undefined || resp === null) {
+                    toastr.error('Unexpected error occurred. Please try again.');
 
                     return;
                 }
 
-                var url = self.prop('href');
+                if (!$.isNumeric(resp.code) || resp.code < 0) {
+                    toastr.error('Signer Role Not Mapping');
 
-                var backdrop = $("<div class='modal-backdrop fade in'></div>");
-                var loading = $('#modal-loading');
+                    return;
+                }
 
-                loading.removeClass('hidden');
-                $('body').append(backdrop);
+                // window.open(resp.data);
 
+                var iframe = $('<iframe>');
+                iframe.prop('src', resp.data);
+
+                var modal = $('#modal-document');
+                var content = modal.find('.modal-content');
 
                 //
-                // get sign partial view
-                var req = $.ajax({ url: url });
+                // clear old content
+                content.html('');
 
-                req.fail(function (jqXHR, stt, err) {
-                    console.log(jqXHR);
-                    toastr.error('Request error occurred. Please try again.');
-                });
+                content.css('padding', '8px');
 
-                req.done(function (resp) {
+                modal.find('.modal-dialog').css('width', '728px');
 
-                    console.log(resp);
+                // var form = $("<form>", {action:'/Document/'});
+                var wrapper = $('#modal-wrapper').clone().removeClass('hidden').removeAttr('id');
+                wrapper.find('.modal-body').html(iframe);
+                // .appendTo(content);
+                content.append(wrapper);
 
-                    if (resp === undefined || resp === null) {
-                        toastr.error('Unexpected error occurred. Please try again.');
 
-                        return;
-                    }
+                // modal.find('.modal-content').html(iframe).css('padding', '8px');
+                modal.modal({ backdrop: 'static' });
 
-                    if (!$.isNumeric(resp.code) || resp.code < 0) {
-                        toastr.error('Signer Role Not Mapping');
+            });
 
-                        return;
-                    }
-
-                    // window.open(resp.data);
-
-                    var iframe = $('<iframe>');
-                    iframe.prop('src', resp.data);
-
-                    var modal = $('#modal-document');
-                    var content = modal.find('.modal-content');
-
-                    //
-                    // clear old content
-                    content.html('');
-
-                    content.css('padding', '8px');
-
-                    modal.find('.modal-dialog').css('width', '728px');
-                    
-                    // var form = $("<form>", {action:'/Document/'});
-                    var wrapper = $('#modal-wrapper').clone().removeClass('hidden').removeAttr('id');
-                    wrapper.find('.modal-body').html(iframe);
-                    // .appendTo(content);
-                    content.append(wrapper);
-
-                    
-                    // modal.find('.modal-content').html(iframe).css('padding', '8px');
-                    modal.modal({ backdrop: 'static' });
-
-                });
-
-                req.complete(function () {
-                    // console.log('completed');
-                    backdrop.remove();
-                    loading.addClass('hidden');
-                });
+            req.complete(function () {
+                // console.log('completed');
+                backdrop.remove();
+                loading.addClass('hidden');
             });
         });
+    });
     </script>
 <script>
     $(".menu > li").removeClass("active");

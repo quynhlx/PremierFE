@@ -575,7 +575,7 @@ namespace debt_fe.Controllers
             var host = Request.Url.Host;           
             var redirect = string.Format("{0}://{1}/{2}",scheme,host.TrimEnd('/'), urlRedirect.TrimStart('/'));
 
-            redirect = string.Format("http://localhost:{0}/{1}", Request.Url.Port, urlRedirect);
+            //redirect = string.Format("http://localhost:{0}/{1}", Request.Url.Port, urlRedirect);
 
             // http://localhost:47854/Debt/Index
 
@@ -666,7 +666,7 @@ namespace debt_fe.Controllers
                 return RedirectToAction("Index");
             }
 
-            var strFileName = string.Format("RightSignatureDoc_{0}.pdf", DateTime.Now.ToString("MMddyyyyhhmmss"));
+            var strFileName = string.Format("Contract{0}.pdf", DateTime.Now.ToString("MMddyyyyhhmm"));
             var uploadFolder = ConfigurationManager.AppSettings["UploadFolder"];
             var docPath = _docBusiness.GetDocumentPath(docId, null);
 

@@ -56,6 +56,8 @@
             <label class="label-bold">Married</label>
             <select class="form-control">
                 <option>-- Select One --</option>
+                <option>Single</option>
+                <option>Married</option>
             </select>
         </div>
     </div>
@@ -64,58 +66,54 @@
     <!-- phone -->
     <div class="col-md-6">
         <label class="label-bold">Phone</label>
-        <div class="form-inline">
+        <div class="form-inline ">
             <div class="form-group">
                 <label class="sr-only">Home Phone</label>
                 <input type="text" class="form-control" placeholder="Home Phone" />
             </div>
-            <div class="form-group">
-                <label class="sr-only">Preferred</label>
+            <div class="form-group check-radio">
                 <div class="radio">
                     <label>
                         <input type="radio" aria-label="preferred home phone" name="preferred" />
                     </label>
                 </div>
+                <label class="sr-only label-check">Preferred</label>
+
             </div>
             @*<div class="form-group">
-                    <a href="#" data-toggle="modal" data-target="#modal-validate-phone">Validate</a>
-                </div>*@
+                <a href="#" data-toggle="modal" data-target="#modal-validate-phone">Validate</a>
+            </div>*@
         </div>
 
-        <div class="form-inline mv">
+        <div class="form-inline mv ">
             <div class="form-group">
-                <label class="sr-only">Work Phone</label>
-                <input type="text" class="form-control" placeholder="Work Phone" />
-            </div>
-            <div class="form-group">
-                <label class="sr-only">Preferred</label>
+                <label class="sr-only label-bold">Work Phone</label>
                 <div class="radio">
-                    <label>
-                        <input type="radio" aria-label="preferred work phone" name="preferred" />
-                    </label>
+                        <input type="text" class="form-control" placeholder="Work Phone" />
                 </div>
+
             </div>
-            @*<div class="form-group">
-                    <a href="#" data-toggle="modal" data-target="#modal-validate-phone">Validate</a>
-                </div>*@
+            <div class="form-group check-radio">
+                <div class="radio">
+                        <input type="radio" aria-label="preferred work phone" name="preferred" />
+                </div>
+                <label class="sr-only label-check">Preferred</label>
+
+            </div>
+
         </div>
 
-        <div class="form-inline">
+        <div class="form-inline ">
             <div class="form-group">
                 <label class="sr-only">Mobile Phone</label>
                 <input type="text" class="form-control" placeholder="Mobile Phone" value="213-393-0528" />
             </div>
-            <div class="form-group">
-                <label class="sr-only">Preferred</label>
+            <div class="form-group check-radio">
                 <div class="radio">
-                    <label>
-                        <input type="radio" aria-label="preferred mobile phone" name="preferred" checked="checked" /> Preferred
-                    </label>
+                        <input type="radio" aria-label="preferred mobile phone" name="preferred" checked="checked" />
                 </div>
+                <label class="label-check">Preferred</label>
             </div>
-            @*<div class="form-group">
-                    <a href="#" data-toggle="modal" data-target="#modal-validate-phone">Validate</a>
-                </div>*@
         </div>
     </div>
 
@@ -186,7 +184,7 @@
     </div>
 </div>
 <hr />
-<div class="row ph+">
+<div class="row ph+ mt++">
     <div class="col-md-6">
         <div class="row">
             <div class="form-inline">
@@ -210,14 +208,7 @@
 
     </div>
 
-    <div class="col-md-6">
-        <div class="form-group">
-            <label class="label-bold">Married</label>
-            <select class="form-control">
-                <option>-- Select One --</option>
-            </select>
-        </div>
-    </div>
+    
 </div>
 <div class="row ph+">
 
@@ -263,3 +254,11 @@
         </div>
     </div>
 </div>
+@section scripts{
+    <script>
+        $(".check-radio").click(function () {
+            $(".check-radio > label").addClass("sr-only");
+            $(this).children(".label-check").removeClass("sr-only");
+        });
+    </script>
+}

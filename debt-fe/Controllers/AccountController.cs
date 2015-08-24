@@ -15,7 +15,7 @@ namespace debt_fe.Controllers
     public class AccountController : Controller
     {
         private DataProvider _dataProvider;
-        
+        ManagementAccountModel ManagementAccount = new ManagementAccountModel();
 
         public AccountController()
         {
@@ -63,6 +63,7 @@ namespace debt_fe.Controllers
 				var authenticationManager = context.Authentication;
 
 				authenticationManager.SignIn(id);
+                ManagementAccount.GetDataFromDataBase(clientISN);
 				
 				var cookie = Request.Cookies["debt_extension"];
 				if (cookie==null)
@@ -72,12 +73,12 @@ namespace debt_fe.Controllers
 
 				cookie.Expires = DateTime.Now.AddDays(7);				
 				cookie.Values["memberId"] = clientISN.ToString();
-
 				Response.AppendCookie(cookie);
-
+                Session.Add("ManagementAccount", ManagementAccount);
 				//
 				// login success
 				// return RedirectToAction("Index", "Document", routeValues: new { memberISN = clientISN });
+               
 				return RedirectToAction("Index", "Document");
 			}
 			else

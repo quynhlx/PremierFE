@@ -1,4 +1,4 @@
-﻿.body{margin:0; padding:0; font-family:Arial, Helvetica, sans-seri;}
+﻿.body{margin:0; padding:0; font-family:Arial, Helvetica, sans-seri; background:#efefef}
 a{color:#27b2bc; text-decoration:none; font-size:14px}
 a:hover{color:#474a54; text-decoration:none}
 .topHeader{width:100%; padding:5px 0 10px 0;}
@@ -149,7 +149,7 @@ hr{margin-bottom:10px; margin-top:10px }
 .title h3{ font-size:18px; display:inline-block; }
 .graybackground{background:#f9f9f9}
 .graybackground1{background:#e1e1e1; }
-.table > tbody > tr > td {vertical-align:middle}
+.table > tbody > tr > td {vertical-align:middle; font-family:Arial, Helvetica, sans-seri; font-size:14px; line-height:18px}
 .border{border:1px solid #e1e1e1; padding:10px}
 table{width:100%}
 .steplist{width:100%; float:left}
@@ -160,8 +160,8 @@ table{width:100%}
 .user {margin:0; padding:0}
 .user ul {margin:0; padding:0}
 .user ul li{margin:0; padding:0; list-style-type:none; display:inline-block; padding-right:25px; color:#fff}
-.user ul li a {color:#fff}
-.user ul li a:hover{decoration:underline !important}
+.user ul li a {color:#fff; font-size:14px; font-weight:normal}
+.user ul li a:hover{decoration:underline !important;}
 .user ul li span{margin-right:10px}
 .colorblue{color:#27b2bc}
 .white{color:#fff}
