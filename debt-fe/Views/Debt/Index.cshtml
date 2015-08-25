@@ -61,7 +61,7 @@
             // init datatable
             //
             $('#table-documents').DataTable({
-                "pageLength":8, // record per page
+                "paging": false,
                 "lengthChange": false, // no record per page change
                 "info": false, // no entities info
                 "order": [[0, "asc"]], // set default sort by column 5 (added date)
@@ -71,7 +71,7 @@
             //
             // add class form-control to datatable search
             $('.dataTables_filter').find('input').addClass('form-control inline');
-
+            
             //
             // button edit document
             //
@@ -137,6 +137,7 @@
             });
 
         });
+
 </script>
 
 <script>

@@ -17,7 +17,7 @@
         <thead>
             <tr>
                 <th>No.</th>
-                <th>Added Date</th>
+                <th>Date</th>
                 <th>Subject</th>
                 <th>Last Message</th>
                 <th></th>
@@ -28,7 +28,7 @@
             {
 
                 <tr>
-                    <td class="text-center">@Mes.Id</td>
+                    <td class="text-center">@Mes.Id @if (Mes.Id <=2) {<span class="check"></span>}</td>
                     <td>
                         @Mes.AddedDate
                     </td>

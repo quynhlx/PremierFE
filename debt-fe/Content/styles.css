@@ -222,4 +222,13 @@ input[type=file].form-control {
 label.label-bold {
   font-weight: bold;
 }
+.check {
+  position: absolute;
+  margin-left: 10px;
+  margin-top: 5px;
+  background-color: #0094ff;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+}
 /*# sourceMappingURL=styles.css.map */

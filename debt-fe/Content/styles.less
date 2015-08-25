@@ -45,7 +45,7 @@
 }
 
 input[type=file].form-control {
-	height: auto;
+    height: auto;
 }
 
 .valign-wrapper {
@@ -57,7 +57,7 @@ input[type=file].form-control {
     -webkit-flex-align: center;
     -ms-flex-align: center;
     -webkit-align-items: center;
-    align-items: center; 
+    align-items: center;
 }
 
 .valign-wrapper .valign {
@@ -66,24 +66,26 @@ input[type=file].form-control {
 
 //
 // login
-// 
+//
 #form-login {
     // margin-top: 25%;
     border: 1px solid #cecece;
     padding: 8px 16px 32px;
     background-color: #fff;
-	& .login-error-summary {
-		& ul {
-			list-style: none;
-			padding: 0;
-			margin: 0;
-			& li {
-				background-color: #f2dede;
-				color: #a94442;
-				padding: 8px 16px;
-			}
-		}		
-	}
+
+    & .login-error-summary {
+        & ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+
+            & li {
+                background-color: #f2dede;
+                color: #a94442;
+                padding: 8px 16px;
+            }
+        }
+    }
 }
 
 //
@@ -94,21 +96,24 @@ input[type=file].form-control {
         padding: 8px;
         display: inline-block;
         cursor: pointer;
+
         &:hover {
             background: rgb(39, 178, 188) none repeat scroll 0% 0%;
             color: rgb(255, 255, 255);
         }
     }
+
     & > span {
         & > a {
             padding: 8px 16px;
             display: inline-block;
             cursor: pointer;
+
             &.current {
                 background: rgb(39, 178, 188) none repeat scroll 0% 0%;
                 color: rgb(255, 255, 255);
             }
-        }        
+        }
     }
 }
 
@@ -136,12 +141,14 @@ input[type=file].form-control {
     width: 1em;
     height: 4em;
 }
+
 .loader:before,
 .loader:after {
-  position: absolute;
-  top: 0;
-  content: '';
+    position: absolute;
+    top: 0;
+    content: '';
 }
+
 .loader:before {
     left: -1.5em;
     -webkit-animation-delay: -0.32s;
@@ -149,6 +156,7 @@ input[type=file].form-control {
     -o-animation-delay: -0.32s;
     animation-delay: -0.32s;
 }
+
 .loader {
     text-indent: -9999em;
     margin: 88px auto;
@@ -164,45 +172,45 @@ input[type=file].form-control {
     -o-animation-delay: -0.16s;
     animation-delay: -0.16s;
 }
+
 .loader:after {
-  left: 1.5em;
+    left: 1.5em;
 }
+
 @-webkit-keyframes load1 {
-  0%,
-  80%,
-  100% {
-    box-shadow: 0 0 #ffffff;
-    height: 4em;
-  }
-  40% {
-    box-shadow: 0 -2em #ffffff;
-    height: 5em;
-  }
+    0%, 80%, 100% {
+        box-shadow: 0 0 #ffffff;
+        height: 4em;
+    }
+
+    40% {
+        box-shadow: 0 -2em #ffffff;
+        height: 5em;
+    }
 }
+
 @-moz-keyframes load1 {
-  0%,
-  80%,
-  100% {
-    box-shadow: 0 0 #ffffff;
-    height: 4em;
-  }
-  40% {
-    box-shadow: 0 -2em #ffffff;
-    height: 5em;
-  }
+    0%, 80%, 100% {
+        box-shadow: 0 0 #ffffff;
+        height: 4em;
+    }
+
+    40% {
+        box-shadow: 0 -2em #ffffff;
+        height: 5em;
+    }
 }
 
 @keyframes load1 {
-  0%,
-  80%,
-  100% {
-    box-shadow: 0 0 #ffffff;
-    height: 4em;
-  }
-  40% {
-    box-shadow: 0 -2em #ffffff;
-    height: 5em;
-  }
+    0%, 80%, 100% {
+        box-shadow: 0 0 #ffffff;
+        height: 4em;
+    }
+
+    40% {
+        box-shadow: 0 -2em #ffffff;
+        height: 5em;
+    }
 }
 
 
@@ -214,6 +222,7 @@ input[type=file].form-control {
 }
 
 @menu-link-color: #27b2bc;
+
 .menu {
     margin: 0;
     padding: 0;
@@ -224,46 +233,53 @@ input[type=file].form-control {
         // padding: 20px 0;
         border-bottom: 1px solid #eee;
         position: relative;
+
         &.active:not(.has-sub) {
             & > a {
                 background-color: @main-blue;
-                color: #fff;   
-            }            
+                color: #fff;
+            }
         }
-		&.active {
-			& .sub-menu {
-				display: block;
-				& a {
-					&.active {
-						background-color: @main-blue;
-						color: #fff;   
-					}
-				}
 
-			}
-		}
+        &.active {
+            & .sub-menu {
+                display: block;
+
+                & a {
+                    &.active {
+                        background-color: @main-blue;
+                        color: #fff;
+                    }
+                }
+            }
+        }
+
         & > a {
             & span {
                 .transition(@properties: transform);
             }
+
             &.active {
                 & span.pull-right {
                     .rotate(90deg);
                 }
             }
         }
+
         & .sub-menu {
             list-style: none;
             margin: 0;
             padding: 0;
             display: none;
+
             & li {
                 &:first-child {
                     border-bottom: 1px solid #eee;
                     border-top: 1px solid #eee;
                 }
+
                 & a {
-                    padding-left:16px;
+                    padding-left: 16px;
                 }
             }
         }
@@ -273,16 +289,18 @@ input[type=file].form-control {
         display: block;
         padding: 20px 8px;
         text-transform: uppercase;
-        font-family:calibri, Arial, Helvetica, sans-seri; 
-        font-size:18px;
+        font-family: calibri, Arial, Helvetica, sans-seri;
+        font-size: 18px;
         color: #808080;
         // padding-left: 8px;
         text-decoration: none;
+
         &:hover {
             // color: @menu-link-color;
             background-color: @main-blue;
-            color: #fff;            
+            color: #fff;
         }
+
         & i, & span {
             // font-size: 8px;
         }
@@ -293,4 +311,14 @@ label {
     &.label-bold {
         font-weight: bold;
     }
+}
+
+.check {
+    position: absolute;
+    margin-left: 10px;
+    margin-top: 5px;
+    background-color: #0094ff;
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
 }
