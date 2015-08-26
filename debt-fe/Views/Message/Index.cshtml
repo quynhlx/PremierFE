@@ -26,9 +26,17 @@
         <tbody>
             @foreach (MessageModels Mes in Model)
             {
-
-                <tr>
-                    <td class="text-center">@Mes.Id @if (Mes.Id <=2) {<span class="check"></span>}</td>
+                string _class = "";
+                    if (Mes.Id <= 2)
+                    {
+                        _class = "text-bold"; 
+                    }
+               
+                <tr class="@_class">
+                    <td class="text-center">
+                        @Mes.Id @if (Mes.Id <= 2)
+                        {<span class="check"></span>}
+                    </td>
                     <td>
                         @Mes.AddedDate
                     </td>
@@ -43,6 +51,7 @@
                 </tr>
             }
         </tbody>
+
     </table>
 </div>
 
