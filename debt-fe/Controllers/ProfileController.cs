@@ -51,6 +51,10 @@ namespace debt_fe.Controllers
         }
         public ActionResult MyProfile ()
         {
+            if (Session["ManagementAccount"] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
             var states = Utility.GetStates();
 
             if (states == null)

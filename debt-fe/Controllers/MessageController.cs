@@ -11,6 +11,10 @@ namespace debt_fe.Controllers
         // GET: Message
         public ActionResult Index()
         {
+            if (Session["ManagementAccount"] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
             var Messages = MessageModels.ReadXML("~/XMLData/Message.xml", typeof(List<MessageModels>));
             return View(Messages);
 

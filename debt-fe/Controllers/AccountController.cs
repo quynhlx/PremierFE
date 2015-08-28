@@ -123,6 +123,7 @@ namespace debt_fe.Controllers
 				Response.AppendCookie(cookie);
 			}
 
+            Session.RemoveAll();
             return RedirectToAction("Login", "Account");
         }
     }

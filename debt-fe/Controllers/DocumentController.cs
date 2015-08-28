@@ -169,7 +169,7 @@ namespace debt_fe.Controllers
 
 			var memberId = this.MemberISN;
 
-			if (memberId<0)
+			if (memberId<0 && Session["ManagementAccount"] == null)
 			{
 				return RedirectToAction("Login", "Account");
 			}

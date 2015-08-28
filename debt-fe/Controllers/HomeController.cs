@@ -10,11 +10,19 @@ namespace debt_fe.Controllers
     {
         public ActionResult Index()
         {
+            if (Session["ManagementAccount"] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
             return View();
         }
 
         public ActionResult HowTo()
         {
+            if (Session["ManagementAccount"] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
             ViewBag.Message = "Your application description page.";
 
             return View();
@@ -22,6 +30,10 @@ namespace debt_fe.Controllers
 
         public ActionResult Support()
         {
+            if (Session["ManagementAccount"] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
             ViewBag.Message = "Your contact page.";
 
             return View();

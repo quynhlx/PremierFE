@@ -12,6 +12,10 @@ namespace debt_fe.Controllers
         // GET: Debt
         public ActionResult Index()
         {
+            if (Session["ManagementAccount"] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
             var Debt = DebtModel.ReadXML("~/XMLData/DebtData.xml", typeof(List<DebtModel>));
             return View(Debt);           
         }

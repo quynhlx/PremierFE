@@ -11,6 +11,10 @@ namespace debt_fe.Controllers
         // GET: Activity
         public ActionResult Index()
         {
+            if (Session["ManagementAccount"] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
             return View();
         }
     }
