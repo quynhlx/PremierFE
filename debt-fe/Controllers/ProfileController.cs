@@ -1,8 +1,11 @@
-﻿using debt_fe.Models;
+﻿using debt_fe.DataAccessHelper;
+using debt_fe.Models;
 using debt_fe.Models.ViewModels;
 using debt_fe.Utilities;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -12,9 +15,52 @@ namespace debt_fe.Controllers
 {
     public class ProfileController : Controller
     {
+        private DataProvider _data;
+        private int _memberISN;
+
+        public int MemberISN
+        {
+            get
+            {
+
+                var debt = Request.Cookies["debt_extension"];
+
+                if (debt == null || string.IsNullOrEmpty(debt.Values["memberId"]))
+                {
+                    return -1;
+                }
+
+                var memberId = debt.Values["memberId"];
+
+                /*
+                if (string.IsNullOrEmpty(memberId))
+                {
+                    return -2;
+                }
+                 */
+
+                return int.Parse(memberId);
+            }
+            set
+            {
+                _memberISN = value;
+
+                // Session["debt_member_isn"] = _memberISN;
+                var debt = Request.Cookies["debt_extension"];
+                if (debt == null)
+                {
+                    debt = new HttpCookie("debt_extension");
+                    debt.Expires = DateTime.Now.AddDays(7);
+                }
+
+                debt.Values["memberId"] = _memberISN.ToString();
+
+                Response.AppendCookie(debt);
+            }
+        }
         public ProfileController()
         {
-
+            _data = new DataProvider("tbone", "tbone");
         }
 
         // GET: Profile
@@ -63,7 +109,21 @@ namespace debt_fe.Controllers
             }
 
             ViewBag.States = new SelectList(states, "Code", "Name");
-            return View();
+            var db = new PremierEntities();       
+            var obj = db.xp_debtuser_getinfo(this.MemberISN);
+            xp_debtuser_getinfo_Result rs = obj.FirstOrDefault();
+            int returnValue;
+            DataSet ds = LoadData(this.MemberISN, out returnValue);
+            return View(rs);
+        }              
+
+        private DataSet LoadData (int memberISN, out int returnValue)
+        {
+            var store = "xp_debtuser_getinfo";
+            var parameters = new Hashtable();
+            parameters.Add("MemberISN", memberISN);
+            DataSet ds = _data.ExecuteStoreProcedure(store, parameters, out returnValue);
+            return ds;
         }
         public ActionResult LoadUpdateHistory()
         {
@@ -161,5 +221,12 @@ namespace debt_fe.Controllers
 
 			return Json(histories, JsonRequestBehavior.AllowGet);
 		}
+        
+        [HttpPost] 
+        public ActionResult ChangeRequest (FormCollection Form)
+        {
+            string content = Form.Get("request-content");
+            return RedirectToAction("MyProfile");
+        }
     }
 }

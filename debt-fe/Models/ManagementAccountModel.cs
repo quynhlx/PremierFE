@@ -37,10 +37,7 @@ namespace debt_fe.Models
             {
                 var Table = admin.Tables[0];
                 var ISN = (int)Table.Rows[0]["MemberISN"];
-                 var paramNames3 = new List<string>
-			{
-				"MemberISN"
-			};
+                 var paramNames3 = new List<string>{"MemberISN"};
 
             var paramValues3 = new System.Collections.ArrayList
 			{

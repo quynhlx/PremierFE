@@ -1,0 +1,370 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="ROIModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <Function Name="xp_debtext_client_insupd2" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MemberISN" Type="int" Mode="In" />
+          <Parameter Name="SalemanISN" Type="int" Mode="In" />
+          <Parameter Name="CampaignISN" Type="int" Mode="In" />
+          <Parameter Name="memUserName" Type="nvarchar" Mode="In" />
+          <Parameter Name="memPassword" Type="nvarchar" Mode="In" />
+          <Parameter Name="memFax" Type="varchar" Mode="In" />
+          <Parameter Name="memFirstName" Type="nvarchar" Mode="In" />
+          <Parameter Name="memLastName" Type="nvarchar" Mode="In" />
+          <Parameter Name="memPhone" Type="varchar" Mode="In" />
+          <Parameter Name="memEmail" Type="nvarchar" Mode="In" />
+          <Parameter Name="memAddress" Type="nvarchar" Mode="In" />
+          <Parameter Name="memZip" Type="varchar" Mode="In" />
+          <Parameter Name="memCity" Type="nvarchar" Mode="In" />
+          <Parameter Name="memState" Type="nvarchar" Mode="In" />
+          <Parameter Name="memCompanyName" Type="nvarchar" Mode="In" />
+          <Parameter Name="memTitle" Type="varchar" Mode="In" />
+          <Parameter Name="memIM" Type="varchar" Mode="In" />
+          <Parameter Name="memStatus" Type="tinyint" Mode="In" />
+          <Parameter Name="memComment" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="memCreditLine" Type="money" Mode="In" />
+          <Parameter Name="DealerISN" Type="int" Mode="In" />
+          <Parameter Name="ANI" Type="varchar" Mode="In" />
+          <Parameter Name="memCreditScore" Type="float" Mode="In" />
+          <Parameter Name="memApprovalPayment" Type="money" Mode="In" />
+          <Parameter Name="memApprovalAmount" Type="money" Mode="In" />
+          <Parameter Name="memSSN" Type="varchar" Mode="In" />
+          <Parameter Name="memConnectedLO" Type="tinyint" Mode="In" />
+          <Parameter Name="updatedBy" Type="int" Mode="In" />
+          <Parameter Name="memTradeVehicle" Type="tinyint" Mode="In" />
+          <Parameter Name="memYearVehicle" Type="nvarchar" Mode="In" />
+          <Parameter Name="memManufacturerVehicle" Type="nvarchar" Mode="In" />
+          <Parameter Name="memModelVehicle" Type="nvarchar" Mode="In" />
+          <Parameter Name="memMonthlyPayment" Type="money" Mode="In" />
+          <Parameter Name="memPolycomID" Type="varchar" Mode="In" />
+          <Parameter Name="memWeekDay" Type="varchar" Mode="In" />
+          <Parameter Name="memHomeValue" Type="money" Mode="In" />
+          <Parameter Name="memCurrentLeftOnLoan" Type="money" Mode="In" />
+          <Parameter Name="memInterestRate" Type="float" Mode="In" />
+          <Parameter Name="memMonthlyPaymentM" Type="money" Mode="In" />
+          <Parameter Name="memAppoxTotalDebt" Type="money" Mode="In" />
+          <Parameter Name="memTypeOfLoan" Type="varchar" Mode="In" />
+          <Parameter Name="memAnyLatePayment" Type="nvarchar" Mode="In" />
+          <Parameter Name="memApprovalOfRCredit" Type="nvarchar" Mode="In" />
+          <Parameter Name="memIsYourCreditGreat" Type="nvarchar" Mode="In" />
+          <Parameter Name="memTimeZoneFull" Type="nvarchar" Mode="In" />
+          <Parameter Name="memDomainName" Type="varchar" Mode="In" />
+          <Parameter Name="memPayOffAmount" Type="money" Mode="In" />
+          <Parameter Name="Balance" Type="money" Mode="In" />
+          <Parameter Name="RatePlan" Type="varchar" Mode="In" />
+          <Parameter Name="memDOB" Type="datetime" Mode="In" />
+          <Parameter Name="LastStepFlag" Type="int" Mode="In" />
+          <Parameter Name="memReadyPurchaseNow" Type="tinyint" Mode="In" />
+          <Parameter Name="xmlInfoExt" Type="xml" Mode="In" />
+          <Parameter Name="PhoneRechargeNo" Type="int" Mode="In" />
+          <Parameter Name="memDropID" Type="varchar" Mode="In" />
+          <Parameter Name="AccountManagerISN" Type="int" Mode="In" />
+        </Function>
+        <Function Name="xp_debtuser_getinfo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MemberISN" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="ROIModelStoreContainer" />
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ROIModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="PremierEntities" annotation:LazyLoadingEnabled="true" >
+          <FunctionImport Name="xp_debtext_client_insupd2">
+            <Parameter Name="MemberISN" Mode="In" Type="Int32" />
+            <Parameter Name="SalemanISN" Mode="In" Type="Int32" />
+            <Parameter Name="CampaignISN" Mode="In" Type="Int32" />
+            <Parameter Name="memUserName" Mode="In" Type="String" />
+            <Parameter Name="memPassword" Mode="In" Type="String" />
+            <Parameter Name="memFax" Mode="In" Type="String" />
+            <Parameter Name="memFirstName" Mode="In" Type="String" />
+            <Parameter Name="memLastName" Mode="In" Type="String" />
+            <Parameter Name="memPhone" Mode="In" Type="String" />
+            <Parameter Name="memEmail" Mode="In" Type="String" />
+            <Parameter Name="memAddress" Mode="In" Type="String" />
+            <Parameter Name="memZip" Mode="In" Type="String" />
+            <Parameter Name="memCity" Mode="In" Type="String" />
+            <Parameter Name="memState" Mode="In" Type="String" />
+            <Parameter Name="memCompanyName" Mode="In" Type="String" />
+            <Parameter Name="memTitle" Mode="In" Type="String" />
+            <Parameter Name="memIM" Mode="In" Type="String" />
+            <Parameter Name="memStatus" Mode="In" Type="Byte" />
+            <Parameter Name="memComment" Mode="In" Type="String" />
+            <Parameter Name="memCreditLine" Mode="In" Type="Decimal" />
+            <Parameter Name="DealerISN" Mode="In" Type="Int32" />
+            <Parameter Name="ANI" Mode="In" Type="String" />
+            <Parameter Name="memCreditScore" Mode="In" Type="Double" />
+            <Parameter Name="memApprovalPayment" Mode="In" Type="Decimal" />
+            <Parameter Name="memApprovalAmount" Mode="In" Type="Decimal" />
+            <Parameter Name="memSSN" Mode="In" Type="String" />
+            <Parameter Name="memConnectedLO" Mode="In" Type="Byte" />
+            <Parameter Name="updatedBy" Mode="In" Type="Int32" />
+            <Parameter Name="memTradeVehicle" Mode="In" Type="Byte" />
+            <Parameter Name="memYearVehicle" Mode="In" Type="String" />
+            <Parameter Name="memManufacturerVehicle" Mode="In" Type="String" />
+            <Parameter Name="memModelVehicle" Mode="In" Type="String" />
+            <Parameter Name="memMonthlyPayment" Mode="In" Type="Decimal" />
+            <Parameter Name="memPolycomID" Mode="In" Type="String" />
+            <Parameter Name="memWeekDay" Mode="In" Type="String" />
+            <Parameter Name="memHomeValue" Mode="In" Type="Decimal" />
+            <Parameter Name="memCurrentLeftOnLoan" Mode="In" Type="Decimal" />
+            <Parameter Name="memInterestRate" Mode="In" Type="Double" />
+            <Parameter Name="memMonthlyPaymentM" Mode="In" Type="Decimal" />
+            <Parameter Name="memAppoxTotalDebt" Mode="In" Type="Decimal" />
+            <Parameter Name="memTypeOfLoan" Mode="In" Type="String" />
+            <Parameter Name="memAnyLatePayment" Mode="In" Type="String" />
+            <Parameter Name="memApprovalOfRCredit" Mode="In" Type="String" />
+            <Parameter Name="memIsYourCreditGreat" Mode="In" Type="String" />
+            <Parameter Name="memTimeZoneFull" Mode="In" Type="String" />
+            <Parameter Name="memDomainName" Mode="In" Type="String" />
+            <Parameter Name="memPayOffAmount" Mode="In" Type="Decimal" />
+            <Parameter Name="Balance" Mode="In" Type="Decimal" />
+            <Parameter Name="RatePlan" Mode="In" Type="String" />
+            <Parameter Name="memDOB" Mode="In" Type="DateTime" />
+            <Parameter Name="LastStepFlag" Mode="In" Type="Int32" />
+            <Parameter Name="memReadyPurchaseNow" Mode="In" Type="Byte" />
+            <Parameter Name="xmlInfoExt" Mode="In" Type="String" />
+            <Parameter Name="PhoneRechargeNo" Mode="In" Type="Int32" />
+            <Parameter Name="memDropID" Mode="In" Type="String" />
+            <Parameter Name="AccountManagerISN" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="xp_debtuser_getinfo" ReturnType="Collection(ROIModel.xp_debtuser_getinfo_Result)">
+            <Parameter Name="MemberISN" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="xp_debtuser_getinfo_Result">
+          <Property Type="Int32" Name="MemberISN" Nullable="false" />
+          <Property Type="String" Name="memUserName" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="memFirstName" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="memMiddleName" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="memLastName" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="memFullName" Nullable="true" MaxLength="100" />
+          <Property Type="DateTime" Name="updatedDate" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="updatedBy" Nullable="true" />
+          <Property Type="DateTime" Name="memSignUp" Nullable="true" Precision="23" />
+          <Property Type="String" Name="memFax" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="memSSN" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="memCompanyName" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="memTitle" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="memIM" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="LastCall" Nullable="true" Precision="23" />
+          <Property Type="String" Name="LastANI" Nullable="true" MaxLength="30" />
+          <Property Type="Int32" Name="NoOfCall" Nullable="true" />
+          <Property Type="Int32" Name="Duration" Nullable="true" />
+          <Property Type="String" Name="memAddress" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="memCity" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="memState" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="memZip" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="memPhone" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="memEmail" Nullable="true" MaxLength="200" />
+          <Property Type="Int32" Name="LastSaleNoteISN" Nullable="true" />
+          <Property Type="String" Name="LastFiles" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="cvsContent" Nullable="true" MaxLength="800" />
+          <Property Type="DateTime" Name="cvsDate" Nullable="true" Precision="23" />
+          <Property Type="Byte" Name="memStatus" Nullable="false" />
+          <Property Type="String" Name="updatedName" Nullable="true" MaxLength="66" />
+          <Property Type="String" Name="AddedName" Nullable="true" MaxLength="66" />
+          <Property Type="Int32" Name="CampaignISN" Nullable="true" />
+          <Property Type="String" Name="cpnName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="cpnDID" Nullable="true" MaxLength="20" />
+          <Property Type="Int32" Name="DealerISN" Nullable="true" />
+          <Property Type="Int32" Name="AdsAgencyISN" Nullable="true" />
+          <Property Type="Double" Name="memCreditScore" Nullable="true" />
+          <Property Type="Decimal" Name="memApprovalPayment" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="memApprovalAmount" Nullable="true" Precision="19" />
+          <Property Type="Byte" Name="memConnectedLO" Nullable="true" />
+          <Property Type="String" Name="memComment" Nullable="true" />
+          <Property Type="Int32" Name="AgentISN" Nullable="true" />
+          <Property Type="String" Name="saleman" Nullable="false" MaxLength="30" />
+          <Property Type="Int32" Name="salemanisn" Nullable="true" />
+          <Property Type="DateTime" Name="memAgentDate" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="appDate" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="LastRecordingISN" Nullable="true" />
+          <Property Type="Int32" Name="LastFaxISN" Nullable="true" />
+          <Property Type="Int32" Name="GroupID" Nullable="true" />
+          <Property Type="String" Name="memPolycomID" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="memWeekDay" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="salemanFName" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="salemanLName" Nullable="true" MaxLength="30" />
+          <Property Type="Decimal" Name="memHomeValue" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="memCurrentLeftOnLoan" Nullable="true" Precision="19" />
+          <Property Type="Double" Name="memInterestRate" Nullable="true" />
+          <Property Type="Decimal" Name="memMonthlyPaymentM" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="memAppoxTotalDebt" Nullable="true" Precision="19" />
+          <Property Type="Double" Name="memTypeOfLoan" Nullable="true" />
+          <Property Type="String" Name="memAnyLatePayment" Nullable="true" MaxLength="256" />
+          <Property Type="String" Name="memApprovalOfRCredit" Nullable="true" MaxLength="256" />
+          <Property Type="String" Name="memIsYourCreditGreat" Nullable="true" MaxLength="256" />
+          <Property Type="Decimal" Name="memPayOffAmount" Nullable="true" Precision="19" />
+          <Property Type="String" Name="FaxFileName" Nullable="true" MaxLength="500" />
+          <Property Type="Int32" Name="fResult" Nullable="true" />
+          <Property Type="String" Name="fErrMsg" Nullable="true" MaxLength="500" />
+          <Property Type="Int32" Name="FaxConversationISN" Nullable="true" />
+          <Property Type="DateTime" Name="FaxDate" Nullable="true" Precision="23" />
+          <Property Type="String" Name="RecordingFileName" Nullable="true" MaxLength="500" />
+          <Property Type="Int32" Name="RecordingConversationISN" Nullable="true" />
+          <Property Type="DateTime" Name="RecordingDate" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="IsPrimaryLead" Nullable="false" />
+          <Property Type="Byte" Name="memTradeVehicle" Nullable="true" />
+          <Property Type="String" Name="memYearVehicle" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="memManufacturerVehicle" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="memModelVehicle" Nullable="true" MaxLength="200" />
+          <Property Type="Decimal" Name="memMonthlyPayment" Nullable="true" Precision="19" />
+          <Property Type="String" Name="memCountry" Nullable="true" MaxLength="50" />
+          <Property Type="Byte" Name="memReadyPurchaseNow" Nullable="true" />
+          <Property Type="DateTime" Name="memDOB" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="FirstPaymentDate" Nullable="true" Precision="23" />
+          <Property Type="Double" Name="InvoiceAmount" Nullable="true" />
+          <Property Type="Double" Name="MainDebt" Nullable="true" />
+          <Property Type="Double" Name="MaxDebt" Nullable="true" />
+          <Property Type="Double" Name="Terms" Nullable="true" />
+          <Property Type="Int32" Name="NoOfPayment" Nullable="false" />
+          <Property Type="String" Name="memWorkPhone" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="memHomePhone" Nullable="true" MaxLength="20" />
+          <Property Type="Double" Name="DebtBalance" Nullable="true" />
+          <Property Type="Int32" Name="PhoneRechargeNo" Nullable="true" />
+          <Property Type="DateTime" Name="SaleDate" Nullable="true" Precision="23" />
+          <Property Type="Double" Name="TotalDebt" Nullable="true" />
+          <Property Type="String" Name="firstCallerID" Nullable="true" MaxLength="512" />
+          <Property Type="DateTime" Name="DeadDate" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="CancelledDate" Nullable="true" Precision="23" />
+          <Property Type="String" Name="memDropID" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="AccountManagerISN" Nullable="true" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ROIModelStoreContainer" CdmEntityContainer="PremierEntities" >
+          <FunctionImportMapping FunctionImportName="xp_debtext_client_insupd2" FunctionName="ROIModel.Store.xp_debtext_client_insupd2" />
+          <FunctionImportMapping FunctionImportName="xp_debtuser_getinfo" FunctionName="ROIModel.Store.xp_debtuser_getinfo">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ROIModel.xp_debtuser_getinfo_Result">
+                <ScalarProperty Name="MemberISN" ColumnName="MemberISN" />
+                <ScalarProperty Name="memUserName" ColumnName="memUserName" />
+                <ScalarProperty Name="memFirstName" ColumnName="memFirstName" />
+                <ScalarProperty Name="memMiddleName" ColumnName="memMiddleName" />
+                <ScalarProperty Name="memLastName" ColumnName="memLastName" />
+                <ScalarProperty Name="memFullName" ColumnName="memFullName" />
+                <ScalarProperty Name="updatedDate" ColumnName="updatedDate" />
+                <ScalarProperty Name="updatedBy" ColumnName="updatedBy" />
+                <ScalarProperty Name="memSignUp" ColumnName="memSignUp" />
+                <ScalarProperty Name="memFax" ColumnName="memFax" />
+                <ScalarProperty Name="memSSN" ColumnName="memSSN" />
+                <ScalarProperty Name="memCompanyName" ColumnName="memCompanyName" />
+                <ScalarProperty Name="memTitle" ColumnName="memTitle" />
+                <ScalarProperty Name="memIM" ColumnName="memIM" />
+                <ScalarProperty Name="LastCall" ColumnName="LastCall" />
+                <ScalarProperty Name="LastANI" ColumnName="LastANI" />
+                <ScalarProperty Name="NoOfCall" ColumnName="NoOfCall" />
+                <ScalarProperty Name="Duration" ColumnName="Duration" />
+                <ScalarProperty Name="memAddress" ColumnName="memAddress" />
+                <ScalarProperty Name="memCity" ColumnName="memCity" />
+                <ScalarProperty Name="memState" ColumnName="memState" />
+                <ScalarProperty Name="memZip" ColumnName="memZip" />
+                <ScalarProperty Name="memPhone" ColumnName="memPhone" />
+                <ScalarProperty Name="memEmail" ColumnName="memEmail" />
+                <ScalarProperty Name="LastSaleNoteISN" ColumnName="LastSaleNoteISN" />
+                <ScalarProperty Name="LastFiles" ColumnName="LastFiles" />
+                <ScalarProperty Name="cvsContent" ColumnName="cvsContent" />
+                <ScalarProperty Name="cvsDate" ColumnName="cvsDate" />
+                <ScalarProperty Name="memStatus" ColumnName="memStatus" />
+                <ScalarProperty Name="updatedName" ColumnName="updatedName" />
+                <ScalarProperty Name="AddedName" ColumnName="AddedName" />
+                <ScalarProperty Name="CampaignISN" ColumnName="CampaignISN" />
+                <ScalarProperty Name="cpnName" ColumnName="cpnName" />
+                <ScalarProperty Name="cpnDID" ColumnName="cpnDID" />
+                <ScalarProperty Name="DealerISN" ColumnName="DealerISN" />
+                <ScalarProperty Name="AdsAgencyISN" ColumnName="AdsAgencyISN" />
+                <ScalarProperty Name="memCreditScore" ColumnName="memCreditScore" />
+                <ScalarProperty Name="memApprovalPayment" ColumnName="memApprovalPayment" />
+                <ScalarProperty Name="memApprovalAmount" ColumnName="memApprovalAmount" />
+                <ScalarProperty Name="memConnectedLO" ColumnName="memConnectedLO" />
+                <ScalarProperty Name="memComment" ColumnName="memComment" />
+                <ScalarProperty Name="AgentISN" ColumnName="AgentISN" />
+                <ScalarProperty Name="saleman" ColumnName="saleman" />
+                <ScalarProperty Name="salemanisn" ColumnName="salemanisn" />
+                <ScalarProperty Name="memAgentDate" ColumnName="memAgentDate" />
+                <ScalarProperty Name="appDate" ColumnName="appDate" />
+                <ScalarProperty Name="LastRecordingISN" ColumnName="LastRecordingISN" />
+                <ScalarProperty Name="LastFaxISN" ColumnName="LastFaxISN" />
+                <ScalarProperty Name="GroupID" ColumnName="GroupID" />
+                <ScalarProperty Name="memPolycomID" ColumnName="memPolycomID" />
+                <ScalarProperty Name="memWeekDay" ColumnName="memWeekDay" />
+                <ScalarProperty Name="salemanFName" ColumnName="salemanFName" />
+                <ScalarProperty Name="salemanLName" ColumnName="salemanLName" />
+                <ScalarProperty Name="memHomeValue" ColumnName="memHomeValue" />
+                <ScalarProperty Name="memCurrentLeftOnLoan" ColumnName="memCurrentLeftOnLoan" />
+                <ScalarProperty Name="memInterestRate" ColumnName="memInterestRate" />
+                <ScalarProperty Name="memMonthlyPaymentM" ColumnName="memMonthlyPaymentM" />
+                <ScalarProperty Name="memAppoxTotalDebt" ColumnName="memAppoxTotalDebt" />
+                <ScalarProperty Name="memTypeOfLoan" ColumnName="memTypeOfLoan" />
+                <ScalarProperty Name="memAnyLatePayment" ColumnName="memAnyLatePayment" />
+                <ScalarProperty Name="memApprovalOfRCredit" ColumnName="memApprovalOfRCredit" />
+                <ScalarProperty Name="memIsYourCreditGreat" ColumnName="memIsYourCreditGreat" />
+                <ScalarProperty Name="memPayOffAmount" ColumnName="memPayOffAmount" />
+                <ScalarProperty Name="FaxFileName" ColumnName="FaxFileName" />
+                <ScalarProperty Name="fResult" ColumnName="fResult" />
+                <ScalarProperty Name="fErrMsg" ColumnName="fErrMsg" />
+                <ScalarProperty Name="FaxConversationISN" ColumnName="FaxConversationISN" />
+                <ScalarProperty Name="FaxDate" ColumnName="FaxDate" />
+                <ScalarProperty Name="RecordingFileName" ColumnName="RecordingFileName" />
+                <ScalarProperty Name="RecordingConversationISN" ColumnName="RecordingConversationISN" />
+                <ScalarProperty Name="RecordingDate" ColumnName="RecordingDate" />
+                <ScalarProperty Name="IsPrimaryLead" ColumnName="IsPrimaryLead" />
+                <ScalarProperty Name="memTradeVehicle" ColumnName="memTradeVehicle" />
+                <ScalarProperty Name="memYearVehicle" ColumnName="memYearVehicle" />
+                <ScalarProperty Name="memManufacturerVehicle" ColumnName="memManufacturerVehicle" />
+                <ScalarProperty Name="memModelVehicle" ColumnName="memModelVehicle" />
+                <ScalarProperty Name="memMonthlyPayment" ColumnName="memMonthlyPayment" />
+                <ScalarProperty Name="memCountry" ColumnName="memCountry" />
+                <ScalarProperty Name="memReadyPurchaseNow" ColumnName="memReadyPurchaseNow" />
+                <ScalarProperty Name="memDOB" ColumnName="memDOB" />
+                <ScalarProperty Name="FirstPaymentDate" ColumnName="FirstPaymentDate" />
+                <ScalarProperty Name="InvoiceAmount" ColumnName="InvoiceAmount" />
+                <ScalarProperty Name="MainDebt" ColumnName="MainDebt" />
+                <ScalarProperty Name="MaxDebt" ColumnName="MaxDebt" />
+                <ScalarProperty Name="Terms" ColumnName="Terms" />
+                <ScalarProperty Name="NoOfPayment" ColumnName="NoOfPayment" />
+                <ScalarProperty Name="memWorkPhone" ColumnName="memWorkPhone" />
+                <ScalarProperty Name="memHomePhone" ColumnName="memHomePhone" />
+                <ScalarProperty Name="DebtBalance" ColumnName="DebtBalance" />
+                <ScalarProperty Name="PhoneRechargeNo" ColumnName="PhoneRechargeNo" />
+                <ScalarProperty Name="SaleDate" ColumnName="SaleDate" />
+                <ScalarProperty Name="TotalDebt" ColumnName="TotalDebt" />
+                <ScalarProperty Name="firstCallerID" ColumnName="firstCallerID" />
+                <ScalarProperty Name="DeadDate" ColumnName="DeadDate" />
+                <ScalarProperty Name="CancelledDate" ColumnName="CancelledDate" />
+                <ScalarProperty Name="memDropID" ColumnName="memDropID" />
+                <ScalarProperty Name="AccountManagerISN" ColumnName="AccountManagerISN" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

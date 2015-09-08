@@ -324,14 +324,30 @@
 	<!-- efValidate with Sliding Captcha (jQueryUI Slider need to be included in jquery-ui-1.10.2.custom.min.js) -->
 	<script type="text/javascript" src="js/cf.min.js"></script>	
 	<!-- gMap -->
-	<script type="text/javascript" src="js/gMap/jquery.ui.map.min.js"></script>
-	<script type="text/javascript" src="js/gMap/jquery.ui.map.extensions.js"></script>	
+    <script type="text/javascript" src="js/gMap/gmaps.js"></script>
 	<!-- toTop -->
 	<script type="text/javascript" src="js/totop/jquery.ui.totop.html"></script>
+    <script type="text/javascript">
+    var map;
+    $(document).ready(function () {
+        map = new GMaps({
+            el: '#map_canvas',
+            lat: 32.8099447,
+            lng: -117.1327298,
+            zoom: 10,
+        });
+        map.addMarker({
+            lat: 32.8099447,
+            lng: -117.1327298,
+            title: 'Premier Doc',
 
+        });
+
+    });
+    </script>
 	<!-- CUSTOM SETTINGS -->
 	<script type="text/javascript" src="js/custom.js"></script>
-	
+    
 	<script>
 	    function SendEmail() {
 	        var txtName = $('[id="txtName"]').val();

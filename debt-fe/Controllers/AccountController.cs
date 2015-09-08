@@ -16,7 +16,7 @@ namespace debt_fe.Controllers
     {
         private DataProvider _dataProvider;
         ManagementAccountModel ManagementAccount = new ManagementAccountModel();
-
+        //private static readonly ILog _logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         public AccountController()
         {
             _dataProvider = new DataProvider("tbone","tbone");            

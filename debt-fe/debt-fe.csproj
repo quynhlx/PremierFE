@@ -51,6 +51,8 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -207,9 +209,27 @@
     <Compile Include="Models\ViewModels\ContactInformationViewModel.cs" />
     <Compile Include="Models\ViewModels\DocumentViewModel.cs" />
     <Compile Include="Models\ViewModels\SignatureViewModel.cs" />
+    <Compile Include="Models\PremierModels.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PremierModels.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PremierModels.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PremierModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PremierModels.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PremierModels.edmx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Utilities\Utility.cs" />
+    <Compile Include="Models\xp_debtuser_getinfo_Result.cs">
+      <DependentUpon>PremierModels.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\UpdateHistory.xml" />
@@ -243,6 +263,7 @@
     <Content Include="Content\images\ico-MyAccount.png" />
     <Content Include="Content\images\ico-setting.png" />
     <Content Include="Content\images\logo.png" />
+    <Content Include="Content\images\no-image.png" />
     <Content Include="Content\images\routing.jpg" />
     <Content Include="Content\images\sort_asc.png" />
     <Content Include="Content\images\sort_asc_disabled.png" />
@@ -290,11 +311,28 @@
     <Content Include="Html\SendEmail.aspx" />
     <Content Include="Html\Terms.html" />
     <Content Include="LeadTracking.html" />
+    <Content Include="Models\PremierModels.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>PremierModels.edmx</DependentUpon>
+      <LastGenOutput>PremierModels.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\PremierModels.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>PremierModels.edmx</DependentUpon>
+      <LastGenOutput>PremierModels.cs</LastGenOutput>
+    </Content>
     <Content Include="XMLData\Message.xml">
       <SubType>Designer</SubType>
     </Content>
     <Content Include="XMLData\DebtData.xml" />
     <Content Include="Html\Web.config" />
+    <EntityDeploy Include="Models\PremierModels.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>PremierModels.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\PremierModels.edmx.diagram">
+      <DependentUpon>PremierModels.edmx</DependentUpon>
+    </Content>
     <None Include="Properties\PublishProfiles\Debt-vn2.valuecomusa.pubxml" />
     <None Include="Properties\PublishProfiles\tienquang.pubxml" />
     <None Include="Properties\PublishProfiles\Debt-Local.pubxml" />
@@ -386,6 +424,9 @@
   <ItemGroup>
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
