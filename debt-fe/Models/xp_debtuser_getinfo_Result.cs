@@ -110,16 +110,5 @@ namespace debt_fe.Models
         public Nullable<System.DateTime> CancelledDate { get; set; }
         public string memDropID { get; set; }
         public Nullable<int> AccountManagerISN { get; set; }
-
-        //More Info
-        public string BestTimeOfCall { set; get; }
-        public string MarriedStatus { set; get; }
-        public string CoFirstName { set; get; }
-        public string CoLastName { set; get; }
-        public string CoAddress { set; get; }
-        public string CoCity { set; get; }
-        public string CoState { set; get; }
-        public string CoZip { set; get; }
-        public string CoEmail { set; get; }
     }
 }

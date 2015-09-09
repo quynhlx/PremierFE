@@ -47,28 +47,6 @@ namespace debt_fe.Controllers
 				 */ 
 
 				return int.Parse(memberId);
-
-				#region session
-				/*
-                var isn = Session["debt_member_isn"];
-                
-                //
-                // if session empty, try to get from request url
-                if (isn == null)
-                {
-                    var isnFromUrl = Request["memberISN"];
-
-                    if (string.IsNullOrEmpty(isnFromUrl))
-                    {
-                        return -1; 
-                    }
-
-                    isn = isnFromUrl;
-                }
-
-                return int.Parse(isn.ToString());
-				 */
-				#endregion
 			}
             set
             {

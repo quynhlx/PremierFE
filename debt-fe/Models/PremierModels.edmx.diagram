@@ -4,7 +4,10 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="6163ec8869d64d7ba07fdfe99c18e4f6" Name="Diagram1" />
+      <Diagram DiagramId="6163ec8869d64d7ba07fdfe99c18e4f6" Name="Diagram1" >
+        <EntityTypeShape EntityType="ROIModel.Vw_PremierMessage" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="ROIModel.PremierMessage" Width="1.5" PointX="3.375" PointY="0.75" />
+      </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

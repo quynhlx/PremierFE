@@ -4,7 +4,43 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="ROIModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="ROIModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="PremierMessage">
+          <Key>
+            <PropertyRef Name="MessageISN" />
+          </Key>
+          <Property Name="MessageISN" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MemberISN" Type="int" />
+          <Property Name="MsgSubject" Type="nvarchar" MaxLength="100" />
+          <Property Name="LastMessage" Type="nvarchar" MaxLength="1000" />
+          <Property Name="addedDate" Type="datetime" />
+          <Property Name="addedBy" Type="int" />
+          <Property Name="updatedDate" Type="datetime" />
+          <Property Name="updatedBy" Type="int" />
+          <Property Name="ClientRead" Type="tinyint" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'ROI.dbo.Vw_PremierMessage' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Vw_PremierMessage">
+          <Key>
+            <PropertyRef Name="MessageISN" />
+            <PropertyRef Name="updatedName" />
+          </Key>
+          <Property Name="MessageISN" Type="int" Nullable="false" />
+          <Property Name="MemberISN" Type="int" />
+          <Property Name="MsgSubject" Type="nvarchar" MaxLength="100" />
+          <Property Name="LastMessage" Type="nvarchar" MaxLength="1000" />
+          <Property Name="addedDate" Type="datetime" />
+          <Property Name="addedBy" Type="int" />
+          <Property Name="updatedDate" Type="datetime" />
+          <Property Name="updatedBy" Type="int" />
+          <Property Name="ClientRead" Type="tinyint" />
+          <Property Name="updatedName" Type="nvarchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <Function Name="xp_client_profile_requestchange" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MemberISN" Type="int" Mode="In" />
+          <Parameter Name="Content" Type="nvarchar" Mode="In" />
+        </Function>
         <Function Name="xp_debtext_client_insupd2" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="MemberISN" Type="int" Mode="In" />
           <Parameter Name="SalemanISN" Type="int" Mode="In" />
@@ -66,9 +102,38 @@
         <Function Name="xp_debtuser_getinfo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="MemberISN" Type="int" Mode="In" />
         </Function>
-        <EntityContainer Name="ROIModelStoreContainer" />
-      </Schema>
-    </edmx:StorageModels>
+        <Function Name="xp_premiermessage_new" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MemberISN" Type="int" Mode="In" />
+          <Parameter Name="Subject" Type="nvarchar" Mode="In" />
+          <Parameter Name="Content" Type="nvarchar" Mode="In" />
+          <Parameter Name="updatedBy" Type="int" Mode="In" />
+        </Function>
+        <Function Name="xp_premiermessage_reply" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MessageISN" Type="int" Mode="In" />
+          <Parameter Name="Content" Type="nvarchar" Mode="In" />
+          <Parameter Name="updatedBy" Type="int" Mode="In" />
+        </Function>
+        <Function Name="xp_premiermessage_viewall" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MessageISN" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="ROIModelStoreContainer">
+          <EntitySet Name="PremierMessage" EntityType="Self.PremierMessage" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Vw_PremierMessage" EntityType="Self.Vw_PremierMessage" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Vw_PremierMessage].[MessageISN] AS [MessageISN], 
+    [Vw_PremierMessage].[MemberISN] AS [MemberISN], 
+    [Vw_PremierMessage].[MsgSubject] AS [MsgSubject], 
+    [Vw_PremierMessage].[LastMessage] AS [LastMessage], 
+    [Vw_PremierMessage].[addedDate] AS [addedDate], 
+    [Vw_PremierMessage].[addedBy] AS [addedBy], 
+    [Vw_PremierMessage].[updatedDate] AS [updatedDate], 
+    [Vw_PremierMessage].[updatedBy] AS [updatedBy], 
+    [Vw_PremierMessage].[ClientRead] AS [ClientRead], 
+    [Vw_PremierMessage].[updatedName] AS [updatedName]
+    FROM [dbo].[Vw_PremierMessage] AS [Vw_PremierMessage]</DefiningQuery>
+          </EntitySet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="ROIModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -132,7 +197,27 @@
             <Parameter Name="AccountManagerISN" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="xp_debtuser_getinfo" ReturnType="Collection(ROIModel.xp_debtuser_getinfo_Result)">
+          <Parameter Name="MemberISN" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="Vw_PremierMessage" EntityType="ROIModel.Vw_PremierMessage" />
+          <FunctionImport Name="xp_premiermessage_new">
             <Parameter Name="MemberISN" Mode="In" Type="Int32" />
+            <Parameter Name="Subject" Mode="In" Type="String" />
+            <Parameter Name="Content" Mode="In" Type="String" />
+            <Parameter Name="updatedBy" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="xp_premiermessage_reply">
+            <Parameter Name="MessageISN" Mode="In" Type="Int32" />
+            <Parameter Name="Content" Mode="In" Type="String" />
+            <Parameter Name="updatedBy" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="xp_premiermessage_viewall" ReturnType="Collection(ROIModel.xp_premiermessage_viewall_Result)">
+          <Parameter Name="MessageISN" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="PremierMessages" EntityType="ROIModel.PremierMessage" />
+          <FunctionImport Name="xp_client_profile_requestchange">
+            <Parameter Name="MemberISN" Mode="In" Type="Int32" />
+            <Parameter Name="Content" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="xp_debtuser_getinfo_Result">
@@ -234,6 +319,44 @@
           <Property Type="String" Name="memDropID" Nullable="true" MaxLength="50" />
           <Property Type="Int32" Name="AccountManagerISN" Nullable="true" />
         </ComplexType>
+        <EntityType Name="Vw_PremierMessage">
+          <Key>
+            <PropertyRef Name="MessageISN" />
+            <PropertyRef Name="updatedName" />
+          </Key>
+          <Property Name="MessageISN" Type="Int32" Nullable="false" />
+          <Property Name="MemberISN" Type="Int32" />
+          <Property Name="MsgSubject" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="LastMessage" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="addedDate" Type="DateTime" Precision="3" />
+          <Property Name="addedBy" Type="Int32" />
+          <Property Name="updatedDate" Type="DateTime" Precision="3" />
+          <Property Name="updatedBy" Type="Int32" />
+          <Property Name="updatedName" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="ClientRead" Type="Byte" />
+        </EntityType>
+        <ComplexType Name="xp_premiermessage_viewall_Result">
+          <Property Type="Int32" Name="FollowISN" Nullable="false" />
+          <Property Type="Int32" Name="MessageISN" Nullable="true" />
+          <Property Type="String" Name="Content" Nullable="true" MaxLength="1000" />
+          <Property Type="DateTime" Name="updatedDate" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="updatedBy" Nullable="true" />
+          <Property Type="String" Name="updatedName" Nullable="false" MaxLength="30" />
+        </ComplexType>
+        <EntityType Name="PremierMessage">
+          <Key>
+            <PropertyRef Name="MessageISN" />
+          </Key>
+          <Property Name="MessageISN" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MemberISN" Type="Int32" />
+          <Property Name="MsgSubject" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="LastMessage" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="addedDate" Type="DateTime" Precision="3" />
+          <Property Name="addedBy" Type="Int32" />
+          <Property Name="updatedDate" Type="DateTime" Precision="3" />
+          <Property Name="updatedBy" Type="Int32" />
+          <Property Name="ClientRead" Type="Byte" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -344,6 +467,52 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="Vw_PremierMessage">
+            <EntityTypeMapping TypeName="ROIModel.Vw_PremierMessage">
+              <MappingFragment StoreEntitySet="Vw_PremierMessage">
+                <ScalarProperty Name="ClientRead" ColumnName="ClientRead" />
+                <ScalarProperty Name="updatedName" ColumnName="updatedName" />
+                <ScalarProperty Name="updatedBy" ColumnName="updatedBy" />
+                <ScalarProperty Name="updatedDate" ColumnName="updatedDate" />
+                <ScalarProperty Name="addedBy" ColumnName="addedBy" />
+                <ScalarProperty Name="addedDate" ColumnName="addedDate" />
+                <ScalarProperty Name="LastMessage" ColumnName="LastMessage" />
+                <ScalarProperty Name="MsgSubject" ColumnName="MsgSubject" />
+                <ScalarProperty Name="MemberISN" ColumnName="MemberISN" />
+                <ScalarProperty Name="MessageISN" ColumnName="MessageISN" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="xp_premiermessage_new" FunctionName="ROIModel.Store.xp_premiermessage_new" />
+          <FunctionImportMapping FunctionImportName="xp_premiermessage_reply" FunctionName="ROIModel.Store.xp_premiermessage_reply" />
+          <FunctionImportMapping FunctionImportName="xp_premiermessage_viewall" FunctionName="ROIModel.Store.xp_premiermessage_viewall">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ROIModel.xp_premiermessage_viewall_Result">
+                <ScalarProperty Name="FollowISN" ColumnName="FollowISN" />
+                <ScalarProperty Name="MessageISN" ColumnName="MessageISN" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="updatedDate" ColumnName="updatedDate" />
+                <ScalarProperty Name="updatedBy" ColumnName="updatedBy" />
+                <ScalarProperty Name="updatedName" ColumnName="updatedName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="PremierMessages">
+            <EntityTypeMapping TypeName="ROIModel.PremierMessage">
+              <MappingFragment StoreEntitySet="PremierMessage">
+                <ScalarProperty Name="ClientRead" ColumnName="ClientRead" />
+                <ScalarProperty Name="updatedBy" ColumnName="updatedBy" />
+                <ScalarProperty Name="updatedDate" ColumnName="updatedDate" />
+                <ScalarProperty Name="addedBy" ColumnName="addedBy" />
+                <ScalarProperty Name="addedDate" ColumnName="addedDate" />
+                <ScalarProperty Name="LastMessage" ColumnName="LastMessage" />
+                <ScalarProperty Name="MsgSubject" ColumnName="MsgSubject" />
+                <ScalarProperty Name="MemberISN" ColumnName="MemberISN" />
+                <ScalarProperty Name="MessageISN" ColumnName="MessageISN" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="xp_client_profile_requestchange" FunctionName="ROIModel.Store.xp_client_profile_requestchange" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

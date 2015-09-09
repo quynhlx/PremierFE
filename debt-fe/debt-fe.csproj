@@ -20,6 +20,7 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -201,6 +202,9 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MemberModel.cs" />
     <Compile Include="Models\MessageModels.cs" />
+    <Compile Include="Models\PremierMessage.cs">
+      <DependentUpon>PremierModels.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\SignatureModel.cs" />
     <Compile Include="Models\StateModel.cs" />
     <Compile Include="Models\TemplateModel.cs" />
@@ -223,6 +227,12 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>PremierModels.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Vw_PremierMessage.cs">
+      <DependentUpon>PremierModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\xp_premiermessage_viewall_Result.cs">
+      <DependentUpon>PremierModels.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />

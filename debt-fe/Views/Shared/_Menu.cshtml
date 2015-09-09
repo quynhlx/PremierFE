@@ -1,8 +1,28 @@
 ﻿@{
-    debt_fe.Models.ManagementAccountModel Acc = (debt_fe.Models.ManagementAccountModel)Session["ManagementAccount"];
+    debt_fe.Models.ManagementAccountModel Acc = null;
+    try
+    {
+        Acc = (debt_fe.Models.ManagementAccountModel)Session["ManagementAccount"];
+    }
+    catch
+    {
+
+    }
+    int numberUnread = 0;
+    var debt = Request.Cookies["debt_extension"];
+
+    if (debt == null || string.IsNullOrEmpty(debt.Values["msgUnread"]))
+    {
+        numberUnread = 0;
+    }else
+    {
+        numberUnread = int.Parse(debt.Values["msgUnread"]);
+    }
+
+
 }
 <ul class="menu">
-    <li data-controller="Message" id="menu-mes"><a href='@Url.Action("Index","Message")' data-action="Index"><span class="glyphicon glyphicon-inbox"></span> messages <span class="badge">2</span></a></li>
+    <li data-controller="Message" id="menu-mes"><a href='@Url.Action("Index","Message")' data-action="Index"><span class="glyphicon glyphicon-inbox"></span> messages <span class="badge">@numberUnread</span></a></li>
     @*<li data-controller="Profile" id="menu-pro" class="has-sub">
             <a href='#'><span class="glyphicon glyphicon-credit-card"></span> my profile <span class="glyphicon glyphicon-menu-right pull-right"></span></a>
             <ul class="sub-menu">
@@ -26,6 +46,5 @@
     <p style="font-size: small">Phone#: @Acc.Phone</p>
             <p style="font-size: small">Email: @Acc.Email</p>
         }
-       
     </div>
 </div>

@@ -9,6 +9,8 @@ using debt_fe.Utilities;
 using System.Security.Claims;
 using Microsoft.AspNet.Identity;
 using System;
+using log4net;
+using System.Linq;
 
 namespace debt_fe.Controllers
 {
@@ -16,7 +18,7 @@ namespace debt_fe.Controllers
     {
         private DataProvider _dataProvider;
         ManagementAccountModel ManagementAccount = new ManagementAccountModel();
-        //private static readonly ILog _logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog _logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         public AccountController()
         {
             _dataProvider = new DataProvider("tbone","tbone");            
@@ -50,8 +52,11 @@ namespace debt_fe.Controllers
 
 			int clientISN;
 			var clientInfo = _dataProvider.ExecuteStoreProcedure("xp_debtext_client_login", paramNames, paramValues, out clientISN);
+            //---
+           
 
-			if (clientISN > 0)
+
+            if (clientISN > 0)
 			{
 				var claims = new List<Claim>();
 				claims.Add(new Claim(ClaimTypes.Name, model.Username));
@@ -63,18 +68,32 @@ namespace debt_fe.Controllers
 				var authenticationManager = context.Authentication;
 
 				authenticationManager.SignIn(id);
-                ManagementAccount.GetDataFromDataBase(clientISN);
-				
-				var cookie = Request.Cookies["debt_extension"];
+                try
+                {
+                    ManagementAccount.GetDataFromDataBase(clientISN);
+                }
+                catch (Exception ex)
+                {
+                    _logger.InfoFormat("[AccountController]Get Management Account Exception : ", ex.ToString());
+                }
+
+                var db = new PremierEntities();
+                int numberUnread = db.Vw_PremierMessage.Where(p => p.MemberISN == clientISN && p.ClientRead == 0).ToList().Count;
+                ViewBag.numberUnread = numberUnread;
+
+                var cookie = Request.Cookies["debt_extension"];
 				if (cookie==null)
 				{
 					cookie = new HttpCookie("debt_extension");
 				}
 
-				cookie.Expires = DateTime.Now.AddDays(7);				
+				cookie.Expires = DateTime.Now.AddDays(7);
+                cookie.Values["msgUnread"] = numberUnread.ToString();		
 				cookie.Values["memberId"] = clientISN.ToString();
 				Response.AppendCookie(cookie);
                 Session.Add("ManagementAccount", ManagementAccount);
+
+                _logger.InfoFormat("[AccountController] Login Sucessfully");
 				//
 				// login success
 				// return RedirectToAction("Index", "Document", routeValues: new { memberISN = clientISN });

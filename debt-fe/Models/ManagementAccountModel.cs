@@ -16,9 +16,9 @@ namespace debt_fe.Models
         public ManagementAccountModel()
         {
             _dataProvider = new debt_fe.DataAccessHelper.DataProvider("tbone", "tbone");
-            FullName = "No Data Found";
-            Email = "No Data Found";
-            Phone = "No Data Found";
+            FullName = "";
+            Email = "";
+            Phone = "";
         }
         public void GetDataFromDataBase(int MemberISN)
         {

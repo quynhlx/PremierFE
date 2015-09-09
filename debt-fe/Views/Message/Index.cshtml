@@ -1,5 +1,5 @@
 ﻿@using debt_fe.Models
-@model IEnumerable<MessageModels>
+@model IEnumerable<Vw_PremierMessage>
 @{
     ViewBag.Title = "Messages";
 }
@@ -24,29 +24,33 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (MessageModels Mes in Model)
+            @foreach (Vw_PremierMessage Mes in Model)
             {
                 string _class = "";
-                    if (Mes.Id <= 2)
-                    {
-                        _class = "text-bold"; 
-                    }
-               
+                string LastDate = "";
+                if (!Convert.ToBoolean(Mes.ClientRead.Value))
+                {
+                    _class = "text-bold";
+                }
+                if (Mes.updatedDate.HasValue)
+                {
+                    LastDate = Mes.updatedDate.Value.ToShortDateString();
+                }
                 <tr class="@_class">
                     <td class="text-center">
-                        @Mes.Id @if (Mes.Id <= 2)
+                        @Mes.MessageISN @if (!Convert.ToBoolean(Mes.ClientRead.Value))
                         {<span class="check"></span>}
                     </td>
                     <td>
-                        @Mes.AddedDate
+                        @LastDate
                     </td>
                     <td>
-                        @Mes.Subject
+                        @Mes.MsgSubject
                     </td>
-                    <td>@Mes.MessageShort</td>
+                    <td>@Mes.LastMessage</td>
                     <td style="width : 170px;">
-                        <a href="@Url.Action("ViewAll","Message", new { MessageId = Mes.Id })" class="pull-right btn btn-info btn-reply" data-toggle="modal" data-target=".modal-message-all">View All</a>
-                        <a href="@Url.Action("Detail", "Message", new { MessageId = Mes.Id })" class="mr pull-right btn btn-info btn-reply" data-toggle="modal" data-target=".modal-message-detail" data-isn="@Mes.Id">Reply</a>
+                        <a href="@Url.Action("ViewAll","Message", new { MessageId = Mes.MessageISN })" class="pull-right btn btn-info btn-reply" data-toggle="modal" data-target=".modal-message-all">View All</a>
+                        <a href="@Url.Action("Detail", "Message", new { MessageId = Mes.MessageISN })" class="mr pull-right btn btn-info btn-reply" data-toggle="modal" data-target=".modal-message-detail" data-isn="@Mes.MessageISN">Reply</a>
                     </td>
                 </tr>
             }
@@ -117,7 +121,6 @@
                 });
 
                 req.done(function (resp) {
-
                     // console.log('response',resp);
 
                     if (resp === undefined || resp == '') {

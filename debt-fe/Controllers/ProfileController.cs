@@ -226,6 +226,9 @@ namespace debt_fe.Controllers
         public ActionResult ChangeRequest (FormCollection Form)
         {
             string content = Form.Get("request-content");
+            var db = new PremierEntities();
+            var rs = db.xp_client_profile_requestchange(this.MemberISN, content);
+            TempData["success"] = "Change Request Successfully";
             return RedirectToAction("MyProfile");
         }
     }

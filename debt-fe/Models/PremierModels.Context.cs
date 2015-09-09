@@ -27,6 +27,8 @@ namespace debt_fe.Models
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<Vw_PremierMessage> Vw_PremierMessage { get; set; }
+        public virtual DbSet<PremierMessage> PremierMessages { get; set; }
     
         public virtual int xp_debtext_client_insupd2(Nullable<int> memberISN, Nullable<int> salemanISN, Nullable<int> campaignISN, string memUserName, string memPassword, string memFax, string memFirstName, string memLastName, string memPhone, string memEmail, string memAddress, string memZip, string memCity, string memState, string memCompanyName, string memTitle, string memIM, Nullable<byte> memStatus, string memComment, Nullable<decimal> memCreditLine, Nullable<int> dealerISN, string aNI, Nullable<double> memCreditScore, Nullable<decimal> memApprovalPayment, Nullable<decimal> memApprovalAmount, string memSSN, Nullable<byte> memConnectedLO, Nullable<int> updatedBy, Nullable<byte> memTradeVehicle, string memYearVehicle, string memManufacturerVehicle, string memModelVehicle, Nullable<decimal> memMonthlyPayment, string memPolycomID, string memWeekDay, Nullable<decimal> memHomeValue, Nullable<decimal> memCurrentLeftOnLoan, Nullable<double> memInterestRate, Nullable<decimal> memMonthlyPaymentM, Nullable<decimal> memAppoxTotalDebt, string memTypeOfLoan, string memAnyLatePayment, string memApprovalOfRCredit, string memIsYourCreditGreat, string memTimeZoneFull, string memDomainName, Nullable<decimal> memPayOffAmount, Nullable<decimal> balance, string ratePlan, Nullable<System.DateTime> memDOB, Nullable<int> lastStepFlag, Nullable<byte> memReadyPurchaseNow, string xmlInfoExt, Nullable<int> phoneRechargeNo, string memDropID, Nullable<int> accountManagerISN)
         {
@@ -264,6 +266,66 @@ namespace debt_fe.Models
                 new ObjectParameter("MemberISN", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<xp_debtuser_getinfo_Result>("xp_debtuser_getinfo", memberISNParameter);
+        }
+    
+        public virtual int xp_premiermessage_new(Nullable<int> memberISN, string subject, string content, Nullable<int> updatedBy)
+        {
+            var memberISNParameter = memberISN.HasValue ?
+                new ObjectParameter("MemberISN", memberISN) :
+                new ObjectParameter("MemberISN", typeof(int));
+    
+            var subjectParameter = subject != null ?
+                new ObjectParameter("Subject", subject) :
+                new ObjectParameter("Subject", typeof(string));
+    
+            var contentParameter = content != null ?
+                new ObjectParameter("Content", content) :
+                new ObjectParameter("Content", typeof(string));
+    
+            var updatedByParameter = updatedBy.HasValue ?
+                new ObjectParameter("updatedBy", updatedBy) :
+                new ObjectParameter("updatedBy", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("xp_premiermessage_new", memberISNParameter, subjectParameter, contentParameter, updatedByParameter);
+        }
+    
+        public virtual int xp_premiermessage_reply(Nullable<int> messageISN, string content, Nullable<int> updatedBy)
+        {
+            var messageISNParameter = messageISN.HasValue ?
+                new ObjectParameter("MessageISN", messageISN) :
+                new ObjectParameter("MessageISN", typeof(int));
+    
+            var contentParameter = content != null ?
+                new ObjectParameter("Content", content) :
+                new ObjectParameter("Content", typeof(string));
+    
+            var updatedByParameter = updatedBy.HasValue ?
+                new ObjectParameter("updatedBy", updatedBy) :
+                new ObjectParameter("updatedBy", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("xp_premiermessage_reply", messageISNParameter, contentParameter, updatedByParameter);
+        }
+    
+        public virtual ObjectResult<xp_premiermessage_viewall_Result> xp_premiermessage_viewall(Nullable<int> messageISN)
+        {
+            var messageISNParameter = messageISN.HasValue ?
+                new ObjectParameter("MessageISN", messageISN) :
+                new ObjectParameter("MessageISN", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<xp_premiermessage_viewall_Result>("xp_premiermessage_viewall", messageISNParameter);
+        }
+    
+        public virtual int xp_client_profile_requestchange(Nullable<int> memberISN, string content)
+        {
+            var memberISNParameter = memberISN.HasValue ?
+                new ObjectParameter("MemberISN", memberISN) :
+                new ObjectParameter("MemberISN", typeof(int));
+    
+            var contentParameter = content != null ?
+                new ObjectParameter("Content", content) :
+                new ObjectParameter("Content", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("xp_client_profile_requestchange", memberISNParameter, contentParameter);
         }
     }
 }
