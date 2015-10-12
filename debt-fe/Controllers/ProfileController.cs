@@ -101,20 +101,11 @@ namespace debt_fe.Controllers
             {
                 return RedirectToAction("Login", "Account");
             }
-            var states = Utility.GetStates();
-
-            if (states == null)
-            {
-                states = new List<StateModel>();
-            }
-
-            ViewBag.States = new SelectList(states, "Code", "Name");
-            var db = new PremierEntities();       
-            var obj = db.xp_debtuser_getinfo(this.MemberISN);
-            xp_debtuser_getinfo_Result rs = obj.FirstOrDefault();
-            int returnValue;
-            DataSet ds = LoadData(this.MemberISN, out returnValue);
-            return View(rs);
+            
+            //DataSet ds = LoadData(this.MemberISN, out returnValue);
+            var myProfile = new MyProfileViewModal();
+            myProfile.GetMyProfile(this.MemberISN);
+            return View(myProfile);
         }              
 
         private DataSet LoadData (int memberISN, out int returnValue)
@@ -227,8 +218,15 @@ namespace debt_fe.Controllers
         {
             string content = Form.Get("request-content");
             var db = new PremierEntities();
-            var rs = db.xp_client_profile_requestchange(this.MemberISN, content);
-            TempData["success"] = "Change Request Successfully";
+            try
+            {
+                var rs = db.xp_client_profile_requestchange(this.MemberISN, content);
+                TempData["success"] = "Change Request Successfully";
+            }
+            catch
+            {
+                TempData["error"] = "Change Request Error";
+            }
             return RedirectToAction("MyProfile");
         }
     }

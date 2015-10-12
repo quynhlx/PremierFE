@@ -202,6 +202,7 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MemberModel.cs" />
     <Compile Include="Models\MessageModels.cs" />
+    <Compile Include="Models\MyProfileViewModal.cs" />
     <Compile Include="Models\PremierMessage.cs">
       <DependentUpon>PremierModels.tt</DependentUpon>
     </Compile>
@@ -376,14 +377,14 @@
     <Content Include="Scripts\_references.js" />
     <Content Include="Views\Profile\MyProfile.cshtml" />
     <Content Include="Views\Activity\Index.cshtml" />
-    <Content Include="Web.config" />
+    <None Include="Web.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
-    <None Include="Views\Web.config" />
+    <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
@@ -452,7 +453,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>47854</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

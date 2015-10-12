@@ -24,8 +24,12 @@
             </tr>
         </thead>
         <tbody>
+            @{
+                int isn = 0;
+            }
             @foreach (Vw_PremierMessage Mes in Model)
             {
+                isn++;
                 string _class = "";
                 string LastDate = "";
                 if (!Convert.ToBoolean(Mes.ClientRead.Value))
@@ -38,7 +42,7 @@
                 }
                 <tr class="@_class">
                     <td class="text-center">
-                        @Mes.MessageISN @if (!Convert.ToBoolean(Mes.ClientRead.Value))
+                        @isn @if (!Convert.ToBoolean(Mes.ClientRead.Value))
                         {<span class="check"></span>}
                     </td>
                     <td>
@@ -147,5 +151,8 @@
 <script>
     $(".menu > li").removeClass("active");
     $('#menu-mes').addClass("active");
+
+
+    
 </script>
 }

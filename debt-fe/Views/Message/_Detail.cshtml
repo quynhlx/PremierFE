@@ -34,7 +34,7 @@
         <div class="row">
             <div class="col-md-12">
                 <h6 class="text-bold">
-                    Reply Message
+                    Reply Message <span class="validator" style="color:red;"></span>
                 </h6>
             </div>
             @Html.HiddenFor(m => m.MessageISN)
@@ -46,5 +46,17 @@
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-    <button type="submit" class="btn btn-primary" onclick="$('#reply-message').submit()">Send</button>
+    <button type="button" class="btn btn-primary btn-reply">Send</button>
 </div>
+<script>
+    $('.btn-reply').click(function () {
+        debugger;
+        var strText = $('#message-content').val();
+        if (strText.length > 255) {
+            $('.validator').html("Must be under 255 characters");
+            return;
+        }
+        $('#reply-message').submit()
+        ('.validator').html("");
+    });
+</script>

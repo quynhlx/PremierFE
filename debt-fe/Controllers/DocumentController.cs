@@ -408,10 +408,11 @@ namespace debt_fe.Controllers
 
             var fileDownloadName = doc.FileName;
 
-
+            
             //
             // get upload folder
             var pathConfig = ConfigurationManager.AppSettings["UploadFolder"];
+            _logger.Info("get pathConfig = " + pathConfig);
             if (string.IsNullOrEmpty(pathConfig))
             {
                 pathConfig = Environment.GetLogicalDrives()[0]; // expect C:\\
@@ -420,7 +421,7 @@ namespace debt_fe.Controllers
             //
             // get document folder and combine to root folder
             var docPath = _docBusiness.GetDocumentPath(documentISN, doc.AddedDate);
-
+            _logger.Info("get docPath = " + docPath);
             var fullPath = Path.Combine(pathConfig, docPath);
 
             //
@@ -555,7 +556,6 @@ namespace debt_fe.Controllers
 
             //redirect = string.Format("http://localhost:{0}/{1}", Request.Url.Port, urlRedirect);
 
-            // http://localhost:47854/Debt/Index
 
             var docKey = RightSignature.Embedded(
                     Guid_Template: template.SignGuid,
