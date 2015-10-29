@@ -18,6 +18,10 @@ a:hover{color:#474a54; text-decoration:none}
   border-top: 1px dashed #666; 
   border-bottom: 1px dashed #666; 
 }
+
+.colorred {
+    color : crimson;
+}
 /*
 .navLeft > ul{margin:0; padding:0 }
 .navLeft > ul > li{margin:0; padding:20px 0; list-style-type:none; border-bottom:1px solid #eeeeee; position:relative }

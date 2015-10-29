@@ -13,51 +13,10 @@ using System.Web.Mvc;
 
 namespace debt_fe.Controllers
 {
-    public class ProfileController : Controller
+    public class ProfileController : BaseController
     {
         private DataProvider _data;
-        private int _memberISN;
-
-        public int MemberISN
-        {
-            get
-            {
-
-                var debt = Request.Cookies["debt_extension"];
-
-                if (debt == null || string.IsNullOrEmpty(debt.Values["memberId"]))
-                {
-                    return -1;
-                }
-
-                var memberId = debt.Values["memberId"];
-
-                /*
-                if (string.IsNullOrEmpty(memberId))
-                {
-                    return -2;
-                }
-                 */
-
-                return int.Parse(memberId);
-            }
-            set
-            {
-                _memberISN = value;
-
-                // Session["debt_member_isn"] = _memberISN;
-                var debt = Request.Cookies["debt_extension"];
-                if (debt == null)
-                {
-                    debt = new HttpCookie("debt_extension");
-                    debt.Expires = DateTime.Now.AddDays(7);
-                }
-
-                debt.Values["memberId"] = _memberISN.ToString();
-
-                Response.AppendCookie(debt);
-            }
-        }
+        
         public ProfileController()
         {
             _data = new DataProvider("tbone", "tbone");
@@ -97,7 +56,7 @@ namespace debt_fe.Controllers
         }
         public ActionResult MyProfile ()
         {
-            if (Session["ManagementAccount"] == null)
+            if (MemberISN < 0)
             {
                 return RedirectToAction("Login", "Account");
             }

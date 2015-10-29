@@ -23,7 +23,7 @@ namespace debt_fe.Models
         public string CellPhone { set; get; }
         public string FaxNumber { set; get; }
         public string Email { set; get; }
-        public string _Married { set; get; }
+        public int _Married { set; get; }
         public SelectList Married
 		{
 			get
@@ -31,15 +31,16 @@ namespace debt_fe.Models
 				return new SelectList(
                         new[]
                         {
-                            new {Value = "None", Text = "--Select One--"},
-                            new {Value = "Single",Text="Single"},
-                            new {Value = "Married",Text="Married"}
+                            new {Value = -1, Text = "--Select One--"},
+                            new {Value = 0,Text="Single"},
+                            new {Value = 1,Text="Married"},
+                            new {Value = 2,Text="Other"}
                           
                         }, "Value", "Text", _Married);
 			}
             set
             {
-                this._Married = value.SelectedValue.ToString();
+                this._Married = (int)value.SelectedValue;
             }
 		}
 
@@ -94,6 +95,7 @@ namespace debt_fe.Models
         public string CoZip { set; get; }
         public string CoEmail { set; get; }
 
+        public string StatusGetData { set; get; }
         public void GetMyProfile (int MemberISN)
         {
             var db = new PremierEntities();
@@ -107,46 +109,50 @@ namespace debt_fe.Models
             var dataProvider = new DataProvider();
             var rsInt = 0;
             var ds = dataProvider.ExecuteStoreProcedure(query, parameters, out rsInt ) ;
+            try
+            {
+                this.FirstName = userInfo.memFirstName;
+                this.LastName = userInfo.memLastName;
+                this.HomePhone = userInfo.memHomePhone;
+                this.WorkPhone = userInfo.memWorkPhone;
+                this.CellPhone = userInfo.memPhone;
+                this.FaxNumber = userInfo.memFax;
+                this.Email = userInfo.memEmail;
 
+                var attrRow = ds.Tables[1].Select("attID = 'BestTimeOfCall'");
 
+                this.BestTimeToContact = attrRow.Length == 0 ? string.Empty : attrRow[0]["attValue"].ToString();
 
-            this.FirstName = userInfo.memFirstName;
-            this.LastName = userInfo.memLastName;
-            this.HomePhone = userInfo.memHomePhone;
-            this.WorkPhone = userInfo.memWorkPhone;
-            this.CellPhone = userInfo.memPhone;
-            this.FaxNumber = userInfo.memFax;
-            this.Email = userInfo.memEmail;
+                attrRow = ds.Tables[1].Select("attID = 'MarriedStatus'");
+                this._Married = attrRow.Length == 0 ? -1 : Convert.ToInt32(attrRow[0]["attValue"]);
 
-            var attrRow = ds.Tables[1].Select("attID = 'BestTimeOfCall'");
-            
-            this.BestTimeToContact = attrRow.Length == 0 ? string.Empty : attrRow[0]["attValue"].ToString();
+                this.Address = userInfo.memAddress;
+                this.City = userInfo.memCity;
+                this._State = userInfo.memState;
+                this.Zip = userInfo.memZip;
 
-            attrRow = ds.Tables[1].Select("attID = 'MarriedStatus'");
-            this._Married = attrRow.Length == 0 ? "None" : attrRow[0]["attValue"].ToString();
+                attrRow = ds.Tables[1].Select("attID = 'Language'");
+                this.Language = attrRow.Length == 0 ? string.Empty : attrRow[0]["attValue"].ToString();
 
-            this.Address = userInfo.memAddress;
-            this.City = userInfo.memCity;
-            this._State = userInfo.memState;
-            this.Zip = userInfo.memZip;
-
-            attrRow = ds.Tables[1].Select("attID = 'Language'");
-            this.Language = attrRow.Length == 0 ? string.Empty : attrRow[0]["attValue"].ToString();
-
-            attrRow = ds.Tables[1].Select("attID = 'CoFirstName'");
-            this.CoFirstName = attrRow.Length == 0 ?  string.Empty : attrRow[0]["attValue"].ToString();
-            attrRow = ds.Tables[1].Select("attID = 'CoLastName'");
-            this.CoLastName = attrRow.Length == 0 ? string.Empty : attrRow[0]["attValue"].ToString();
-            attrRow = ds.Tables[1].Select("attID = 'CoAddress'");
-            this.CoAddress = attrRow.Length == 0 ? string.Empty : attrRow[0]["attValue"].ToString();
-            attrRow = ds.Tables[1].Select("attID = 'CoCity'");
-            this.CoCity = attrRow.Length == 0 ? string.Empty : attrRow[0]["attValue"].ToString();
-            attrRow = ds.Tables[1].Select("attID = 'CoState'");
-            this._CoState = attrRow.Length == 0 ? string.Empty : attrRow[0]["attValue"].ToString();
-            attrRow = ds.Tables[1].Select("attID = 'CoZip'");
-            this.CoZip = attrRow.Length == 0 ? string.Empty : attrRow[0]["attValue"].ToString();
-            attrRow = ds.Tables[1].Select("attID = 'CoEmail'");
-            this.CoEmail = attrRow.Length == 0 ? string.Empty : attrRow[0]["attValue"].ToString();
+                attrRow = ds.Tables[1].Select("attID = 'CoFirstName'");
+                this.CoFirstName = attrRow.Length == 0 ? string.Empty : attrRow[0]["attValue"].ToString();
+                attrRow = ds.Tables[1].Select("attID = 'CoLastName'");
+                this.CoLastName = attrRow.Length == 0 ? string.Empty : attrRow[0]["attValue"].ToString();
+                attrRow = ds.Tables[1].Select("attID = 'CoAddress'");
+                this.CoAddress = attrRow.Length == 0 ? string.Empty : attrRow[0]["attValue"].ToString();
+                attrRow = ds.Tables[1].Select("attID = 'CoCity'");
+                this.CoCity = attrRow.Length == 0 ? string.Empty : attrRow[0]["attValue"].ToString();
+                attrRow = ds.Tables[1].Select("attID = 'CoState'");
+                this._CoState = attrRow.Length == 0 ? string.Empty : attrRow[0]["attValue"].ToString();
+                attrRow = ds.Tables[1].Select("attID = 'CoZip'");
+                this.CoZip = attrRow.Length == 0 ? string.Empty : attrRow[0]["attValue"].ToString();
+                attrRow = ds.Tables[1].Select("attID = 'CoEmail'");
+                this.CoEmail = attrRow.Length == 0 ? string.Empty : attrRow[0]["attValue"].ToString();
+            }catch 
+                (Exception ex)
+            {
+                StatusGetData = ex.ToString();
+            }
         }
 
     }

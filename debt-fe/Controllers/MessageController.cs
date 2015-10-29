@@ -6,51 +6,9 @@ using System.Web.Mvc;
 using debt_fe.Models;
 namespace debt_fe.Controllers
 {
-    public class MessageController : Controller
+    public class MessageController : BaseController
     {
         PremierEntities db;
-        private int _memberISN;
-
-        public int MemberISN
-        {
-            get
-            {
-
-                var debt = Request.Cookies["debt_extension"];
-
-                if (debt == null || string.IsNullOrEmpty(debt.Values["memberId"]))
-                {
-                    return -1;
-                }
-
-                var memberId = debt.Values["memberId"];
-
-                /*
-				if (string.IsNullOrEmpty(memberId))
-				{
-					return -2;
-				}
-				 */
-
-                return int.Parse(memberId);
-            }
-            set
-            {
-                _memberISN = value;
-
-                // Session["debt_member_isn"] = _memberISN;
-                var debt = Request.Cookies["debt_extension"];
-                if (debt == null)
-                {
-                    debt = new HttpCookie("debt_extension");
-                    debt.Expires = DateTime.Now.AddDays(7);
-                }
-
-                debt.Values["memberId"] = _memberISN.ToString();
-
-                Response.AppendCookie(debt);
-            }
-        }
 
         public MessageController ()
         {
@@ -59,7 +17,7 @@ namespace debt_fe.Controllers
         // GET: Message
         public ActionResult Index()
         {
-            if (Session["ManagementAccount"] == null)
+            if (MemberISN < 0)
             {
                 return RedirectToAction("Login", "Account");
             }
@@ -93,7 +51,7 @@ namespace debt_fe.Controllers
         {
             var MsgINS = Convert.ToInt32(form.Get("MessageISN"));
             var content = form.Get("message-content").ToString();
-            var rs =  db.xp_premiermessage_reply(MsgINS, content, null);
+            var rs =  db.xp_premiermessage_reply(MsgINS, content, -this.MemberISN);
             TempData["success"] = "Message has been sent";
             return RedirectToAction("Index");
         }

@@ -11,13 +11,13 @@ using Microsoft.AspNet.Identity;
 using System;
 using log4net;
 using System.Linq;
+using debt_fe.Models.ViewModels;
 
 namespace debt_fe.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController : Controller                                                                                                                                       
     {
         private DataProvider _dataProvider;
-        ManagementAccountModel ManagementAccount = new ManagementAccountModel();
         private static readonly ILog _logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         public AccountController()
         {
@@ -68,15 +68,6 @@ namespace debt_fe.Controllers
 				var authenticationManager = context.Authentication;
 
 				authenticationManager.SignIn(id);
-                try
-                {
-                    ManagementAccount.GetDataFromDataBase(clientISN);
-                }
-                catch (Exception ex)
-                {
-                    _logger.InfoFormat("[AccountController]Get Management Account Exception : ", ex.ToString());
-                }
-
                 var db = new PremierEntities();
                 int numberUnread = db.Vw_PremierMessage.Where(p => p.MemberISN == clientISN && p.ClientRead == 0).ToList().Count;
                 ViewBag.numberUnread = numberUnread;
@@ -91,14 +82,17 @@ namespace debt_fe.Controllers
                 cookie.Values["msgUnread"] = numberUnread.ToString();		
 				cookie.Values["memberId"] = clientISN.ToString();
 				Response.AppendCookie(cookie);
-                Session.Add("ManagementAccount", ManagementAccount);
 
+                var smsCode = RandomSMSCode();
+                var Message = string.Format("Authetication Code: {0}", smsCode) ;
+                //var rs = SendSMS("+841688166199", Message);
+                Session.Add("SMSCode", smsCode);
                 _logger.InfoFormat("[AccountController] Login Sucessfully");
 				//
 				// login success
 				// return RedirectToAction("Index", "Document", routeValues: new { memberISN = clientISN });
-               
-				return RedirectToAction("Index", "Document");
+
+                return RedirectToAction("AuthenticationSMS");
 			}
 			else
 			{
@@ -145,5 +139,31 @@ namespace debt_fe.Controllers
             Session.RemoveAll();
             return RedirectToAction("Login", "Account");
         }
+
+        public ActionResult AuthenticationSMS ()
+        {
+            var model = new AuthenticationViewModel();
+            return View(model);
+        }
+
+        private string SendSMS (string NumberPhone, string Message)
+        {
+            var usernameSMS = ConfigurationManager.AppSettings["UsernameSMS"].ToString();
+            var passwordSMS = ConfigurationManager.AppSettings["PasswordSMS"].ToString();
+            var emailSMS =  ConfigurationManager.AppSettings["EmailSMS"].ToString();
+            debt_fe.SMSService.WSAgentSoapClient smsService = new SMSService.WSAgentSoapClient("WSAgentSoap12");
+            var rs = smsService.SendSMSExt(usernameSMS, passwordSMS, DateTime.Now.ToString("yyyyMMddHHmm"), DateTime.Now.ToString("yyyyMMddHHmm"), string.Empty, NumberPhone, 1, Message, emailSMS, string.Empty, 1, string.Empty);
+            return rs;
+        }
+        private string RandomSMSCode ()
+        {
+            string SMSCode = string.Empty;
+            Random random = new Random();
+            int code = random.Next(100000, 999999);
+            SMSCode = code.ToString();
+            return SMSCode;
+        }
+
     }
+    
 }

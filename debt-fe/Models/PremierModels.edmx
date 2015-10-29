@@ -20,6 +20,38 @@
           <Property Name="ClientRead" Type="tinyint" />
         </EntityType>
         <!--Errors Found During Generation:
+warning 6002: The table/view 'ROI.dbo.Vw_DebtExt_Creditor' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Vw_DebtExt_Creditor">
+          <Key>
+            <PropertyRef Name="CreditorISN" />
+            <PropertyRef Name="DebtRemoved" />
+          </Key>
+          <Property Name="CreditorISN" Type="int" Nullable="false" />
+          <Property Name="MemberISN" Type="int" />
+          <Property Name="cdtName" Type="nvarchar" MaxLength="100" />
+          <Property Name="cdtAcctNo" Type="varchar" MaxLength="50" />
+          <Property Name="cdtBalance" Type="money" />
+          <Property Name="updatedDate" Type="datetime" />
+          <Property Name="updatedBy" Type="int" />
+          <Property Name="cdtType" Type="varchar" MaxLength="100" />
+          <Property Name="cdtWhose" Type="varchar" MaxLength="200" />
+          <Property Name="addedDate" Type="datetime" />
+          <Property Name="addedBy" Type="int" />
+          <Property Name="cdtIsPush" Type="tinyint" />
+          <Property Name="cdtSource" Type="tinyint" />
+          <Property Name="PCreditorISN" Type="int" />
+          <Property Name="cdtDelinquent" Type="int" />
+          <Property Name="addedUserName" Type="nvarchar" MaxLength="30" />
+          <Property Name="updatedName" Type="nvarchar" MaxLength="30" />
+          <Property Name="Creditor" Type="nvarchar" MaxLength="100" />
+          <Property Name="CollectorISN" Type="int" />
+          <Property Name="cltAcctNo" Type="varchar" MaxLength="50" />
+          <Property Name="DebtStatus" Type="nvarchar" MaxLength="50" />
+          <Property Name="cltName" Type="nvarchar" MaxLength="100" />
+          <Property Name="Graduation" Type="datetime" />
+          <Property Name="DebtRemoved" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
 warning 6002: The table/view 'ROI.dbo.Vw_PremierMessage' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="Vw_PremierMessage">
           <Key>
@@ -37,9 +69,56 @@ warning 6002: The table/view 'ROI.dbo.Vw_PremierMessage' does not have a primary
           <Property Name="ClientRead" Type="tinyint" />
           <Property Name="updatedName" Type="nvarchar" MaxLength="30" Nullable="false" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'ROI.dbo.Vw_TroubleTicket' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Vw_TroubleTicket">
+          <Key>
+            <PropertyRef Name="TroubleTicketISN" />
+            <PropertyRef Name="saleman" />
+          </Key>
+          <Property Name="TroubleTicketISN" Type="int" Nullable="false" />
+          <Property Name="MemberISN" Type="int" />
+          <Property Name="CallDetailISN" Type="int" />
+          <Property Name="CallID" Type="varchar" MaxLength="30" />
+          <Property Name="PinNumber" Type="varchar" MaxLength="20" />
+          <Property Name="Destination" Type="varchar" MaxLength="100" />
+          <Property Name="tblAddedDate" Type="datetime" />
+          <Property Name="tblAddedBy" Type="int" />
+          <Property Name="tblSubject" Type="nvarchar" MaxLength="500" />
+          <Property Name="tblDesc" Type="nvarchar" MaxLength="1000" />
+          <Property Name="tblStatus" Type="smallint" />
+          <Property Name="tblResult" Type="nvarchar" MaxLength="1000" />
+          <Property Name="tblAttachFile" Type="varchar" MaxLength="500" />
+          <Property Name="updatedDate" Type="datetime" />
+          <Property Name="updatedBy" Type="int" />
+          <Property Name="tblDate" Type="datetime" />
+          <Property Name="tblCode" Type="char" MaxLength="4" />
+          <Property Name="LeadISN" Type="int" />
+          <Property Name="tblLeadPhone" Type="varchar" MaxLength="20" />
+          <Property Name="tblAgentPhone" Type="varchar" MaxLength="20" />
+          <Property Name="tblAgentDTMF" Type="varchar" MaxLength="10" />
+          <Property Name="memUserName" Type="nvarchar" MaxLength="30" />
+          <Property Name="memFullName" Type="nvarchar" MaxLength="100" />
+          <Property Name="memFullName2" Type="nvarchar" MaxLength="100" />
+          <Property Name="updatedName" Type="nvarchar" MaxLength="66" />
+          <Property Name="tblAddedName" Type="nvarchar" MaxLength="66" />
+          <Property Name="memFax" Type="varchar" MaxLength="20" />
+          <Property Name="saleman" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="CampaignISN" Type="int" />
+          <Property Name="cpnName" Type="nvarchar" MaxLength="50" />
+          <Property Name="cpnDID" Type="varchar" MaxLength="20" />
+          <Property Name="DealerISN" Type="int" />
+          <Property Name="Dealer" Type="nvarchar" MaxLength="30" />
+          <Property Name="tblDescExt" Type="nvarchar" MaxLength="1200" />
+        </EntityType>
         <Function Name="xp_client_profile_requestchange" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="MemberISN" Type="int" Mode="In" />
           <Parameter Name="Content" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="xp_complaint_ins" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MemberISN" Type="int" Mode="In" />
+          <Parameter Name="Complaint" Type="nvarchar" Mode="In" />
+          <Parameter Name="addedBy" Type="int" Mode="In" />
         </Function>
         <Function Name="xp_debtext_client_insupd2" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="MemberISN" Type="int" Mode="In" />
@@ -99,6 +178,15 @@ warning 6002: The table/view 'ROI.dbo.Vw_PremierMessage' does not have a primary
           <Parameter Name="memDropID" Type="varchar" Mode="In" />
           <Parameter Name="AccountManagerISN" Type="int" Mode="In" />
         </Function>
+        <Function Name="xp_debtext_document_signature_upd" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DocumentISN" Type="int" Mode="In" />
+          <Parameter Name="docFileName" Type="nvarchar" Mode="In" />
+          <Parameter Name="docSize" Type="int" Mode="In" />
+          <Parameter Name="docSignatureDate" Type="datetime" Mode="In" />
+          <Parameter Name="docSignatureIP" Type="varchar" Mode="In" />
+          <Parameter Name="ClientInfo" Type="nvarchar" Mode="In" />
+          <Parameter Name="updatedBy" Type="int" Mode="In" />
+        </Function>
         <Function Name="xp_debtuser_getinfo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="MemberISN" Type="int" Mode="In" />
         </Function>
@@ -118,6 +206,34 @@ warning 6002: The table/view 'ROI.dbo.Vw_PremierMessage' does not have a primary
         </Function>
         <EntityContainer Name="ROIModelStoreContainer">
           <EntitySet Name="PremierMessage" EntityType="Self.PremierMessage" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Vw_DebtExt_Creditor" EntityType="Self.Vw_DebtExt_Creditor" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Vw_DebtExt_Creditor].[CreditorISN] AS [CreditorISN], 
+    [Vw_DebtExt_Creditor].[MemberISN] AS [MemberISN], 
+    [Vw_DebtExt_Creditor].[cdtName] AS [cdtName], 
+    [Vw_DebtExt_Creditor].[cdtAcctNo] AS [cdtAcctNo], 
+    [Vw_DebtExt_Creditor].[cdtBalance] AS [cdtBalance], 
+    [Vw_DebtExt_Creditor].[updatedDate] AS [updatedDate], 
+    [Vw_DebtExt_Creditor].[updatedBy] AS [updatedBy], 
+    [Vw_DebtExt_Creditor].[cdtType] AS [cdtType], 
+    [Vw_DebtExt_Creditor].[cdtWhose] AS [cdtWhose], 
+    [Vw_DebtExt_Creditor].[addedDate] AS [addedDate], 
+    [Vw_DebtExt_Creditor].[addedBy] AS [addedBy], 
+    [Vw_DebtExt_Creditor].[cdtIsPush] AS [cdtIsPush], 
+    [Vw_DebtExt_Creditor].[cdtSource] AS [cdtSource], 
+    [Vw_DebtExt_Creditor].[PCreditorISN] AS [PCreditorISN], 
+    [Vw_DebtExt_Creditor].[cdtDelinquent] AS [cdtDelinquent], 
+    [Vw_DebtExt_Creditor].[addedUserName] AS [addedUserName], 
+    [Vw_DebtExt_Creditor].[updatedName] AS [updatedName], 
+    [Vw_DebtExt_Creditor].[Creditor] AS [Creditor], 
+    [Vw_DebtExt_Creditor].[CollectorISN] AS [CollectorISN], 
+    [Vw_DebtExt_Creditor].[cltAcctNo] AS [cltAcctNo], 
+    [Vw_DebtExt_Creditor].[DebtStatus] AS [DebtStatus], 
+    [Vw_DebtExt_Creditor].[cltName] AS [cltName], 
+    [Vw_DebtExt_Creditor].[Graduation] AS [Graduation], 
+    [Vw_DebtExt_Creditor].[DebtRemoved] AS [DebtRemoved]
+    FROM [dbo].[Vw_DebtExt_Creditor] AS [Vw_DebtExt_Creditor]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="Vw_PremierMessage" EntityType="Self.Vw_PremierMessage" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [Vw_PremierMessage].[MessageISN] AS [MessageISN], 
@@ -131,6 +247,44 @@ warning 6002: The table/view 'ROI.dbo.Vw_PremierMessage' does not have a primary
     [Vw_PremierMessage].[ClientRead] AS [ClientRead], 
     [Vw_PremierMessage].[updatedName] AS [updatedName]
     FROM [dbo].[Vw_PremierMessage] AS [Vw_PremierMessage]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="Vw_TroubleTicket" EntityType="Self.Vw_TroubleTicket" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Vw_TroubleTicket].[TroubleTicketISN] AS [TroubleTicketISN], 
+    [Vw_TroubleTicket].[MemberISN] AS [MemberISN], 
+    [Vw_TroubleTicket].[CallDetailISN] AS [CallDetailISN], 
+    [Vw_TroubleTicket].[CallID] AS [CallID], 
+    [Vw_TroubleTicket].[PinNumber] AS [PinNumber], 
+    [Vw_TroubleTicket].[Destination] AS [Destination], 
+    [Vw_TroubleTicket].[tblAddedDate] AS [tblAddedDate], 
+    [Vw_TroubleTicket].[tblAddedBy] AS [tblAddedBy], 
+    [Vw_TroubleTicket].[tblSubject] AS [tblSubject], 
+    [Vw_TroubleTicket].[tblDesc] AS [tblDesc], 
+    [Vw_TroubleTicket].[tblStatus] AS [tblStatus], 
+    [Vw_TroubleTicket].[tblResult] AS [tblResult], 
+    [Vw_TroubleTicket].[tblAttachFile] AS [tblAttachFile], 
+    [Vw_TroubleTicket].[updatedDate] AS [updatedDate], 
+    [Vw_TroubleTicket].[updatedBy] AS [updatedBy], 
+    [Vw_TroubleTicket].[tblDate] AS [tblDate], 
+    [Vw_TroubleTicket].[tblCode] AS [tblCode], 
+    [Vw_TroubleTicket].[LeadISN] AS [LeadISN], 
+    [Vw_TroubleTicket].[tblLeadPhone] AS [tblLeadPhone], 
+    [Vw_TroubleTicket].[tblAgentPhone] AS [tblAgentPhone], 
+    [Vw_TroubleTicket].[tblAgentDTMF] AS [tblAgentDTMF], 
+    [Vw_TroubleTicket].[memUserName] AS [memUserName], 
+    [Vw_TroubleTicket].[memFullName] AS [memFullName], 
+    [Vw_TroubleTicket].[memFullName2] AS [memFullName2], 
+    [Vw_TroubleTicket].[updatedName] AS [updatedName], 
+    [Vw_TroubleTicket].[tblAddedName] AS [tblAddedName], 
+    [Vw_TroubleTicket].[memFax] AS [memFax], 
+    [Vw_TroubleTicket].[saleman] AS [saleman], 
+    [Vw_TroubleTicket].[CampaignISN] AS [CampaignISN], 
+    [Vw_TroubleTicket].[cpnName] AS [cpnName], 
+    [Vw_TroubleTicket].[cpnDID] AS [cpnDID], 
+    [Vw_TroubleTicket].[DealerISN] AS [DealerISN], 
+    [Vw_TroubleTicket].[Dealer] AS [Dealer], 
+    [Vw_TroubleTicket].[tblDescExt] AS [tblDescExt]
+    FROM [dbo].[Vw_TroubleTicket] AS [Vw_TroubleTicket]</DefiningQuery>
           </EntitySet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -218,6 +372,22 @@ warning 6002: The table/view 'ROI.dbo.Vw_PremierMessage' does not have a primary
           <FunctionImport Name="xp_client_profile_requestchange">
             <Parameter Name="MemberISN" Mode="In" Type="Int32" />
             <Parameter Name="Content" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="xp_complaint_ins">
+            <Parameter Name="MemberISN" Mode="In" Type="Int32" />
+            <Parameter Name="Complaint" Mode="In" Type="String" />
+            <Parameter Name="addedBy" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="Vw_TroubleTicket" EntityType="ROIModel.Vw_TroubleTicket" />
+          <EntitySet Name="Vw_DebtExt_Creditor" EntityType="ROIModel.Vw_DebtExt_Creditor" />
+          <FunctionImport Name="xp_debtext_document_signature_upd">
+            <Parameter Name="DocumentISN" Mode="In" Type="Int32" />
+            <Parameter Name="docFileName" Mode="In" Type="String" />
+            <Parameter Name="docSize" Mode="In" Type="Int32" />
+            <Parameter Name="docSignatureDate" Mode="In" Type="DateTime" />
+            <Parameter Name="docSignatureIP" Mode="In" Type="String" />
+            <Parameter Name="ClientInfo" Mode="In" Type="String" />
+            <Parameter Name="updatedBy" Mode="In" Type="Int32" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="xp_debtuser_getinfo_Result">
@@ -356,6 +526,76 @@ warning 6002: The table/view 'ROI.dbo.Vw_PremierMessage' does not have a primary
           <Property Name="updatedDate" Type="DateTime" Precision="3" />
           <Property Name="updatedBy" Type="Int32" />
           <Property Name="ClientRead" Type="Byte" />
+        </EntityType>
+        <EntityType Name="Vw_TroubleTicket">
+          <Key>
+            <PropertyRef Name="TroubleTicketISN" />
+            <PropertyRef Name="saleman" />
+          </Key>
+          <Property Name="TroubleTicketISN" Type="Int32" Nullable="false" />
+          <Property Name="MemberISN" Type="Int32" />
+          <Property Name="CallDetailISN" Type="Int32" />
+          <Property Name="CallID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="PinNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Destination" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="tblAddedDate" Type="DateTime" Precision="3" />
+          <Property Name="tblAddedBy" Type="Int32" />
+          <Property Name="tblSubject" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="tblDesc" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="tblStatus" Type="Int16" />
+          <Property Name="tblResult" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="tblAttachFile" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="updatedDate" Type="DateTime" Precision="3" />
+          <Property Name="updatedBy" Type="Int32" />
+          <Property Name="tblDate" Type="DateTime" Precision="3" />
+          <Property Name="tblCode" Type="String" MaxLength="4" FixedLength="true" Unicode="false" />
+          <Property Name="LeadISN" Type="Int32" />
+          <Property Name="tblLeadPhone" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="tblAgentPhone" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="tblAgentDTMF" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="memUserName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="memFullName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="memFullName2" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="updatedName" Type="String" MaxLength="66" FixedLength="false" Unicode="true" />
+          <Property Name="tblAddedName" Type="String" MaxLength="66" FixedLength="false" Unicode="true" />
+          <Property Name="memFax" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="saleman" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="CampaignISN" Type="Int32" />
+          <Property Name="cpnName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="cpnDID" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="DealerISN" Type="Int32" />
+          <Property Name="Dealer" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="tblDescExt" Type="String" MaxLength="1200" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Vw_DebtExt_Creditor">
+          <Key>
+            <PropertyRef Name="CreditorISN" />
+            <PropertyRef Name="DebtRemoved" />
+          </Key>
+          <Property Name="CreditorISN" Type="Int32" Nullable="false" />
+          <Property Name="MemberISN" Type="Int32" />
+          <Property Name="cdtName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="cdtAcctNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="cdtBalance" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="updatedDate" Type="DateTime" Precision="3" />
+          <Property Name="updatedBy" Type="Int32" />
+          <Property Name="cdtType" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="cdtWhose" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="addedDate" Type="DateTime" Precision="3" />
+          <Property Name="addedBy" Type="Int32" />
+          <Property Name="cdtIsPush" Type="Byte" />
+          <Property Name="cdtSource" Type="Byte" />
+          <Property Name="PCreditorISN" Type="Int32" />
+          <Property Name="cdtDelinquent" Type="Int32" />
+          <Property Name="addedUserName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="updatedName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Creditor" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CollectorISN" Type="Int32" />
+          <Property Name="cltAcctNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DebtStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="cltName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Graduation" Type="DateTime" Precision="3" />
+          <Property Name="DebtRemoved" Type="Int32" Nullable="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -513,6 +753,78 @@ warning 6002: The table/view 'ROI.dbo.Vw_PremierMessage' does not have a primary
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="xp_client_profile_requestchange" FunctionName="ROIModel.Store.xp_client_profile_requestchange" />
+          <FunctionImportMapping FunctionImportName="xp_complaint_ins" FunctionName="ROIModel.Store.xp_complaint_ins" />
+          <EntitySetMapping Name="Vw_TroubleTicket">
+            <EntityTypeMapping TypeName="ROIModel.Vw_TroubleTicket">
+              <MappingFragment StoreEntitySet="Vw_TroubleTicket">
+                <ScalarProperty Name="tblDescExt" ColumnName="tblDescExt" />
+                <ScalarProperty Name="Dealer" ColumnName="Dealer" />
+                <ScalarProperty Name="DealerISN" ColumnName="DealerISN" />
+                <ScalarProperty Name="cpnDID" ColumnName="cpnDID" />
+                <ScalarProperty Name="cpnName" ColumnName="cpnName" />
+                <ScalarProperty Name="CampaignISN" ColumnName="CampaignISN" />
+                <ScalarProperty Name="saleman" ColumnName="saleman" />
+                <ScalarProperty Name="memFax" ColumnName="memFax" />
+                <ScalarProperty Name="tblAddedName" ColumnName="tblAddedName" />
+                <ScalarProperty Name="updatedName" ColumnName="updatedName" />
+                <ScalarProperty Name="memFullName2" ColumnName="memFullName2" />
+                <ScalarProperty Name="memFullName" ColumnName="memFullName" />
+                <ScalarProperty Name="memUserName" ColumnName="memUserName" />
+                <ScalarProperty Name="tblAgentDTMF" ColumnName="tblAgentDTMF" />
+                <ScalarProperty Name="tblAgentPhone" ColumnName="tblAgentPhone" />
+                <ScalarProperty Name="tblLeadPhone" ColumnName="tblLeadPhone" />
+                <ScalarProperty Name="LeadISN" ColumnName="LeadISN" />
+                <ScalarProperty Name="tblCode" ColumnName="tblCode" />
+                <ScalarProperty Name="tblDate" ColumnName="tblDate" />
+                <ScalarProperty Name="updatedBy" ColumnName="updatedBy" />
+                <ScalarProperty Name="updatedDate" ColumnName="updatedDate" />
+                <ScalarProperty Name="tblAttachFile" ColumnName="tblAttachFile" />
+                <ScalarProperty Name="tblResult" ColumnName="tblResult" />
+                <ScalarProperty Name="tblStatus" ColumnName="tblStatus" />
+                <ScalarProperty Name="tblDesc" ColumnName="tblDesc" />
+                <ScalarProperty Name="tblSubject" ColumnName="tblSubject" />
+                <ScalarProperty Name="tblAddedBy" ColumnName="tblAddedBy" />
+                <ScalarProperty Name="tblAddedDate" ColumnName="tblAddedDate" />
+                <ScalarProperty Name="Destination" ColumnName="Destination" />
+                <ScalarProperty Name="PinNumber" ColumnName="PinNumber" />
+                <ScalarProperty Name="CallID" ColumnName="CallID" />
+                <ScalarProperty Name="CallDetailISN" ColumnName="CallDetailISN" />
+                <ScalarProperty Name="MemberISN" ColumnName="MemberISN" />
+                <ScalarProperty Name="TroubleTicketISN" ColumnName="TroubleTicketISN" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Vw_DebtExt_Creditor">
+            <EntityTypeMapping TypeName="ROIModel.Vw_DebtExt_Creditor">
+              <MappingFragment StoreEntitySet="Vw_DebtExt_Creditor">
+                <ScalarProperty Name="DebtRemoved" ColumnName="DebtRemoved" />
+                <ScalarProperty Name="Graduation" ColumnName="Graduation" />
+                <ScalarProperty Name="cltName" ColumnName="cltName" />
+                <ScalarProperty Name="DebtStatus" ColumnName="DebtStatus" />
+                <ScalarProperty Name="cltAcctNo" ColumnName="cltAcctNo" />
+                <ScalarProperty Name="CollectorISN" ColumnName="CollectorISN" />
+                <ScalarProperty Name="Creditor" ColumnName="Creditor" />
+                <ScalarProperty Name="updatedName" ColumnName="updatedName" />
+                <ScalarProperty Name="addedUserName" ColumnName="addedUserName" />
+                <ScalarProperty Name="cdtDelinquent" ColumnName="cdtDelinquent" />
+                <ScalarProperty Name="PCreditorISN" ColumnName="PCreditorISN" />
+                <ScalarProperty Name="cdtSource" ColumnName="cdtSource" />
+                <ScalarProperty Name="cdtIsPush" ColumnName="cdtIsPush" />
+                <ScalarProperty Name="addedBy" ColumnName="addedBy" />
+                <ScalarProperty Name="addedDate" ColumnName="addedDate" />
+                <ScalarProperty Name="cdtWhose" ColumnName="cdtWhose" />
+                <ScalarProperty Name="cdtType" ColumnName="cdtType" />
+                <ScalarProperty Name="updatedBy" ColumnName="updatedBy" />
+                <ScalarProperty Name="updatedDate" ColumnName="updatedDate" />
+                <ScalarProperty Name="cdtBalance" ColumnName="cdtBalance" />
+                <ScalarProperty Name="cdtAcctNo" ColumnName="cdtAcctNo" />
+                <ScalarProperty Name="cdtName" ColumnName="cdtName" />
+                <ScalarProperty Name="MemberISN" ColumnName="MemberISN" />
+                <ScalarProperty Name="CreditorISN" ColumnName="CreditorISN" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="xp_debtext_document_signature_upd" FunctionName="ROIModel.Store.xp_debtext_document_signature_upd" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

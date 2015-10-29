@@ -29,6 +29,8 @@ namespace debt_fe.Models
     
         public virtual DbSet<Vw_PremierMessage> Vw_PremierMessage { get; set; }
         public virtual DbSet<PremierMessage> PremierMessages { get; set; }
+        public virtual DbSet<Vw_TroubleTicket> Vw_TroubleTicket { get; set; }
+        public virtual DbSet<Vw_DebtExt_Creditor> Vw_DebtExt_Creditor { get; set; }
     
         public virtual int xp_debtext_client_insupd2(Nullable<int> memberISN, Nullable<int> salemanISN, Nullable<int> campaignISN, string memUserName, string memPassword, string memFax, string memFirstName, string memLastName, string memPhone, string memEmail, string memAddress, string memZip, string memCity, string memState, string memCompanyName, string memTitle, string memIM, Nullable<byte> memStatus, string memComment, Nullable<decimal> memCreditLine, Nullable<int> dealerISN, string aNI, Nullable<double> memCreditScore, Nullable<decimal> memApprovalPayment, Nullable<decimal> memApprovalAmount, string memSSN, Nullable<byte> memConnectedLO, Nullable<int> updatedBy, Nullable<byte> memTradeVehicle, string memYearVehicle, string memManufacturerVehicle, string memModelVehicle, Nullable<decimal> memMonthlyPayment, string memPolycomID, string memWeekDay, Nullable<decimal> memHomeValue, Nullable<decimal> memCurrentLeftOnLoan, Nullable<double> memInterestRate, Nullable<decimal> memMonthlyPaymentM, Nullable<decimal> memAppoxTotalDebt, string memTypeOfLoan, string memAnyLatePayment, string memApprovalOfRCredit, string memIsYourCreditGreat, string memTimeZoneFull, string memDomainName, Nullable<decimal> memPayOffAmount, Nullable<decimal> balance, string ratePlan, Nullable<System.DateTime> memDOB, Nullable<int> lastStepFlag, Nullable<byte> memReadyPurchaseNow, string xmlInfoExt, Nullable<int> phoneRechargeNo, string memDropID, Nullable<int> accountManagerISN)
         {
@@ -326,6 +328,56 @@ namespace debt_fe.Models
                 new ObjectParameter("Content", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("xp_client_profile_requestchange", memberISNParameter, contentParameter);
+        }
+    
+        public virtual int xp_complaint_ins(Nullable<int> memberISN, string complaint, Nullable<int> addedBy)
+        {
+            var memberISNParameter = memberISN.HasValue ?
+                new ObjectParameter("MemberISN", memberISN) :
+                new ObjectParameter("MemberISN", typeof(int));
+    
+            var complaintParameter = complaint != null ?
+                new ObjectParameter("Complaint", complaint) :
+                new ObjectParameter("Complaint", typeof(string));
+    
+            var addedByParameter = addedBy.HasValue ?
+                new ObjectParameter("addedBy", addedBy) :
+                new ObjectParameter("addedBy", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("xp_complaint_ins", memberISNParameter, complaintParameter, addedByParameter);
+        }
+    
+        public virtual int xp_debtext_document_signature_upd(Nullable<int> documentISN, string docFileName, Nullable<int> docSize, Nullable<System.DateTime> docSignatureDate, string docSignatureIP, string clientInfo, Nullable<int> updatedBy)
+        {
+            var documentISNParameter = documentISN.HasValue ?
+                new ObjectParameter("DocumentISN", documentISN) :
+                new ObjectParameter("DocumentISN", typeof(int));
+    
+            var docFileNameParameter = docFileName != null ?
+                new ObjectParameter("docFileName", docFileName) :
+                new ObjectParameter("docFileName", typeof(string));
+    
+            var docSizeParameter = docSize.HasValue ?
+                new ObjectParameter("docSize", docSize) :
+                new ObjectParameter("docSize", typeof(int));
+    
+            var docSignatureDateParameter = docSignatureDate.HasValue ?
+                new ObjectParameter("docSignatureDate", docSignatureDate) :
+                new ObjectParameter("docSignatureDate", typeof(System.DateTime));
+    
+            var docSignatureIPParameter = docSignatureIP != null ?
+                new ObjectParameter("docSignatureIP", docSignatureIP) :
+                new ObjectParameter("docSignatureIP", typeof(string));
+    
+            var clientInfoParameter = clientInfo != null ?
+                new ObjectParameter("ClientInfo", clientInfo) :
+                new ObjectParameter("ClientInfo", typeof(string));
+    
+            var updatedByParameter = updatedBy.HasValue ?
+                new ObjectParameter("updatedBy", updatedBy) :
+                new ObjectParameter("updatedBy", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("xp_debtext_document_signature_upd", documentISNParameter, docFileNameParameter, docSizeParameter, docSignatureDateParameter, docSignatureIPParameter, clientInfoParameter, updatedByParameter);
         }
     }
 }

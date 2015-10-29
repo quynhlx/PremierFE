@@ -193,6 +193,8 @@ namespace debt_fe.Businesses
             parameters.Add("docSignatureStatus", document.IsSignatureDocument);
             parameters.Add("CreditorISN", document.CreditorISN);
             parameters.Add("updatedBy", document.UpdatedBy);
+            parameters.Add("docSendIP", document.SendIP);
+            parameters.Add("docSignatureIP", document.SignatureIP);
             // parameters.Add("docAddedBy", document.AddedBy);
 
             // _logger.InfoFormat("");
@@ -212,14 +214,14 @@ namespace debt_fe.Businesses
         /// <param name="filename">a string of download file</param>
         /// <param name="documentId">a number of document isn</param>
         /// <returns></returns>
-        public bool EditSignatureDocument(string filename, int documentId)
+        public bool EditSignatureDocument(string filename, int documentId, string IP)
         {
-            var query = "update Vw_DebtExt_Document set docFileName=@filename where DocumentISN=@docId";
+            var query = "update Vw_DebtExt_Document set docFileName=@filename, docSignatureIP=@SendIP where DocumentISN=@docId";
 
             var parameters = new Hashtable();
             parameters.Add("filename",filename);
             parameters.Add("docId",documentId);
-
+            parameters.Add("SendIP", IP);
             try
             {
                 _data.ExecuteNonQuery(query, parameters);

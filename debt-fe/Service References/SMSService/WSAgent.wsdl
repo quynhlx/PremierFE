@@ -1,0 +1,786 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="SendSMS">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="xmlParam" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendSMSResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SendSMSResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendSMSExt">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="username" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="startTime_yyyyMMddHHmm" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="endTime_yyyyMMddHHmm" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="fromEmail" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="phone" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="priority" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="message" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="callbackEmail" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="callbackUrl" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="reference" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="information" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendSMSExtResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SendSMSExtResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetJob">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="jobISN" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetJobResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetJobResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:element ref="s:schema" />
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetLastestJobByPhone">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="phone" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetLastestJobByPhoneResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetLastestJobByPhoneResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:element ref="s:schema" />
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="MergeScheduleExt">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="blastName" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="order" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="type" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="start" type="s:long" />
+            <s:element minOccurs="1" maxOccurs="1" name="speed" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="emailFrom" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="emailTo" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="emailPriority" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="emailSubject" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="comment" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="MergeScheduleExtResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="MergeScheduleExtResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SetScheduleExt">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="blastName" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="order" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="type" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="start" type="s:long" />
+            <s:element minOccurs="1" maxOccurs="1" name="speed" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="smsPhone" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="smsPriority" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="smsMessage" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="comment" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SetScheduleExtResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SetScheduleExtResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ClearScheduleExt">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="blastName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ClearScheduleExtResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ClearScheduleExtResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetIncomingMessage">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="messageISN" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetIncomingMessageResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetIncomingMessageResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="string" nillable="true" type="s:string" />
+      <s:element name="DataSet" nillable="true">
+        <s:complexType>
+          <s:sequence>
+            <s:element ref="s:schema" />
+            <s:any />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="SendSMSSoapIn">
+    <wsdl:part name="parameters" element="tns:SendSMS" />
+  </wsdl:message>
+  <wsdl:message name="SendSMSSoapOut">
+    <wsdl:part name="parameters" element="tns:SendSMSResponse" />
+  </wsdl:message>
+  <wsdl:message name="SendSMSExtSoapIn">
+    <wsdl:part name="parameters" element="tns:SendSMSExt" />
+  </wsdl:message>
+  <wsdl:message name="SendSMSExtSoapOut">
+    <wsdl:part name="parameters" element="tns:SendSMSExtResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetJobSoapIn">
+    <wsdl:part name="parameters" element="tns:GetJob" />
+  </wsdl:message>
+  <wsdl:message name="GetJobSoapOut">
+    <wsdl:part name="parameters" element="tns:GetJobResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetLastestJobByPhoneSoapIn">
+    <wsdl:part name="parameters" element="tns:GetLastestJobByPhone" />
+  </wsdl:message>
+  <wsdl:message name="GetLastestJobByPhoneSoapOut">
+    <wsdl:part name="parameters" element="tns:GetLastestJobByPhoneResponse" />
+  </wsdl:message>
+  <wsdl:message name="MergeScheduleExtSoapIn">
+    <wsdl:part name="parameters" element="tns:MergeScheduleExt" />
+  </wsdl:message>
+  <wsdl:message name="MergeScheduleExtSoapOut">
+    <wsdl:part name="parameters" element="tns:MergeScheduleExtResponse" />
+  </wsdl:message>
+  <wsdl:message name="SetScheduleExtSoapIn">
+    <wsdl:part name="parameters" element="tns:SetScheduleExt" />
+  </wsdl:message>
+  <wsdl:message name="SetScheduleExtSoapOut">
+    <wsdl:part name="parameters" element="tns:SetScheduleExtResponse" />
+  </wsdl:message>
+  <wsdl:message name="ClearScheduleExtSoapIn">
+    <wsdl:part name="parameters" element="tns:ClearScheduleExt" />
+  </wsdl:message>
+  <wsdl:message name="ClearScheduleExtSoapOut">
+    <wsdl:part name="parameters" element="tns:ClearScheduleExtResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetIncomingMessageSoapIn">
+    <wsdl:part name="parameters" element="tns:GetIncomingMessage" />
+  </wsdl:message>
+  <wsdl:message name="GetIncomingMessageSoapOut">
+    <wsdl:part name="parameters" element="tns:GetIncomingMessageResponse" />
+  </wsdl:message>
+  <wsdl:message name="SendSMSHttpGetIn">
+    <wsdl:part name="xmlParam" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SendSMSHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="SendSMSExtHttpGetIn">
+    <wsdl:part name="username" type="s:string" />
+    <wsdl:part name="password" type="s:string" />
+    <wsdl:part name="startTime_yyyyMMddHHmm" type="s:string" />
+    <wsdl:part name="endTime_yyyyMMddHHmm" type="s:string" />
+    <wsdl:part name="fromEmail" type="s:string" />
+    <wsdl:part name="phone" type="s:string" />
+    <wsdl:part name="priority" type="s:string" />
+    <wsdl:part name="message" type="s:string" />
+    <wsdl:part name="callbackEmail" type="s:string" />
+    <wsdl:part name="callbackUrl" type="s:string" />
+    <wsdl:part name="reference" type="s:string" />
+    <wsdl:part name="information" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SendSMSExtHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetJobHttpGetIn">
+    <wsdl:part name="jobISN" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetJobHttpGetOut">
+    <wsdl:part name="Body" element="tns:DataSet" />
+  </wsdl:message>
+  <wsdl:message name="GetLastestJobByPhoneHttpGetIn">
+    <wsdl:part name="phone" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetLastestJobByPhoneHttpGetOut">
+    <wsdl:part name="Body" element="tns:DataSet" />
+  </wsdl:message>
+  <wsdl:message name="MergeScheduleExtHttpGetIn">
+    <wsdl:part name="blastName" type="s:string" />
+    <wsdl:part name="order" type="s:string" />
+    <wsdl:part name="type" type="s:string" />
+    <wsdl:part name="start" type="s:string" />
+    <wsdl:part name="speed" type="s:string" />
+    <wsdl:part name="emailFrom" type="s:string" />
+    <wsdl:part name="emailTo" type="s:string" />
+    <wsdl:part name="emailPriority" type="s:string" />
+    <wsdl:part name="emailSubject" type="s:string" />
+    <wsdl:part name="comment" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="MergeScheduleExtHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="SetScheduleExtHttpGetIn">
+    <wsdl:part name="blastName" type="s:string" />
+    <wsdl:part name="order" type="s:string" />
+    <wsdl:part name="type" type="s:string" />
+    <wsdl:part name="start" type="s:string" />
+    <wsdl:part name="speed" type="s:string" />
+    <wsdl:part name="smsPhone" type="s:string" />
+    <wsdl:part name="smsPriority" type="s:string" />
+    <wsdl:part name="smsMessage" type="s:string" />
+    <wsdl:part name="comment" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SetScheduleExtHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="ClearScheduleExtHttpGetIn">
+    <wsdl:part name="blastName" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ClearScheduleExtHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetIncomingMessageHttpGetIn">
+    <wsdl:part name="messageISN" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetIncomingMessageHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="SendSMSHttpPostIn">
+    <wsdl:part name="xmlParam" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SendSMSHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="SendSMSExtHttpPostIn">
+    <wsdl:part name="username" type="s:string" />
+    <wsdl:part name="password" type="s:string" />
+    <wsdl:part name="startTime_yyyyMMddHHmm" type="s:string" />
+    <wsdl:part name="endTime_yyyyMMddHHmm" type="s:string" />
+    <wsdl:part name="fromEmail" type="s:string" />
+    <wsdl:part name="phone" type="s:string" />
+    <wsdl:part name="priority" type="s:string" />
+    <wsdl:part name="message" type="s:string" />
+    <wsdl:part name="callbackEmail" type="s:string" />
+    <wsdl:part name="callbackUrl" type="s:string" />
+    <wsdl:part name="reference" type="s:string" />
+    <wsdl:part name="information" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SendSMSExtHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetJobHttpPostIn">
+    <wsdl:part name="jobISN" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetJobHttpPostOut">
+    <wsdl:part name="Body" element="tns:DataSet" />
+  </wsdl:message>
+  <wsdl:message name="GetLastestJobByPhoneHttpPostIn">
+    <wsdl:part name="phone" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetLastestJobByPhoneHttpPostOut">
+    <wsdl:part name="Body" element="tns:DataSet" />
+  </wsdl:message>
+  <wsdl:message name="MergeScheduleExtHttpPostIn">
+    <wsdl:part name="blastName" type="s:string" />
+    <wsdl:part name="order" type="s:string" />
+    <wsdl:part name="type" type="s:string" />
+    <wsdl:part name="start" type="s:string" />
+    <wsdl:part name="speed" type="s:string" />
+    <wsdl:part name="emailFrom" type="s:string" />
+    <wsdl:part name="emailTo" type="s:string" />
+    <wsdl:part name="emailPriority" type="s:string" />
+    <wsdl:part name="emailSubject" type="s:string" />
+    <wsdl:part name="comment" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="MergeScheduleExtHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="SetScheduleExtHttpPostIn">
+    <wsdl:part name="blastName" type="s:string" />
+    <wsdl:part name="order" type="s:string" />
+    <wsdl:part name="type" type="s:string" />
+    <wsdl:part name="start" type="s:string" />
+    <wsdl:part name="speed" type="s:string" />
+    <wsdl:part name="smsPhone" type="s:string" />
+    <wsdl:part name="smsPriority" type="s:string" />
+    <wsdl:part name="smsMessage" type="s:string" />
+    <wsdl:part name="comment" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SetScheduleExtHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="ClearScheduleExtHttpPostIn">
+    <wsdl:part name="blastName" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ClearScheduleExtHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetIncomingMessageHttpPostIn">
+    <wsdl:part name="messageISN" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetIncomingMessageHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:portType name="WSAgentSoap">
+    <wsdl:operation name="SendSMS">
+      <wsdl:input message="tns:SendSMSSoapIn" />
+      <wsdl:output message="tns:SendSMSSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SendSMSExt">
+      <wsdl:input message="tns:SendSMSExtSoapIn" />
+      <wsdl:output message="tns:SendSMSExtSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetJob">
+      <wsdl:input message="tns:GetJobSoapIn" />
+      <wsdl:output message="tns:GetJobSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetLastestJobByPhone">
+      <wsdl:input message="tns:GetLastestJobByPhoneSoapIn" />
+      <wsdl:output message="tns:GetLastestJobByPhoneSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="MergeScheduleExt">
+      <wsdl:input message="tns:MergeScheduleExtSoapIn" />
+      <wsdl:output message="tns:MergeScheduleExtSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SetScheduleExt">
+      <wsdl:input message="tns:SetScheduleExtSoapIn" />
+      <wsdl:output message="tns:SetScheduleExtSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ClearScheduleExt">
+      <wsdl:input message="tns:ClearScheduleExtSoapIn" />
+      <wsdl:output message="tns:ClearScheduleExtSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetIncomingMessage">
+      <wsdl:input message="tns:GetIncomingMessageSoapIn" />
+      <wsdl:output message="tns:GetIncomingMessageSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="WSAgentHttpGet">
+    <wsdl:operation name="SendSMS">
+      <wsdl:input message="tns:SendSMSHttpGetIn" />
+      <wsdl:output message="tns:SendSMSHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SendSMSExt">
+      <wsdl:input message="tns:SendSMSExtHttpGetIn" />
+      <wsdl:output message="tns:SendSMSExtHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetJob">
+      <wsdl:input message="tns:GetJobHttpGetIn" />
+      <wsdl:output message="tns:GetJobHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetLastestJobByPhone">
+      <wsdl:input message="tns:GetLastestJobByPhoneHttpGetIn" />
+      <wsdl:output message="tns:GetLastestJobByPhoneHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="MergeScheduleExt">
+      <wsdl:input message="tns:MergeScheduleExtHttpGetIn" />
+      <wsdl:output message="tns:MergeScheduleExtHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SetScheduleExt">
+      <wsdl:input message="tns:SetScheduleExtHttpGetIn" />
+      <wsdl:output message="tns:SetScheduleExtHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ClearScheduleExt">
+      <wsdl:input message="tns:ClearScheduleExtHttpGetIn" />
+      <wsdl:output message="tns:ClearScheduleExtHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetIncomingMessage">
+      <wsdl:input message="tns:GetIncomingMessageHttpGetIn" />
+      <wsdl:output message="tns:GetIncomingMessageHttpGetOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="WSAgentHttpPost">
+    <wsdl:operation name="SendSMS">
+      <wsdl:input message="tns:SendSMSHttpPostIn" />
+      <wsdl:output message="tns:SendSMSHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SendSMSExt">
+      <wsdl:input message="tns:SendSMSExtHttpPostIn" />
+      <wsdl:output message="tns:SendSMSExtHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetJob">
+      <wsdl:input message="tns:GetJobHttpPostIn" />
+      <wsdl:output message="tns:GetJobHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetLastestJobByPhone">
+      <wsdl:input message="tns:GetLastestJobByPhoneHttpPostIn" />
+      <wsdl:output message="tns:GetLastestJobByPhoneHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="MergeScheduleExt">
+      <wsdl:input message="tns:MergeScheduleExtHttpPostIn" />
+      <wsdl:output message="tns:MergeScheduleExtHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SetScheduleExt">
+      <wsdl:input message="tns:SetScheduleExtHttpPostIn" />
+      <wsdl:output message="tns:SetScheduleExtHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ClearScheduleExt">
+      <wsdl:input message="tns:ClearScheduleExtHttpPostIn" />
+      <wsdl:output message="tns:ClearScheduleExtHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetIncomingMessage">
+      <wsdl:input message="tns:GetIncomingMessageHttpPostIn" />
+      <wsdl:output message="tns:GetIncomingMessageHttpPostOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="WSAgentSoap" type="tns:WSAgentSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="SendSMS">
+      <soap:operation soapAction="http://tempuri.org/SendSMS" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendSMSExt">
+      <soap:operation soapAction="http://tempuri.org/SendSMSExt" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetJob">
+      <soap:operation soapAction="http://tempuri.org/GetJob" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLastestJobByPhone">
+      <soap:operation soapAction="http://tempuri.org/GetLastestJobByPhone" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MergeScheduleExt">
+      <soap:operation soapAction="http://tempuri.org/MergeScheduleExt" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetScheduleExt">
+      <soap:operation soapAction="http://tempuri.org/SetScheduleExt" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ClearScheduleExt">
+      <soap:operation soapAction="http://tempuri.org/ClearScheduleExt" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetIncomingMessage">
+      <soap:operation soapAction="http://tempuri.org/GetIncomingMessage" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="WSAgentSoap12" type="tns:WSAgentSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="SendSMS">
+      <soap12:operation soapAction="http://tempuri.org/SendSMS" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendSMSExt">
+      <soap12:operation soapAction="http://tempuri.org/SendSMSExt" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetJob">
+      <soap12:operation soapAction="http://tempuri.org/GetJob" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLastestJobByPhone">
+      <soap12:operation soapAction="http://tempuri.org/GetLastestJobByPhone" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MergeScheduleExt">
+      <soap12:operation soapAction="http://tempuri.org/MergeScheduleExt" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetScheduleExt">
+      <soap12:operation soapAction="http://tempuri.org/SetScheduleExt" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ClearScheduleExt">
+      <soap12:operation soapAction="http://tempuri.org/ClearScheduleExt" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetIncomingMessage">
+      <soap12:operation soapAction="http://tempuri.org/GetIncomingMessage" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="WSAgentHttpGet" type="tns:WSAgentHttpGet">
+    <http:binding verb="GET" />
+    <wsdl:operation name="SendSMS">
+      <http:operation location="/SendSMS" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendSMSExt">
+      <http:operation location="/SendSMSExt" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetJob">
+      <http:operation location="/GetJob" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLastestJobByPhone">
+      <http:operation location="/GetLastestJobByPhone" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MergeScheduleExt">
+      <http:operation location="/MergeScheduleExt" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetScheduleExt">
+      <http:operation location="/SetScheduleExt" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ClearScheduleExt">
+      <http:operation location="/ClearScheduleExt" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetIncomingMessage">
+      <http:operation location="/GetIncomingMessage" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="WSAgentHttpPost" type="tns:WSAgentHttpPost">
+    <http:binding verb="POST" />
+    <wsdl:operation name="SendSMS">
+      <http:operation location="/SendSMS" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendSMSExt">
+      <http:operation location="/SendSMSExt" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetJob">
+      <http:operation location="/GetJob" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLastestJobByPhone">
+      <http:operation location="/GetLastestJobByPhone" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MergeScheduleExt">
+      <http:operation location="/MergeScheduleExt" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetScheduleExt">
+      <http:operation location="/SetScheduleExt" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ClearScheduleExt">
+      <http:operation location="/ClearScheduleExt" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetIncomingMessage">
+      <http:operation location="/GetIncomingMessage" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="WSAgent">
+    <wsdl:port name="WSAgentSoap" binding="tns:WSAgentSoap">
+      <soap:address location="http://trackmyroi.com/smsblast/WSAgent.asmx" />
+    </wsdl:port>
+    <wsdl:port name="WSAgentSoap12" binding="tns:WSAgentSoap12">
+      <soap12:address location="http://trackmyroi.com/smsblast/WSAgent.asmx" />
+    </wsdl:port>
+    <wsdl:port name="WSAgentHttpGet" binding="tns:WSAgentHttpGet">
+      <http:address location="http://trackmyroi.com/smsblast/WSAgent.asmx" />
+    </wsdl:port>
+    <wsdl:port name="WSAgentHttpPost" binding="tns:WSAgentHttpPost">
+      <http:address location="http://trackmyroi.com/smsblast/WSAgent.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

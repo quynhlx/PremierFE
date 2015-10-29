@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var BaseView = (debt_fe.Models.ViewModels.BaseViewModel)ViewBag.BaseViewModel;
+}
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -14,15 +17,22 @@
 <body>
 
     <div class="row-fluid">
+        <div class="modal fade" id="modal-complaint">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content no-border-radius " id="modal-result">
+                    <!-- load modal content here -->
+                </div>
+            </div>
+        </div>
         <div class="container posCenter float-Left whiteBackground noPaddingLR">
             <div class="container-fluid noPaddingLR">
                 <div class="navLeft pull-left ">
                     <div class="logo pull-left"><a href="#"><img src='@Url.Content("~/Content/images/logo.png")' /></a></div>
                     <div class="clear">
-                        @Html.Partial("_Menu")
+                        @Html.Partial("_Menu", @BaseView.ManagerViewModel)
                     </div>
                 </div>
-                <div class="Rcontent pull-left">
+                <div class="Rcontent pull-left ">
                     <div class="blueBackground pull-left col-lg-12 pv++">
                         <div class="col-lg-6 mart302 marb302">
                             <h3 class="white text-uppercase">@ViewBag.Title</h3>
@@ -31,7 +41,13 @@
                             @Html.Partial("_LoginPartial")
                         </div>
                     </div>
-
+                    <div class="graybackground p col-lg-12 ">
+                        <div class="row">
+                            <h4 class="m0 colorred col-lg-6 text-center">Draft Date: @BaseView.HeaderViewModel.DraftDateStr</h4>
+                            <h4 class="m0 colorred col-lg-6 text-center">Draft Amount: @BaseView.HeaderViewModel.DraftAmountStr</h4>
+                        </div>
+                        
+                    </div>
                     @RenderBody()
                     <!--End content-->
                 </div>
@@ -75,7 +91,17 @@
     <script src="~/Scripts/app/app.js"></script>
 
     @RenderSection("scripts", required: false)
-
+    <script>
+        $(".btn-complaint").click(function () {
+            var href = $(this).attr('data-href');
+            $.ajax({
+                url: href, success: function (result) {
+                    $('#modal-complaint').modal('show');
+                    $("#modal-result").html(result);
+                }
+            });
+        });
+    </script>
 
 </body>
 </html>

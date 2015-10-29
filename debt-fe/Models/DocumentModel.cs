@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using debt_fe.Models.ViewModels;
 
 namespace debt_fe.Models
 {
-	public class DocumentModel
+	public class DocumentModel : BaseViewModel
 	{
+        
         public int ID { get; set; }
         public int MemberISN { get; set; }
         public string FileName { get; set; } // docFileName
@@ -27,7 +29,8 @@ namespace debt_fe.Models
 		public string LastAction { get; set; }
 		public string SignatureStatus { get; set; }
 		public bool IsSignatureDocument { get; set; }
-
+        public string SendIP { set; get; }
+        public string SignatureIP { set; get; }
 
         private string _customFileName;
 
@@ -37,4 +40,5 @@ namespace debt_fe.Models
             set { _customFileName = value; }
         }
 	}
+   
 }

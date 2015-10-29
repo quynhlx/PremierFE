@@ -6,12 +6,12 @@ using System.Web.Mvc;
 
 namespace debt_fe.Controllers
 {
-    public class ActivityController : Controller
+    public class ActivityController : BaseController
     {
         // GET: Activity
         public ActionResult Index()
         {
-            if (Session["ManagementAccount"] == null)
+            if (MemberISN < 0)
             {
                 return RedirectToAction("Login", "Account");
             }

@@ -1,0 +1,51 @@
+﻿@using debt_fe.Models.ViewModels
+@model IEnumerable<AppointmentViewModel>
+@{
+    ViewBag.Title = "Appointment List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="col-md-12 mt+++">
+    <table class="table table-bordered" id="table-appointment">
+        <thead>
+            <tr>
+                <th>No.</th>
+                <th></th>
+                <th></th>
+                <th>Appointment Date Time</th>
+                <th>Status</th>
+                <th>Action</th>
+                <th>Type</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.No</td>
+                    <td><img src="~/Content/images/i_message.gif" /></td>
+                    <td><img src="~/Content/images/ico_test_caller_id.gif" /></td>
+                    <td>@item.Datetime</td>
+                    <td>@item.Status.ToString()</td>
+                    <td>@item.ActionStr</td>
+                    <td>@item.TypeStr</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+@section scripts {
+    <script>
+        $('#table-appointment').DataTable({
+            "pageLength": 5, // record per page
+            "lengthChange": false, // no record per page change
+            "info": false, // no entities info
+            "order": [[0, "asc"]], // set default sort by column 5 (added date)
+            aoColumnDefs: [{ "bSortable": false, "aTargets": [1,2] }] // disable sort in last column   
+        });
+        $('.dataTables_filter').find('input').addClass('form-control inline');
+        $(".menu > li").removeClass("active");
+        $('#menu-appoint').addClass("active");
+    </script>    
+}

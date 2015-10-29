@@ -1,4 +1,6 @@
-﻿@{
+﻿@model debt_fe.Models.ManagementAccountModel
+
+@{
     debt_fe.Models.ManagementAccountModel Acc = null;
     try
     {
@@ -14,7 +16,8 @@
     if (debt == null || string.IsNullOrEmpty(debt.Values["msgUnread"]))
     {
         numberUnread = 0;
-    }else
+    }
+    else
     {
         numberUnread = int.Parse(debt.Values["msgUnread"]);
     }
@@ -30,6 +33,7 @@
                 <li id="menu-info"><a href='@Url.Action("ContactInformation","Profile")' data-action="ContactInformation"><span class="glyphicon glyphicon-menu-right"></span> contact information</a></li>
             </ul>
         </li>*@
+    <li data-controller="Home" id="menu-appoint"><a href='@Url.Action("Index","Appointment")' data-action="Index"><span class="glyphicon glyphicon-usd"></span> Appointment List</a></li>
     <li data-controller="Document" id="menu-activity"><a href='@Url.Action("Index","Activity")' data-action="Index"><span class="glyphicon glyphicon-tasks"></span> Activity</a></li>
 
     <li data-controller="Document" id="menu-doc"><a href='@Url.Action("Index","Document")' data-action="Index"><span class="glyphicon glyphicon-file"></span> my documents</a></li>
@@ -39,12 +43,16 @@
 </ul>
 <div class="col-md-12 p+">
     <div class="border">
-        <h5 class="text-center"><strong>Contact Account Manager</strong></h5>
-        @if (Acc != null)
+
+        @if (Model != null)
         {
-            <p style="font-size: small">@Acc.FullName</p>
-    <p style="font-size: small">Phone#: @Acc.Phone</p>
-            <p style="font-size: small">Email: @Acc.Email</p>
+            <h5 class="text-center"><strong>Contact @Model.NameType</strong></h5>
+            <p style="font-size: small">@Model.FullName</p>
+            <p style="font-size: small">Phone#: @Model.Phone</p>
+            <p style="font-size: small">Email: @Model.Email</p>
         }
+    </div>
+    <div class="text-center">
+        <button data-href="@Url.Action("Complaint", "Home", new { returnUrl = string.Format("{0}", HttpContext.Current.Request.Url.AbsoluteUri) })" class="mt btn btn-warning btn-complaint">Submit Complaint</button>
     </div>
 </div>

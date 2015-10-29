@@ -12,64 +12,25 @@ using System.Threading;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web;
+using debt_fe.DataAccessHelper;
+using System.Data;
+using System.Collections;
 
 namespace debt_fe.Controllers
 {
-    [Authorize]
-    public class DocumentController : Controller
+    public class DocumentController : BaseController
     {
         private DocumentBusiness _docBusiness;
         private SignatureBusiness _signBusiness;
-
+        private DataProvider db;
+        PremierEntities _db = new PremierEntities();
         private static readonly ILog _logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
-        private int _memberISN;
-
-        public int MemberISN
-        {
-            get
-            {
-                
-				var debt = Request.Cookies["debt_extension"];
-				
-				if (debt == null || string.IsNullOrEmpty(debt.Values["memberId"]))
-				{
-					return -1;
-				}
-
-				var memberId = debt.Values["memberId"];
-
-				/*
-				if (string.IsNullOrEmpty(memberId))
-				{
-					return -2;
-				}
-				 */ 
-
-				return int.Parse(memberId);
-			}
-            set
-            {
-                _memberISN = value;
-
-                // Session["debt_member_isn"] = _memberISN;
-				var debt = Request.Cookies["debt_extension"];
-				if (debt==null)
-				{
-					debt = new HttpCookie("debt_extension");
-					debt.Expires = DateTime.Now.AddDays(7);					
-				}
-
-				debt.Values["memberId"] = _memberISN.ToString();
-
-				Response.AppendCookie(debt);
-            }
-        }
 
         public DocumentController()
         {
             _docBusiness = new DocumentBusiness();
             _signBusiness = new SignatureBusiness();
+            db = new DataProvider();
         }
 
         public ActionResult Index()
@@ -112,38 +73,6 @@ namespace debt_fe.Controllers
                 _logger.InfoFormat("url referred = {0}", urlPreferred);
             }
 
-            
-
-
-           
-            // TempData["info"] = "Hello world";
-
-            //
-            // add member isn to session
-            #region get member isn
-
-			// var memberISN = this.MemberISN;
-
-			/*
-            if (memberISN == null)
-            {
-				return RedirectToAction("Login", "Account");
-
-                
-				memberISN = this.MemberISN;
-
-                if (memberISN < 0)
-                {
-                    return RedirectToAction("Login", "Account");
-                }
-				
-            }
-            else
-            {
-                this.MemberISN = memberISN.Value;
-            } 
-			*/
-            #endregion
 
 			var memberId = this.MemberISN;
 
@@ -319,6 +248,8 @@ namespace debt_fe.Controllers
                 return RedirectToAction("Index");
             }
 
+            var UserIP = string.Empty;
+            UserIP = Request.ServerVariables["REMOTE_ADDR"];
             var document = new DocumentModel();
 
             document.Public = true;
@@ -326,7 +257,7 @@ namespace debt_fe.Controllers
             document.MemberISN = this.MemberISN;
             document.DocName = viewModel.DocName;
             document.Desc = viewModel.Notes;
-
+            document.SendIP = UserIP;
             if (viewModel.SelectedCreditorID != null)
             {
                 document.CreditorISN = viewModel.SelectedCreditorID.Value;
@@ -599,10 +530,7 @@ namespace debt_fe.Controllers
              * 
              * */
         }
-        private void UpdateLeadStatus()
-        {
-
-        }
+       
         public ActionResult SignatureDownload(int signId)
         {            
             var matchId = string.Empty;
@@ -648,9 +576,14 @@ namespace debt_fe.Controllers
             var uploadFolder = ConfigurationManager.AppSettings["UploadFolder"];
             var docPath = _docBusiness.GetDocumentPath(docId, null);
 
+            
+
             //
             // update signature filename after sign
-            _docBusiness.EditSignatureDocument(strFileName, docId);
+            var UserIP = string.Empty;
+            var BrowserInfo = string.Format("Browser {0}", Request.Browser.Browser);
+            UserIP = Request.ServerVariables["REMOTE_ADDR"];
+            var rs = _db.xp_debtext_document_signature_upd(docId, strFileName, null, DateTime.Now, UserIP, BrowserInfo, -MemberISN);
             _docBusiness.UpdateLeadStatus(this.MemberISN, "Contract Received", MemberISN);
             var urlSigned = RightSignature.GetURLPDFSigned(matchId);
 
@@ -676,7 +609,7 @@ namespace debt_fe.Controllers
             }
 
             var savePath = Path.Combine(uploadFolder, strFileName);
-
+            AddTemplateDefaut();
             /*
             var thread = new Thread(new ParameterizedThreadStart(DownloadSignatureAsync));
             thread.IsBackground = true;
@@ -720,6 +653,91 @@ namespace debt_fe.Controllers
             return RedirectToAction("Index");
         }
 
+        public void AddTemplateDefaut ()
+        {
+            var templateId = System.Configuration.ConfigurationSettings.AppSettings["TeamplateISN_CreateLead"];
+            var dsTemplateName = new DataProvider().ExecuteQuery("Select TemplateISN, tplName, tplFile From DebtTemplate Where TemplateISN in (" + templateId + ")");
+            if (dsTemplateName.Rows.Count > 0)
+            {
+                foreach (DataRow row in dsTemplateName.Rows)
+                {
+                    var tempISN = row["TemplateISN"].ToString();
+                    var templateName = row["tplName"].ToString();
+                    var fileName = row["tplFile"].ToString();
+                    var docISN = DocumentEdit(0, MemberISN, fileName, null, "1", null, null, templateName, -MemberISN);
+                    if (docISN > 0)
+                    {
+                        var folder = GetTemplatePath(Convert.ToInt32(tempISN), null);
+                        folder = Path.Combine(ConfigurationManager.AppSettings["UploadFolder"], folder);
+                        var pathFull = Path.Combine(folder, fileName);
+                        if (System.IO.File.Exists(pathFull))
+                        {
+                            var pathSave = Path.Combine(ConfigurationManager.AppSettings["UploadFolder"], this.GetDocumentsPath(docISN, null));
+                            if (!Directory.Exists(pathSave)) Directory.CreateDirectory(pathSave);
+                            System.IO.File.Copy(pathFull, Path.Combine(pathSave, fileName));
+                        }
+                    }
+                }
+            }
+        }
+        private string GetTemplatePath(int TemplateISN, object AddedDate)
+        {
+            DateTime date = DateTime.Now;
+            if (AddedDate == null)
+            {
+                var table = db.ExecuteQuery("Select addedDate From DebtTemplate Where TemplateISN=" + TemplateISN.ToString());
+                AddedDate = Convert.ToDateTime(table.Rows[0]["addedDate"]);
+            }
+            if (AddedDate != null) date = Convert.ToDateTime(AddedDate);
+            string strPath = date.ToString("yyyyMM") + "\\" + "DebtExtTemplate\\" + date.ToString("dd") + "\\" + TemplateISN.ToString();
+            return strPath;
+        }
+        public string GetDocumentsPath(int DocumentISN, object AddedDate)
+        {
+            DateTime date = DateTime.Now;
+            if (AddedDate == null)
+            {
+                var table = db.ExecuteQuery("Select docAddedDate From Document Where DocumentISN=" + DocumentISN.ToString());
+                AddedDate = Convert.ToDateTime(table.Rows[0]["docAddedDate"]);
+            }
+            if (AddedDate != null) date = Convert.ToDateTime(AddedDate);
+            string strPath = date.ToString("yyyyMM") + "\\" + "Documents\\" + date.ToString("dd") + "\\" + DocumentISN.ToString();
+            return strPath;
+        }
+        private int DocumentEdit(int DocumentISN, int MemberISN, string docFileName, string docSize, string docPublic, string docDesc, string CreditorISN, string docName, int updatedBy)
+        {
+            var result = 0;
+            if (string.IsNullOrEmpty(CreditorISN))
+            {
+
+                var parameters = new Hashtable ()  ;
+                parameters.Add("DocumentISN", DocumentISN);
+                parameters.Add("MemberISN", MemberISN);
+                parameters.Add("docFileName", docFileName);
+                parameters.Add("docSize", docSize);
+                parameters.Add("docPublic", docPublic);
+                parameters.Add("docDesc", docDesc);
+                parameters.Add("docName", docName);
+                parameters.Add("updatedBy", updatedBy);
+                result = (int)db.ExecuteStoreProcedure("xp_debtext_documenttask_insupd", parameters);
+               
+            }
+            else
+            {
+                var parameters = new Hashtable();
+                parameters.Add("DocumentISN", DocumentISN);
+                parameters.Add("MemberISN", MemberISN);
+                parameters.Add("docFileName", docFileName);
+                parameters.Add("docSize", docSize);
+                parameters.Add("docPublic", docPublic);
+                parameters.Add("docDesc", docDesc);
+                parameters.Add("CreditorISN", CreditorISN);
+                parameters.Add("docName", docName);
+                parameters.Add("updatedBy", updatedBy);
+                result = (int)db.ExecuteStoreProcedure("xp_debtext_documenttask_insupd", parameters);
+            }
+            return result;
+        }
         public ActionResult Message ()
         {
             return View();

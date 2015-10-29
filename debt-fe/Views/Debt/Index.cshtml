@@ -1,7 +1,7 @@
-﻿@using debt_fe.Models
-@model IEnumerable<DebtModel>
+﻿@using debt_fe.Models.ViewModels
+@model IEnumerable<DebtViewModel>
 @{
-    ViewBag.Title = "Debts";
+    ViewBag.Title = "My Debts";
 }
 
 <div class="modal fade modal-message" tabindex="-1" role="dialog" aria-labelledby="modalDetail">
@@ -29,22 +29,16 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (DebtModel debt in Model)
+            @foreach (var debt in Model)
             {
                 <tr>
                     <td>@debt.Id</td>
-                    <td>@debt.Name</td>
+                    <td>@debt.DebtName</td>
                     <td>@debt.Creditor</td>
                     <td>@debt.AccountNumber</td>
-                    <td>@debt.DebtAmount</td>
-                    <td>@debt.CurrentCollector</td>
-                    <td>@debt.CurrentStatus</td>
-                    @*<td>@debt.Delinquency</td>
-                    <td>@debt.Graduation</td>
-                    <td>
-                        <a href="@Url.Action("Detail", "Debt", new { id = debt.Id })" class="mr pull-right detail-view" data-isn="@debt.Id">@debt.History</a>
-                        - by @debt.By
-                    </td>*@
+                    <td>@debt.DebtAmountStr</td>
+                    <td>@debt.Collector</td>
+                    <td>@debt.Status</td>
                 </tr>
                 
             }

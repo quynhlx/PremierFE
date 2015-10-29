@@ -2,7 +2,6 @@
 @model MyProfileViewModal
 @{
     ViewBag.Title = "My Profile";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="modal fade" id="modal-changerequest" tabindex="-1" role="dialog" aria-labelledby="changerequest">
@@ -56,7 +55,7 @@
     <div class="col-md-6">
         <div class="form-group">
             <label class="label-bold">Married</label>
-            @Html.DropDownListFor(m => m.Married, Model.Married, new {@class="form-control" })
+            @Html.DropDownListFor(m => m._Married, Model.Married, new {@class="form-control" })
         </div>
     </div>
 </div>
