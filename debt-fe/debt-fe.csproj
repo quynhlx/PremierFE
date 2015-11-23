@@ -357,6 +357,7 @@
       <LastGenOutput>PremierModels.cs</LastGenOutput>
     </Content>
     <Content Include="Properties\DataSources\System.Data.DataSet.datasource" />
+    <None Include="Properties\PublishProfiles\Upcode70.pubxml" />
     <None Include="Service References\SMSService\WSAgent.disco" />
     <None Include="Service References\SMSService\configuration91.svcinfo" />
     <None Include="Service References\SMSService\configuration.svcinfo" />
