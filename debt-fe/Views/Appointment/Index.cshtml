@@ -21,7 +21,7 @@
         <tbody>
             @foreach (var item in Model)
             {
-                <tr>
+                <tr class="text-center">
                     <td>@item.No</td>
                     <td><img src="~/Content/images/i_message.gif" /></td>
                     <td><img src="~/Content/images/ico_test_caller_id.gif" /></td>
@@ -38,7 +38,7 @@
 @section scripts {
     <script>
         $('#table-appointment').DataTable({
-            "pageLength": 5, // record per page
+            "pageLength": 10, // record per page
             "lengthChange": false, // no record per page change
             "info": false, // no entities info
             "order": [[0, "asc"]], // set default sort by column 5 (added date)

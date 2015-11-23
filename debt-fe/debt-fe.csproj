@@ -364,6 +364,8 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+    <Content Include="Scripts\jquery.countdown.js" />
+    <Content Include="Scripts\jquery.countdown.min.js" />
     <Content Include="XMLData\Message.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -414,12 +416,16 @@
     <Content Include="Views\Shared\_Complaint.cshtml" />
     <Content Include="Views\Account\AuthenticationSMS.cshtml" />
     <None Include="Service References\SMSService\WSAgent.wsdl" />
-    <None Include="Web.config" />
+    <Content Include="Web.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />

@@ -35,7 +35,7 @@ namespace debt_fe.Models.ViewModels
                     case AppointmentAction.RescheduleMissed:
                         return "Reschedule/Missed";
                     default:
-                        return "N/A"; 
+                        return ""; 
                 }
             }
         }

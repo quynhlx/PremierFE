@@ -56,7 +56,7 @@ namespace debt_fe.Controllers
         }
         public ActionResult MyProfile ()
         {
-            if (MemberISN < 0)
+            if (!Authentication)
             {
                 return RedirectToAction("Login", "Account");
             }

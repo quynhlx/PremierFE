@@ -17,7 +17,7 @@ namespace debt_fe.Controllers
         // GET: Message
         public ActionResult Index()
         {
-            if (MemberISN < 0)
+            if (!Authentication)
             {
                 return RedirectToAction("Login", "Account");
             }

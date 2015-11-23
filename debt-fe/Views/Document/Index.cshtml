@@ -65,7 +65,7 @@
 <div class="col-md-12 mt+">
     <table class="table table-bordered" id="table-documents">
         <thead>
-            <tr>
+            <tr class="text-center">
                 <th>No.</th>
                 <th>Document Name</th>
                 <th>File</th>
@@ -73,7 +73,6 @@
                 <th>Notes</th>
                 <th>Date Added</th>
                 <th class="text-center">
-                    
                 </th>
             </tr>
         </thead>
@@ -130,7 +129,7 @@
         // init datatable
         //
         $('#table-documents').DataTable({
-            "pageLength": 7, // record per page
+            "pageLength": 10, // record per page
             "lengthChange": false, // no record per page change
             "info": false, // no entities info
             "order": [[0, "asc"]], // set default sort by column 5 (added date)

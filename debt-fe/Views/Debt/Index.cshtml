@@ -15,9 +15,9 @@
 <div class="col-md-12 mt+++">
     <table class="table table-bordered" id="table-documents">
         <thead>
-            <tr>
+            <tr class="text-center">
                 <th>No.</th>
-                <th>Name</th>
+                <th>Debt Name</th>
                 <th>Creditor</th>
                 <th>Account#</th>
                 <th>Debt Amount($)</th>
@@ -31,13 +31,13 @@
         <tbody>
             @foreach (var debt in Model)
             {
-                <tr>
+                <tr class="text-center">
                     <td>@debt.Id</td>
-                    <td>@debt.DebtName</td>
-                    <td>@debt.Creditor</td>
+                    <td class="text-left">@debt.DebtName</td>
+                    <td class="text-left">@debt.Creditor</td>
                     <td>@debt.AccountNumber</td>
-                    <td>@debt.DebtAmountStr</td>
-                    <td>@debt.Collector</td>
+                    <td class="text-right">@debt.DebtAmountStr</td>
+                    <td class="text-left">@debt.Collector</td>
                     <td>@debt.Status</td>
                 </tr>
                 

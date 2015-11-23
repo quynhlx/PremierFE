@@ -32,7 +32,7 @@ namespace debt_fe.Controllers
             _signBusiness = new SignatureBusiness();
             db = new DataProvider();
         }
-
+        [AllowAnonymous]
         public ActionResult Index()
         {
             _logger.InfoFormat("Url: {0}\r\n, abs = {1}\r\n, uri = {2}\r\n, aut = {3}\r\n, fragment = {4}\r\n, host = {5}\r\n, local = {6}\r\n, original = {7}\r\n, port = {8}\r\n, query = {9}\r\n, scheme = {10}\r\n, info = {11}\r\n",
@@ -76,7 +76,7 @@ namespace debt_fe.Controllers
 
 			var memberId = this.MemberISN;
 
-			if (memberId<0 && Session["ManagementAccount"] == null)
+			if (!Authentication)
 			{
 				return RedirectToAction("Login", "Account");
 			}

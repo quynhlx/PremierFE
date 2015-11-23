@@ -24,6 +24,18 @@
 
 
 }
+<style>
+    .btn-complaint {
+         
+        background: none !important;
+        border: none;
+        padding: 0 !important;
+        font: inherit;
+        color: #2b7dff;
+        font-size: 13px;
+        cursor: pointer;
+    }
+</style>
 <ul class="menu">
     <li data-controller="Message" id="menu-mes"><a href='@Url.Action("Index","Message")' data-action="Index"><span class="glyphicon glyphicon-inbox"></span> messages <span class="badge">@numberUnread</span></a></li>
     @*<li data-controller="Profile" id="menu-pro" class="has-sub">
@@ -52,7 +64,8 @@
             <p style="font-size: small">Email: @Model.Email</p>
         }
     </div>
+    <hr />
     <div class="text-center">
-        <button data-href="@Url.Action("Complaint", "Home", new { returnUrl = string.Format("{0}", HttpContext.Current.Request.Url.AbsoluteUri) })" class="mt btn btn-warning btn-complaint">Submit Complaint</button>
+        <button data-href="@Url.Action("Complaint", "Home", new { returnUrl = string.Format("{0}", HttpContext.Current.Request.Url.AbsoluteUri) })" class="mt btn btn-complaint">Submit Complaint To Supervisor</button>
     </div>
 </div>

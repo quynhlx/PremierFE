@@ -13,6 +13,10 @@ namespace debt_fe.Controllers
         // GET: Appointment
         public ActionResult Index()
         {
+            if (!Authentication)
+            {
+                return RedirectToAction("Login", "Account");
+            }
             var troubleTicket = db.Vw_TroubleTicket.Where(t => t.tblDate.HasValue && t.MemberISN == MemberISN).ToList();
             var model = new List<AppointmentViewModel>();
             int i = 1;

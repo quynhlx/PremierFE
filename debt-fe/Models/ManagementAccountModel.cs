@@ -24,6 +24,10 @@ namespace debt_fe.Models
         }
         public void GetDataFromDataBase(int MemberISN)
         {
+            try
+            {
+
+            
             var paramNames2 = new List<string>
 			{
 				"MemberISN"
@@ -64,6 +68,14 @@ namespace debt_fe.Models
                         NameType = "Account Salesman";
                     }
                 }
+            }
+            }
+            catch
+            {
+                NameType = "Account Salesman";
+                this.FullName = string.Empty;
+                this.Email = string.Empty;
+                this.Phone = string.Empty;
             }
         }
     }

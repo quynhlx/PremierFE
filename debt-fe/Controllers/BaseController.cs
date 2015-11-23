@@ -1,6 +1,9 @@
-﻿using debt_fe.Models.ViewModels;
+﻿using debt_fe.Models;
+using debt_fe.Models.ViewModels;
+using debt_fe.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -12,7 +15,49 @@ namespace debt_fe.Controllers
         // GET: Base
         private debt_fe.DataAccessHelper.DataProvider _dataProvider = new DataAccessHelper.DataProvider();
         private int _memberISN;
+        private bool _useAuthenticationSMS;
+        public string MasterCode {
+            get
+            {
+                var code = string.Empty;
+                try
+                {
+                    code = ConfigurationManager.AppSettings["MasterCode"].ToString();
+                }
+                catch { }
+                return code;
+            }
+        }
+        public MyProfileViewModal Profile 
+        {
+             get {
+                 if (this.MemberISN < 0) return null;
+                 var profile = new MyProfileViewModal();
+                 profile.GetMyProfile(this.MemberISN);
+                 return profile;
+             }
+        }
+        public bool UseAuthenticationSMS
+        {
+            get
+            {
+                _useAuthenticationSMS = false;
+                try
+                {
+                    _useAuthenticationSMS = Convert.ToBoolean(ConfigurationManager.AppSettings["useAuthenticationSMS"].ToString());
+                }
+                catch { }
+                return _useAuthenticationSMS;
+            }
+        }
+        public bool Authentication { 
+            get {
 
+                if (Session["Authentication"] != null &&  Session["Authentication"].ToString() == Utility.ToMD5Hash(this.MemberISN.ToString()))
+                    return true;
+                else return false;
+            } 
+        } 
         public int MemberISN
         {
             get
@@ -26,14 +71,6 @@ namespace debt_fe.Controllers
                 }
 
                 var memberId = debt.Values["memberId"];
-
-                /*
-                if (string.IsNullOrEmpty(memberId))
-                {
-                    return -2;
-                }
-                 */
-
                 return int.Parse(memberId);
             }
             set
@@ -53,7 +90,7 @@ namespace debt_fe.Controllers
                 Response.AppendCookie(debt);
             }
         }
-
+        
         private HeaderInfoViewModel _headerInfo;
         public HeaderInfoViewModel HeaderInfo
         {
@@ -88,6 +125,7 @@ namespace debt_fe.Controllers
         protected override void OnAuthentication(System.Web.Mvc.Filters.AuthenticationContext filterContext)
         {
             base.OnAuthentication(filterContext);
+
         }
         protected override void OnActionExecuted(ActionExecutedContext filterContext)
         {
