@@ -180,7 +180,7 @@ namespace debt_fe.Controllers
             try
             {
                 var rs = db.xp_client_profile_requestchange(this.MemberISN, content);
-                TempData["success"] = "Change Request Successfully";
+                TempData["success"] = "your request has been sent";
             }
             catch
             {

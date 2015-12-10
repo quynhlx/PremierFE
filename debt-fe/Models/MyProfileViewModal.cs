@@ -15,7 +15,7 @@ namespace debt_fe.Models
     public class MyProfileViewModal
     {
         public DateTime LastRequest { set; get; }
-
+        public Nullable<int> DealerISN { get; set; }
         public string FirstName { set; get; }
         public string LastName { set; get; }
         public string HomePhone { set; get; }
@@ -75,6 +75,7 @@ namespace debt_fe.Models
         public string CoCity { set; get; }
         public string _CoState { set; get; }
 
+        
         public SelectList CoState
         {
             get
@@ -118,7 +119,7 @@ namespace debt_fe.Models
                 this.CellPhone = userInfo.memPhone;
                 this.FaxNumber = userInfo.memFax;
                 this.Email = userInfo.memEmail;
-
+                this.DealerISN = userInfo.DealerISN;
                 var attrRow = ds.Tables[1].Select("attID = 'BestTimeOfCall'");
 
                 this.BestTimeToContact = attrRow.Length == 0 ? string.Empty : attrRow[0]["attValue"].ToString();

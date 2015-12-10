@@ -85,7 +85,11 @@ namespace debt_fe.Controllers
                 cookie.Values["msgUnread"] = numberUnread.ToString();
                 cookie.Values["memberId"] = clientISN.ToString();
                 Response.AppendCookie(cookie);
-
+                
+                //
+                //GET DealerISN from ProfileMember
+                //
+                
                 if(isWhiteIP)
                 {
                     Session.Add("Authentication", Utility.ToMD5Hash(this.MemberISN.ToString()));
@@ -223,7 +227,7 @@ namespace debt_fe.Controllers
             get
             {
                 var currentIP = this.Request.UserHostAddress.ToString();
-                var ds = this._dataProvider.ExecuteQuery("select * from Vw_WhiteIPAddr where whtPortal = @whtPortal and whtIPAddr = @IPAddr ", new List<string> { "whtPortal", "IPAddr" } , new ArrayList { 1, currentIP });
+                var ds = this._dataProvider.ExecuteQuery("select * from Vw_WhiteIPAddr where whtPortal = @whtPortal and whtIPAddr = @IPAddr and DealerISN = @DealerISN", new List<string> { "whtPortal", "IPAddr", "DealerISN" }, new ArrayList { 1, currentIP, this.Profile.DealerISN });
                 if (ds.Rows.Count > 0)
                 {
                     return true;
