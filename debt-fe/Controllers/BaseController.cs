@@ -134,8 +134,8 @@ namespace debt_fe.Controllers
             baseView.HeaderViewModel = HeaderInfo;
             baseView.ManagerViewModel = new Models.ManagementAccountModel(MemberISN);
             ViewBag.BaseViewModel = baseView;
+            ViewBag.BaseUrlChat = System.Configuration.ConfigurationManager.AppSettings["BaseUrlChat"];
         }
-        
     }
 
 

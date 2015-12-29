@@ -14,7 +14,26 @@ namespace debt_fe.Models
 {
     public class MyProfileViewModal
     {
-        public DateTime LastRequest { set; get; }
+        private DateTime _lastRequest;
+        public DateTime LastRequest
+        {
+            get
+            {
+                if(_lastRequest == new DateTime())
+                {
+                    return new DateTime();
+                }
+                else
+                {
+                    return _lastRequest;
+                }
+               
+            }
+            set
+            {
+                this._lastRequest = value;
+            }
+        }
         public Nullable<int> DealerISN { get; set; }
         public string FirstName { set; get; }
         public string LastName { set; get; }
@@ -75,7 +94,19 @@ namespace debt_fe.Models
         public string CoCity { set; get; }
         public string _CoState { set; get; }
 
-        
+        DateTime GetLastRequest (int MemberISN)
+        {
+            string query = "select cvsDate from[Conversation] where ConversationISN in (select val_number from MemberExt3 where AttributeISN = 564 and MemberISN = @MemberISN)";
+            var dataProvider = new DataProvider();
+            var parameters = new Hashtable();
+            parameters.Add("MemberISN", MemberISN);
+            var tb = dataProvider.ExecuteQuery(query, parameters);
+            if(tb.Rows.Count > 0)
+            {
+                return Convert.ToDateTime(tb.Rows[0][0]);
+            }
+            return new DateTime();
+        }
         public SelectList CoState
         {
             get
@@ -99,10 +130,15 @@ namespace debt_fe.Models
         public string StatusGetData { set; get; }
         public void GetMyProfile (int MemberISN)
         {
+
+
             var db = new PremierEntities();
             var userInfos = db.xp_debtuser_getinfo(MemberISN);
             var userInfo = userInfos.FirstOrDefault();
 
+            
+
+            
             var query = "xp_debtuser_getinfo";
             var parameters = new Hashtable();
             parameters.Add("MemberISN", MemberISN);
@@ -112,6 +148,7 @@ namespace debt_fe.Models
             var ds = dataProvider.ExecuteStoreProcedure(query, parameters, out rsInt ) ;
             try
             {
+                this.LastRequest = GetLastRequest(MemberISN);
                 this.FirstName = userInfo.memFirstName;
                 this.LastName = userInfo.memLastName;
                 this.HomePhone = userInfo.memHomePhone;
@@ -121,7 +158,7 @@ namespace debt_fe.Models
                 this.Email = userInfo.memEmail;
                 this.DealerISN = userInfo.DealerISN;
                 var attrRow = ds.Tables[1].Select("attID = 'BestTimeOfCall'");
-
+                
                 this.BestTimeToContact = attrRow.Length == 0 ? string.Empty : attrRow[0]["attValue"].ToString();
 
                 attrRow = ds.Tables[1].Select("attID = 'MarriedStatus'");

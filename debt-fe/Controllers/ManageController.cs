@@ -7,17 +7,18 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using debt_fe.Models;
+using debt_fe.Utilities;
 
 namespace debt_fe.Controllers
 {
-    [Authorize]
-    public class ManageController : Controller
+    public class ManageController : BaseController
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
         public ManageController()
         {
+           
         }
 
         public ManageController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
@@ -215,30 +216,43 @@ namespace debt_fe.Controllers
         // GET: /Manage/ChangePassword
         public ActionResult ChangePassword()
         {
+            if (!Authentication)
+            {
+                return RedirectToAction("Login", "Account");
+            }
             return View();
         }
 
         //
         // POST: /Manage/ChangePassword
+
+        PremierEntities db = new PremierEntities();
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<ActionResult> ChangePassword(ChangePasswordViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
-            var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
-            if (result.Succeeded)
+            //var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
+            //if (result.Succeeded)
+            //{
+            //    var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            //    if (user != null)
+            //    {
+            //        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+            //    }
+            //    return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
+            //}
+            var pass = Utility.ToMD5Hash(model.NewPass.Trim());
+
+            var rs =  db.xp_debtext_client_password_upd(this.MemberISN, pass, -this.MemberISN);
+            if(rs > 0 && Session["CurrentPassword"].ToString() == model.OldPass.Trim())
             {
-                var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
-                if (user != null)
-                {
-                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                }
-                return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
+                TempData["success"] = "Your password has been changed.";
+                return View(model);
             }
-            AddErrors(result);
+            TempData["error"] = "Change password failed.";
             return View(model);
         }
 

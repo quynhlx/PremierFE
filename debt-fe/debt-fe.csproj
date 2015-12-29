@@ -242,6 +242,9 @@
     <Compile Include="Models\Vw_DebtExt_Creditor.cs">
       <DependentUpon>PremierModels.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Vw_PremierActivity.cs">
+      <DependentUpon>PremierModels.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Vw_PremierMessage.cs">
       <DependentUpon>PremierModels.tt</DependentUpon>
     </Compile>
@@ -357,6 +360,10 @@
       <LastGenOutput>PremierModels.cs</LastGenOutput>
     </Content>
     <Content Include="Properties\DataSources\System.Data.DataSet.datasource" />
+    <None Include="compilerconfig.json" />
+    <Content Include="compilerconfig.json.defaults">
+      <DependentUpon>compilerconfig.json</DependentUpon>
+    </Content>
     <None Include="Properties\PublishProfiles\Upcode70.pubxml" />
     <None Include="Service References\SMSService\WSAgent.disco" />
     <None Include="Service References\SMSService\configuration91.svcinfo" />
@@ -417,16 +424,14 @@
     <Content Include="Views\Shared\_Complaint.cshtml" />
     <Content Include="Views\Account\AuthenticationSMS.cshtml" />
     <None Include="Service References\SMSService\WSAgent.wsdl" />
-    <Content Include="Web.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <None Include="Web.config" />
+    <Content Include="Views\Account\ForgotPassword.cshtml" />
+    <Content Include="Views\Manage\Error.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />

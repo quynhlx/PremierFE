@@ -9,10 +9,10 @@
         <div class="modal-content">
             <div class="modal-header center-block"><h4>Change Request</h4> </div>
             <div class="modal-body">
-                @using (Html.BeginForm("ChangeRequest", "Profile", FormMethod.Post, new {id="changerequest" }))
+                @using (Html.BeginForm("ChangeRequest", "Profile", FormMethod.Post, new { id = "changerequest" }))
                 {
                     <label class="label-bold">Your request content <span class="validator" style="color:red;"></span></label>
-                    @Html.TextArea("request-content", new { style = "width: 100%; min-height: 300px;"})
+                    @Html.TextArea("request-content", new { style = "width: 100%; min-height: 300px;" })
                 }
             </div>
             <div class="modal-footer">
@@ -23,7 +23,11 @@
     </div>
 </div>
 <div class="col-lg-12 mt++ mb++">
-    <button class="btn btn-primary" data-toggle="modal" data-target="#modal-changerequest">Change Request</button> (Latest request sent at @Model.LastRequest.ToString("MM/dd/yyy hh:mm tt") )
+    <button class="btn btn-primary" data-toggle="modal" data-target="#modal-changerequest">Change Request</button>
+@if (Model.LastRequest != new DateTime())
+{
+    <span>(Latest request sent at </span> @Model.LastRequest.ToString("MM/dd/yyy hh:mm tt") <span>)</span>
+}
 </div>
 
 <div class="row ph+">
@@ -55,7 +59,7 @@
     <div class="col-md-6">
         <div class="form-group">
             <label class="label-bold">Married</label>
-            @Html.DropDownListFor(m => m._Married, Model.Married, new {@class="form-control" })
+            @Html.DropDownListFor(m => m._Married, Model.Married, new { @class = "form-control" })
         </div>
     </div>
 </div>
@@ -192,7 +196,7 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label class="label-bold">Co-Client First Name</label>
-                        @Html.TextBoxFor(m => m.CoFirstName, new { @class = "form-control"})
+                        @Html.TextBoxFor(m => m.CoFirstName, new { @class = "form-control" })
                     </div>
                 </div>
 
@@ -239,7 +243,7 @@
         <div class="form-inline mt+">
             <div class="form-group">
                 <label class="sr-only">State</label>
-                @Html.DropDownListFor(m => m._CoState,Model.CoState, new { @class = "form-control" })
+                @Html.DropDownListFor(m => m._CoState, Model.CoState, new { @class = "form-control" })
             </div>
         </div>
     </div>
@@ -261,14 +265,14 @@
             $(this).children(".label-check").removeClass("sr-only");
         });
         $('.btn-request').click(function () {
-        debugger;
-        var strText = $('#request-content').val();
-        if (strText.length > 1024) {
-            $('.validator').html("Must be under 1024 characters");
-            return;
-        }
+            debugger;
+            var strText = $('#request-content').val();
+            if (strText.length > 1024) {
+                $('.validator').html("Must be under 1024 characters");
+                return;
+            }
             $('#changerequest').submit()
         ('.validator').html("");
-    });
+        });
     </script>
 }

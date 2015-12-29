@@ -52,6 +52,20 @@ warning 6002: The table/view 'ROI.dbo.Vw_DebtExt_Creditor' does not have a prima
           <Property Name="DebtRemoved" Type="int" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
+warning 6002: The table/view 'ROI.dbo.Vw_PremierActivity' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Vw_PremierActivity">
+          <Key>
+            <PropertyRef Name="PremierActivityISN" />
+          </Key>
+          <Property Name="PremierActivityISN" Type="int" Nullable="false" />
+          <Property Name="MemberISN" Type="int" />
+          <Property Name="TaskISN" Type="int" />
+          <Property Name="Content" Type="nvarchar" MaxLength="500" />
+          <Property Name="updatedDate" Type="datetime" />
+          <Property Name="updatedBy" Type="int" />
+          <Property Name="addedName" Type="nvarchar" MaxLength="30" />
+        </EntityType>
+        <!--Errors Found During Generation:
 warning 6002: The table/view 'ROI.dbo.Vw_PremierMessage' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="Vw_PremierMessage">
           <Key>
@@ -178,6 +192,11 @@ warning 6002: The table/view 'ROI.dbo.Vw_TroubleTicket' does not have a primary 
           <Parameter Name="memDropID" Type="varchar" Mode="In" />
           <Parameter Name="AccountManagerISN" Type="int" Mode="In" />
         </Function>
+        <Function Name="xp_debtext_client_password_upd" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MemberISN" Type="int" Mode="In" />
+          <Parameter Name="memPassword" Type="nvarchar" Mode="In" />
+          <Parameter Name="updatedBy" Type="int" Mode="In" />
+        </Function>
         <Function Name="xp_debtext_document_signature_upd" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DocumentISN" Type="int" Mode="In" />
           <Parameter Name="docFileName" Type="nvarchar" Mode="In" />
@@ -189,6 +208,11 @@ warning 6002: The table/view 'ROI.dbo.Vw_TroubleTicket' does not have a primary 
         </Function>
         <Function Name="xp_debtuser_getinfo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="MemberISN" Type="int" Mode="In" />
+        </Function>
+        <Function Name="xp_member_changepwd" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MemberISN" Type="int" Mode="In" />
+          <Parameter Name="NewPassword" Type="nvarchar" Mode="In" />
+          <Parameter Name="updatedBy" Type="int" Mode="In" />
         </Function>
         <Function Name="xp_premiermessage_new" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="MemberISN" Type="int" Mode="In" />
@@ -233,6 +257,17 @@ warning 6002: The table/view 'ROI.dbo.Vw_TroubleTicket' does not have a primary 
     [Vw_DebtExt_Creditor].[Graduation] AS [Graduation], 
     [Vw_DebtExt_Creditor].[DebtRemoved] AS [DebtRemoved]
     FROM [dbo].[Vw_DebtExt_Creditor] AS [Vw_DebtExt_Creditor]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="Vw_PremierActivity" EntityType="Self.Vw_PremierActivity" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Vw_PremierActivity].[PremierActivityISN] AS [PremierActivityISN], 
+    [Vw_PremierActivity].[MemberISN] AS [MemberISN], 
+    [Vw_PremierActivity].[TaskISN] AS [TaskISN], 
+    [Vw_PremierActivity].[Content] AS [Content], 
+    [Vw_PremierActivity].[updatedDate] AS [updatedDate], 
+    [Vw_PremierActivity].[updatedBy] AS [updatedBy], 
+    [Vw_PremierActivity].[addedName] AS [addedName]
+    FROM [dbo].[Vw_PremierActivity] AS [Vw_PremierActivity]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="Vw_PremierMessage" EntityType="Self.Vw_PremierMessage" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -387,6 +422,17 @@ warning 6002: The table/view 'ROI.dbo.Vw_TroubleTicket' does not have a primary 
             <Parameter Name="docSignatureDate" Mode="In" Type="DateTime" />
             <Parameter Name="docSignatureIP" Mode="In" Type="String" />
             <Parameter Name="ClientInfo" Mode="In" Type="String" />
+            <Parameter Name="updatedBy" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="Vw_PremierActivity" EntityType="ROIModel.Vw_PremierActivity" />
+          <FunctionImport Name="xp_member_changepwd">
+            <Parameter Name="MemberISN" Mode="In" Type="Int32" />
+            <Parameter Name="NewPassword" Mode="In" Type="String" />
+            <Parameter Name="updatedBy" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="xp_debtext_client_password_upd">
+            <Parameter Name="MemberISN" Mode="In" Type="Int32" />
+            <Parameter Name="memPassword" Mode="In" Type="String" />
             <Parameter Name="updatedBy" Mode="In" Type="Int32" />
           </FunctionImport>
         </EntityContainer>
@@ -596,6 +642,18 @@ warning 6002: The table/view 'ROI.dbo.Vw_TroubleTicket' does not have a primary 
           <Property Name="cltName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Graduation" Type="DateTime" Precision="3" />
           <Property Name="DebtRemoved" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Vw_PremierActivity">
+          <Key>
+            <PropertyRef Name="PremierActivityISN" />
+          </Key>
+          <Property Name="PremierActivityISN" Type="Int32" Nullable="false" />
+          <Property Name="MemberISN" Type="Int32" />
+          <Property Name="TaskISN" Type="Int32" />
+          <Property Name="Content" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="updatedDate" Type="DateTime" Precision="3" />
+          <Property Name="updatedBy" Type="Int32" />
+          <Property Name="addedName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -825,6 +883,21 @@ warning 6002: The table/view 'ROI.dbo.Vw_TroubleTicket' does not have a primary 
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="xp_debtext_document_signature_upd" FunctionName="ROIModel.Store.xp_debtext_document_signature_upd" />
+          <EntitySetMapping Name="Vw_PremierActivity">
+            <EntityTypeMapping TypeName="ROIModel.Vw_PremierActivity">
+              <MappingFragment StoreEntitySet="Vw_PremierActivity">
+                <ScalarProperty Name="addedName" ColumnName="addedName" />
+                <ScalarProperty Name="updatedBy" ColumnName="updatedBy" />
+                <ScalarProperty Name="updatedDate" ColumnName="updatedDate" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="TaskISN" ColumnName="TaskISN" />
+                <ScalarProperty Name="MemberISN" ColumnName="MemberISN" />
+                <ScalarProperty Name="PremierActivityISN" ColumnName="PremierActivityISN" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="xp_member_changepwd" FunctionName="ROIModel.Store.xp_member_changepwd" />
+          <FunctionImportMapping FunctionImportName="xp_debtext_client_password_upd" FunctionName="ROIModel.Store.xp_debtext_client_password_upd" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

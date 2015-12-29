@@ -31,6 +31,7 @@ namespace debt_fe.Models
         public virtual DbSet<PremierMessage> PremierMessages { get; set; }
         public virtual DbSet<Vw_TroubleTicket> Vw_TroubleTicket { get; set; }
         public virtual DbSet<Vw_DebtExt_Creditor> Vw_DebtExt_Creditor { get; set; }
+        public virtual DbSet<Vw_PremierActivity> Vw_PremierActivity { get; set; }
     
         public virtual int xp_debtext_client_insupd2(Nullable<int> memberISN, Nullable<int> salemanISN, Nullable<int> campaignISN, string memUserName, string memPassword, string memFax, string memFirstName, string memLastName, string memPhone, string memEmail, string memAddress, string memZip, string memCity, string memState, string memCompanyName, string memTitle, string memIM, Nullable<byte> memStatus, string memComment, Nullable<decimal> memCreditLine, Nullable<int> dealerISN, string aNI, Nullable<double> memCreditScore, Nullable<decimal> memApprovalPayment, Nullable<decimal> memApprovalAmount, string memSSN, Nullable<byte> memConnectedLO, Nullable<int> updatedBy, Nullable<byte> memTradeVehicle, string memYearVehicle, string memManufacturerVehicle, string memModelVehicle, Nullable<decimal> memMonthlyPayment, string memPolycomID, string memWeekDay, Nullable<decimal> memHomeValue, Nullable<decimal> memCurrentLeftOnLoan, Nullable<double> memInterestRate, Nullable<decimal> memMonthlyPaymentM, Nullable<decimal> memAppoxTotalDebt, string memTypeOfLoan, string memAnyLatePayment, string memApprovalOfRCredit, string memIsYourCreditGreat, string memTimeZoneFull, string memDomainName, Nullable<decimal> memPayOffAmount, Nullable<decimal> balance, string ratePlan, Nullable<System.DateTime> memDOB, Nullable<int> lastStepFlag, Nullable<byte> memReadyPurchaseNow, string xmlInfoExt, Nullable<int> phoneRechargeNo, string memDropID, Nullable<int> accountManagerISN)
         {
@@ -378,6 +379,40 @@ namespace debt_fe.Models
                 new ObjectParameter("updatedBy", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("xp_debtext_document_signature_upd", documentISNParameter, docFileNameParameter, docSizeParameter, docSignatureDateParameter, docSignatureIPParameter, clientInfoParameter, updatedByParameter);
+        }
+    
+        public virtual int xp_member_changepwd(Nullable<int> memberISN, string newPassword, Nullable<int> updatedBy)
+        {
+            var memberISNParameter = memberISN.HasValue ?
+                new ObjectParameter("MemberISN", memberISN) :
+                new ObjectParameter("MemberISN", typeof(int));
+    
+            var newPasswordParameter = newPassword != null ?
+                new ObjectParameter("NewPassword", newPassword) :
+                new ObjectParameter("NewPassword", typeof(string));
+    
+            var updatedByParameter = updatedBy.HasValue ?
+                new ObjectParameter("updatedBy", updatedBy) :
+                new ObjectParameter("updatedBy", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("xp_member_changepwd", memberISNParameter, newPasswordParameter, updatedByParameter);
+        }
+    
+        public virtual int xp_debtext_client_password_upd(Nullable<int> memberISN, string memPassword, Nullable<int> updatedBy)
+        {
+            var memberISNParameter = memberISN.HasValue ?
+                new ObjectParameter("MemberISN", memberISN) :
+                new ObjectParameter("MemberISN", typeof(int));
+    
+            var memPasswordParameter = memPassword != null ?
+                new ObjectParameter("memPassword", memPassword) :
+                new ObjectParameter("memPassword", typeof(string));
+    
+            var updatedByParameter = updatedBy.HasValue ?
+                new ObjectParameter("updatedBy", updatedBy) :
+                new ObjectParameter("updatedBy", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("xp_debtext_client_password_upd", memberISNParameter, memPasswordParameter, updatedByParameter);
         }
     }
 }

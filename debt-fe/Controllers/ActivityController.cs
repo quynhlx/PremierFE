@@ -1,4 +1,5 @@
-﻿using System;
+﻿using debt_fe.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,6 +9,7 @@ namespace debt_fe.Controllers
 {
     public class ActivityController : BaseController
     {
+        PremierEntities db = new PremierEntities();
         // GET: Activity
         public ActionResult Index()
         {
@@ -15,7 +17,8 @@ namespace debt_fe.Controllers
             {
                 return RedirectToAction("Login", "Account");
             }
-            return View();
+            var activities = db.Vw_PremierActivity.ToList();
+            return View(activities);
         }
     }
 }

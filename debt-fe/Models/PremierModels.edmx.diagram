@@ -9,6 +9,7 @@
         <EntityTypeShape EntityType="ROIModel.PremierMessage" Width="1.5" PointX="3.375" PointY="0.75" />
         <EntityTypeShape EntityType="ROIModel.Vw_TroubleTicket" Width="1.5" PointX="0.75" PointY="4.75" />
         <EntityTypeShape EntityType="ROIModel.Vw_DebtExt_Creditor" Width="1.5" PointX="3.375" PointY="4.75" />
+        <EntityTypeShape EntityType="ROIModel.Vw_PremierActivity" Width="1.5" PointX="5.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

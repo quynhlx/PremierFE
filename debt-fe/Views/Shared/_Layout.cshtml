@@ -1,5 +1,17 @@
 ﻿@{
     var BaseView = (debt_fe.Models.ViewModels.BaseViewModel)ViewBag.BaseViewModel;
+
+    var memberId = -1;
+    var debt = Request.Cookies["debt_extension"];
+
+    if (debt == null || string.IsNullOrEmpty(debt.Values["memberId"]))
+    {
+
+    }
+    else
+    {
+        memberId = int.Parse(debt.Values["memberId"]);
+    }
 }
 <!DOCTYPE html>
 <html>
@@ -60,7 +72,7 @@
     <input type="hidden" id="info" value="@TempData["info"]" />
     <input type="hidden" id="warning" value="@TempData["warning"]" />
     <input type="hidden" id="error" value="@TempData["error"]" />
-    <div class="chat-box hidden">
+    @*<div class="chat-box hidden">
         <div class="chat-box-header">
             <label class="pull-left ml white text-bold">Customer</label>
             <button class="btn btn-sm btn-minus pull-right"><span class="glyphicon glyphicon-minus"></span></button>
@@ -80,7 +92,15 @@
             <label class="pull-left ml white text-bold">Chat with us now</label>
             <button class="btn btn-sm btn-exp pull-right"><span class="glyphicon glyphicon-exclamation-sign"></span></button>
         </div>
+    </div>*@
+    <div class="chat-box  box-minus">
+        <div class="chat-box-header">
+            Chat Support
+            <button class="btn pull-right " id="chat-minus"><span class="fa fa-expand" id="icon-minus"></span></button>
+        </div>
+        <iframe src="@ViewBag.BaseUrlChat/ChatHub/ChatClient?userid=@memberId" frameborder="0" id="chat-iframe"></iframe>
     </div>
+    
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
@@ -101,7 +121,12 @@
                 }
             });
         });
-    </script>
+        $('#chat-minus').click(function () {
+            $('.chat-box').toggleClass("box-minus");
+            $('#icon-minus').toggleClass("fa-expand");
+            $('#icon-minus').toggleClass("fa-minus");
+        });
+    </script>   
 
 </body>
 </html>

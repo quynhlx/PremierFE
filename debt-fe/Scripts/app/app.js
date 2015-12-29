@@ -136,14 +136,4 @@
 
 })();
 
-$(".chat-box-minus").click(function () {
-    $(".chat-box").fadeIn();
-    $(".chat-box").removeClass("hidden");
-    $(this).addClass("hidden");
-});
-
-$(".btn-minus").click(function () {
-    $(".chat-box").fadeOut();
-    $(".chat-box-minus").removeClass("hidden");
-});
 

@@ -1,4 +1,4 @@
-﻿
+﻿@model IEnumerable<debt_fe.Models.Vw_PremierActivity>
 @{
     ViewBag.Title = "Activity";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -21,16 +21,16 @@
             </tr>
         </thead>
         <tbody>
-            @for (int i = 0 ; i < 10 ; i ++)
+            @foreach (var item in Model)
             {
                 <tr>
-                    <td>%Content%</td>
-                    <td>@DateTime.Today.AddDays(-i).ToString("MM/dd/yyyy hh:mm tt")</td>
-                    <td>Rose @i</td>
+                    <td>@item.Content</td>
+                    <td>@item.updatedDate.Value.ToString("MM/dd/yyyy hh:mm tt")</td>
+                    <td>@item.addedName</td>
                 </tr>
-
             }
         </tbody>
+
     </table>
 </div>
 <div class="modal-backdrop fade in hidden" id="modal-loading"><div class="loader">Loading...</div></div>

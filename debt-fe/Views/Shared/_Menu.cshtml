@@ -26,7 +26,6 @@
 }
 <style>
     .btn-complaint {
-         
         background: none !important;
         border: none;
         padding: 0 !important;
@@ -60,7 +59,14 @@
         {
             <h5 class="text-center"><strong>Contact @Model.NameType</strong></h5>
             <p style="font-size: small">@Model.FullName</p>
-            <p style="font-size: small">Phone#: @Model.Phone</p>
+            if (Model.Phone.Length > 10)
+            {
+                <p style="font-size: small">Phone#: @(string.Format("{0:#-###-###-####}", Convert.ToDecimal(Model.Phone)))</p>
+            }
+            else
+            {
+                <p style="font-size: small">Phone#: @(string.Format("{0:###-###-####}", Convert.ToDecimal(Model.Phone)))</p>
+            }
             <p style="font-size: small">Email: @Model.Email</p>
         }
     </div>

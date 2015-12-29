@@ -49,8 +49,9 @@ namespace debt_fe.Controllers
 			};
 
             var paramValues = new ArrayList
-			{
-				model.Username, Utility.ToMD5Hash(model.Password), dealers
+            {
+                
+				model.Username, Utility.ToMD5Hash(model.Password.Trim()), dealers
 			};
 
             int clientISN;
@@ -61,6 +62,7 @@ namespace debt_fe.Controllers
 
             if (clientISN > 0)
             {
+                Session["CurrentPassword"] = model.Password.Trim();
                 var claims = new List<Claim>();
                 claims.Add(new Claim(ClaimTypes.Name, model.Username));
                 claims.Add(new Claim(ClaimTypes.Hash, Utility.ToMD5Hash(model.Password)));
@@ -118,13 +120,13 @@ namespace debt_fe.Controllers
                 switch (clientISN)
                 {
                     case -4:
-                        errMsg = "Account does not exist";
+                        errMsg = "Account or password is incorrect";
                         break;
                     case -3:
                         errMsg = "Account is inactive";
                         break;
                     default:
-                        errMsg = "Password is incorrect";
+                        errMsg = "Account or password is incorrect";
                         break;
                 }
 
@@ -221,7 +223,18 @@ namespace debt_fe.Controllers
             var rs= SendSMS(numberPhone, message);
             return Json(new { msg = "The authetication code had sent to your phone", code = 1 }, JsonRequestBehavior.AllowGet);
         }
+        [HttpGet]
+        public ActionResult ForgotPassword ()
+        {
 
+            return View();
+        }
+        [HttpGet]
+        public ActionResult ChangePassword ()
+        {
+            return View();
+        }
+        
         protected bool isWhiteIP
         {
             get
@@ -235,6 +248,8 @@ namespace debt_fe.Controllers
                 return false;
             }
         }
+
+
     }
 
 }

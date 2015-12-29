@@ -9,6 +9,8 @@ namespace debt_fe
         public void Configuration(IAppBuilder app)
         {
             ConfigureAuth(app);
+            System.Web.Helpers.AntiForgeryConfig.UniqueClaimTypeIdentifier =
+            System.Security.Claims.ClaimTypes.NameIdentifier;
         }
     }
 }
