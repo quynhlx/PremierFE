@@ -17,7 +17,16 @@ namespace debt_fe.Controllers
             {
                 return RedirectToAction("Login", "Account");
             }
-            var activities = db.Vw_PremierActivity.ToList();
+            var activities = db.Vw_PremierActivity.Where(m => m.MemberISN == MemberISN).OrderByDescending(a=>a.updatedDate);
+            return View(activities);
+        }
+        public ActionResult Mobile(string username, string hashpass)
+        {
+            if (this.MobileLogin(username, hashpass) < 0 || MemberISN < 0)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            var activities = db.Vw_PremierActivity.Where(m => m.MemberISN == MemberISN).OrderByDescending(a => a.updatedDate);
             return View(activities);
         }
     }

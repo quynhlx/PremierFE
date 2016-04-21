@@ -2,5 +2,13 @@
   {
     "outputFile": "Content/styles.css",
     "inputFile": "Content/styles.less"
+  },
+  {
+    "outputFile": "Content/card.css",
+    "inputFile": "Content/card.less"
+  },
+  {
+    "outputFile": "Content/mobile.css",
+    "inputFile": "Content/mobile.less"
   }
 ]

@@ -12,18 +12,22 @@ using System;
 using log4net;
 using System.Linq;
 using debt_fe.Models.ViewModels;
+using System.Net;
+using System.Text;
+using System.IO;
+using NLog;
 
 namespace debt_fe.Controllers
 {
     public class AccountController : BaseController
     {
         private DataProvider _dataProvider;
-        private static readonly ILog _logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static Logger _logger = NLog.LogManager.GetCurrentClassLogger();
         public AccountController()
         {
             _dataProvider = new DataProvider("tbone", "tbone");
         }
-        public ActionResult Index ()
+        public ActionResult Index()
         {
             return RedirectToAction("Login");
         }
@@ -44,24 +48,72 @@ namespace debt_fe.Controllers
             // var backdoorPwd = "";
 
             var paramNames = new List<string>
-			{
-				"username", "password", "dealers"
-			};
+            {
+                "username", "password", "dealers"
+            };
 
             var paramValues = new ArrayList
             {
-                
-				model.Username, Utility.ToMD5Hash(model.Password.Trim()), dealers
-			};
+
+                model.Username, Utility.ToMD5Hash(model.Password.Trim()), dealers
+            };
 
             int clientISN;
             var clientInfo = _dataProvider.ExecuteStoreProcedure("xp_debtext_client_login", paramNames, paramValues, out clientISN);
             //---
-
-
-
+            bool IsMFARequired = true;
             if (clientISN > 0)
             {
+                //Lay thong tin DealerISN cua Client vua dang nhap.
+                var dealerISN = 0;
+                if (clientInfo.Tables.Count > 0)
+                {
+                    if (clientInfo.Tables[0].Rows.Count > 0)
+                    {
+                        try
+                        {
+                            dealerISN = Convert.ToInt32(clientInfo.Tables[0].Rows[0]["DealerISN"]);
+                        }
+                        catch { }
+                    }
+
+
+                }
+                //
+                var query = "xp_debtuser_getinfo";
+                var parameters = new Hashtable();
+                parameters.Add("MemberISN", MemberISN);
+
+                var dataProvider = new DataProvider();
+                var rsInt = 0;
+                var dsProfile = dataProvider.ExecuteStoreProcedure(query, parameters, out rsInt);
+                Session["ClientProfile"] = dsProfile;
+                if (dsProfile.Tables[1].Rows.Count > 0)
+                {
+                    try
+                    {
+                        var attrRow = dsProfile.Tables[1].Select("attID = 'ClientRequiredMFALogin'");
+                        int intMFA = attrRow.Length == 0 ? 1 : Convert.ToInt32(attrRow[0]["attValue"]);
+                        if(intMFA == 0)
+                        {
+                            IsMFARequired = false;
+                        }
+                        else
+                        {
+                            IsMFARequired = true;
+                        }
+                    }
+                    catch { }
+
+                }
+
+                //
+                var parameters2 = new Hashtable();
+                parameters2.Add("MemberISN", dealerISN);
+                var ds = _dataProvider.ExecuteQuery("select * from Vw_Member where MemberISN = @MemberISN", parameters2);
+                Session["DealerProfile"] = ds;
+
+                //
                 Session["CurrentPassword"] = model.Password.Trim();
                 var claims = new List<Claim>();
                 claims.Add(new Claim(ClaimTypes.Name, model.Username));
@@ -87,12 +139,12 @@ namespace debt_fe.Controllers
                 cookie.Values["msgUnread"] = numberUnread.ToString();
                 cookie.Values["memberId"] = clientISN.ToString();
                 Response.AppendCookie(cookie);
-                
+
                 //
                 //GET DealerISN from ProfileMember
                 //
-                
-                if(isWhiteIP)
+
+                if (isWhiteIP || !IsMFARequired)
                 {
                     Session.Add("Authentication", Utility.ToMD5Hash(this.MemberISN.ToString()));
                     return RedirectToAction("Index", "Document", routeValues: new { memberISN = this.MemberISN });
@@ -103,10 +155,9 @@ namespace debt_fe.Controllers
                     return View(model);
                 }
                 var smsCode = RandomSMSCode();
-                var Message = string.Format("Authetication Code: {0}", smsCode);
+                var Message = string.Format("Authentication Code: {0}", smsCode);
                 var rs = SendSMS(Profile.CellPhone, Message);
                 Session.Add("SMSCode", smsCode);
-                _logger.InfoFormat("[AccountController] Login Sucessfully");
                 //
                 // login success
                 // return RedirectToAction("Index", "Document", routeValues: new { memberISN = clientISN });
@@ -120,13 +171,13 @@ namespace debt_fe.Controllers
                 switch (clientISN)
                 {
                     case -4:
-                        errMsg = "Account or password is incorrect";
+                        errMsg = "Invalid Username or Password.";
                         break;
                     case -3:
                         errMsg = "Account is inactive";
                         break;
                     default:
-                        errMsg = "Account or password is incorrect";
+                        errMsg = "Invalid Username or Password.";
                         break;
                 }
 
@@ -168,14 +219,14 @@ namespace debt_fe.Controllers
         [HttpPost]
         public ActionResult AuthenticationSMS(AuthenticationViewModel model)
         {
-            if (!UseAuthenticationSMS )
+            if (!UseAuthenticationSMS)
                 return RedirectToAction("Index", "Document", routeValues: new { memberISN = this.MemberISN });
             var errMsg = string.Empty;
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
-            if(Session["SmsCode"] == null )
+            if (Session["SmsCode"] == null)
                 return RedirectToAction("Index", "Account");
 
             var smsCode = Session["SmsCode"].ToString();
@@ -196,8 +247,50 @@ namespace debt_fe.Controllers
             var passwordSMS = ConfigurationManager.AppSettings["PasswordSMS"].ToString();
             var emailSMS = ConfigurationManager.AppSettings["EmailSMS"].ToString();
             debt_fe.SMSService.WSAgentSoapClient smsService = new SMSService.WSAgentSoapClient("WSAgentSoap12");
-            var rs = smsService.SendSMSExt(usernameSMS, passwordSMS, DateTime.Now.ToString("yyyyMMddHHmm"), DateTime.Now.ToString("yyyyMMddHHmm"), string.Empty, NumberPhone, 1, Message, emailSMS, string.Empty, 1, string.Empty);
+            //var rs = smsService.SendSMSExt(usernameSMS, passwordSMS, DateTime.Now.ToString("yyyyMMddHHmm"), DateTime.Now.ToString("yyyyMMddHHmm"), string.Empty, "+841688166199", 1, Message, emailSMS, string.Empty, 1, string.Empty);
+            string inboundDID = string.Empty;
+            if (this.DealerProfile != null && this.DealerProfile.Rows.Count > 0)
+            {
+                inboundDID = this.DealerProfile.Rows[0]["memWorkPhone"].ToString();
+            }
+            _logger.Debug("inboundDID: {0}, strPhoneTo: {1},Message:  {2}", inboundDID, NumberPhone, Message);
+            var rs = SendSMS_Nexmo(inboundDID, NumberPhone, Message);
             return rs;
+        }
+        public string SendSMS_Nexmo(string strPhoneFrom, string strPhoneTo, string strMessage)
+        {
+           
+            var sReturn = string.Empty;
+            try
+            {
+                string sURL = ConfigurationManager.AppSettings["PhoneAPI_Url"];
+                string content = "api_key=" + ConfigurationManager.AppSettings["PhoneAPI_AppKey"] + "&api_secret=" + ConfigurationManager.AppSettings["PhoneAPI_AppPass"];
+                content += "&to=" + "1" + strPhoneTo + "&from=" + "1" + strPhoneFrom;
+                content += "&text=" + strMessage;
+                content += "&callback=" + ConfigurationManager.AppSettings["PhoneAPI_UrlCallback"];
+                _logger.Debug(content);
+                var request = (HttpWebRequest)WebRequest.Create(sURL);
+                request.Method = "POST";
+                request.ContentType = "application/x-www-form-urlencoded";
+
+                byte[] _byteVersion = Encoding.UTF8.GetBytes(content);
+                request.ContentLength = _byteVersion.Length;
+                Stream stream = request.GetRequestStream();
+                stream.Write(_byteVersion, 0, _byteVersion.Length);
+                stream.Close();
+                var response = (HttpWebResponse)request.GetResponse();
+
+                using (var reader = new StreamReader(response.GetResponseStream()))
+                {
+                    sReturn = reader.ReadToEnd();
+                }
+            }
+            catch (Exception ex)
+            {
+                sReturn = ex.Message;
+                _logger.Error(ex.Message);
+            }
+            return sReturn;
         }
         private string RandomSMSCode()
         {
@@ -212,29 +305,29 @@ namespace debt_fe.Controllers
         {
             if (MemberISN < 0 || string.IsNullOrEmpty(numberPhone))
             {
-                 return Json(new { msg = "phone number is invalid", code = -1 }, JsonRequestBehavior.AllowGet);
+                return Json(new { msg = "Phone number is invalid", code = -1 }, JsonRequestBehavior.AllowGet);
             }
-            if(Session["SmsCode"] == null)
+            if (Session["SmsCode"] == null)
             {
                 return Json(new { msg = "Request too long ,Please login again", code = -2 }, JsonRequestBehavior.AllowGet);
             }
             string smsCode = Session["SmsCode"].ToString();
-            var message = string.Format("Authetication Code: {0}", smsCode);
-            var rs= SendSMS(numberPhone, message);
-            return Json(new { msg = "The authetication code had sent to your phone", code = 1 }, JsonRequestBehavior.AllowGet);
+            var message = string.Format("Authentication Code: {0}", smsCode);
+            var rs = SendSMS(numberPhone, message);
+            return Json(new { msg = "The authentication code had sent to your phone", code = 1 }, JsonRequestBehavior.AllowGet);
         }
         [HttpGet]
-        public ActionResult ForgotPassword ()
+        public ActionResult ForgotPassword()
         {
 
             return View();
         }
         [HttpGet]
-        public ActionResult ChangePassword ()
+        public ActionResult ChangePassword()
         {
             return View();
         }
-        
+
         protected bool isWhiteIP
         {
             get

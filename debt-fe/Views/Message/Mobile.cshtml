@@ -1,0 +1,146 @@
+﻿@using debt_fe.Models
+@using debt_fe.Utilities
+@model IEnumerable<Vw_PremierMessage>
+@{
+    ViewBag.Title = "Messages";
+    Layout = "~/Views/Shared/_LayoutMobile.cshtml";
+}
+<style>
+    #modal-loading {
+        z-index: 1045;
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        text-align: center;
+    }
+
+    .card-body {
+        padding: 8px 16px;
+    }
+
+        .card-body:hover {
+            background-color: #ffffff !important;
+        }
+
+    .btn-o:hover {
+        color: #0094ff;
+    }
+</style>
+<div class="container">
+    <div class="modal fade modal-message" tabindex="-1" role="dialog" aria-labelledby="modalMessageDetail">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content detail no-border-radius">
+
+            </div>
+        </div>
+    </div>
+    <div class="mt+"></div>
+    @foreach (var item in Model)
+    {
+        var check = "";
+        var bold = "text-bold";
+        if (item.ClientRead.HasValue && item.ClientRead.Value == 1)
+        {
+            check = "hidden";
+            bold = "";
+
+        }
+
+        <div class="card">
+            <div class="card-body style-default-light">
+                <div class="row">
+                    <a href="@Url.Action("ViewAll","Message", new { MessageId = item.MessageISN })" data-isn="@item.MessageISN" class="btn-reply btn-unread">
+                        <div class="col-xs-10">
+                            <h3 class="mt mb0">
+                                <i id="mes-@item.MessageISN" class="fa fa-circle text-primary @check" style="font-size:small;"></i> <strong> @item.MsgSubject </strong>
+                            </h3>
+                            <div style="font-size:12px;">@item.updatedDate.Value.ToShortDateString()</div>
+                                <div id="bold-@item.MessageISN" style="font-size:15px;" class="@bold">@Utility.Truncate(item.LastMessage, 100)</div>
+                            </div>
+                        </a>
+                        <div class="col-xs-2 text-left">
+                            <a href="@Url.Action("Detail", "Message", new { MessageId = item.MessageISN })" data-isn="@item.MessageISN" class="btn btn-o style-transparent btn-reply btn-unread "> <i class="fa fa-reply text-primary"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    }
+
+</div>
+<div class="modal-backdrop fade in hidden" id="modal-loading"><div class="loader">Loading...</div></div>
+@section scripts {
+    <script>
+
+        $('.card').on('click', '.btn-reply', function (e) {
+
+            e.preventDefault();
+            e.stopPropagation();
+
+            var self = $(this);
+
+            console.log('button reply clicked');
+
+            var modal = $('.modal-message');
+            var err = $('#error-msg-container');
+
+            var href = self.prop('href');
+            //var isn = self.data('isn');
+
+            //if (isn === '') {
+            //    // err.removeClass('hide').find('#error-msg').html('Document ISN not found');
+            //    toastr.info('Document ISN not found');
+            //    return;
+            //}
+
+            var backdrop = $("<div class='modal-backdrop fade in'></div>");
+            var loading = $('#modal-loading');
+
+            loading.removeClass('hidden');
+            $('body').append(backdrop);
+
+
+            var req = $.ajax({ url: href });
+
+            req.fail(function (jqXHR) {
+                // err.removeClass('hide').find('#error-msg').html('Unexpected error occurred. Please try again.');
+                toastr.error('Request error. Please try again.');
+
+                loading.hide();
+                backdrop.remove();
+            });
+
+            req.done(function (resp) {
+                // console.log('response',resp);
+
+                if (resp === undefined || resp == '') {
+                    toastr.info('Unexpected error occurred. Please try again !!!');
+                    return;
+                }
+
+                //
+                // load partial into modal content
+                modal.find('.modal-content').html(resp);
+
+                loading.hide();
+                backdrop.remove();
+
+                modal.modal({
+                    backdrop: 'static'
+                });
+            });
+
+        });
+
+        $('.card').on('click', '.btn-unread', function (e) {
+            var self = $(this);
+            var isn = self.attr('data-isn');
+            var selector = "#mes-" + isn;
+            var selectorBold = "#bold-" + isn;
+            $markRead = $(selector);
+            $markRead.addClass('hidden');
+            $(selectorBold).removeClass('text-bold');
+        });
+    </script>
+}

@@ -1,0 +1,177 @@
+﻿@using debt_fe.Models
+@using debt_fe.Utilities
+
+@model IEnumerable<Vw_PremierMessage>
+@{
+    ViewBag.Title = "Messages";
+    Layout = "~/Views/Shared/_LayoutMobile.cshtml";
+}
+<div class="table-responsive">
+    <div class="modal fade modal-message" tabindex="-1" role="dialog" aria-labelledby="modalMessageDetail">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content detail no-border-radius">
+
+            </div>
+        </div>
+    </div>
+
+    <table class="table table-hover table-bordered" id="table-documents">
+        <thead>
+            <tr>
+                <th style="width: 25px;">No.</th>
+                <th style="width: 50px">Date</th>
+                <th style="width: 200px;">Subject</th>
+                <th>Last Message</th>
+                <th style="width: 95px"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int isn = 0;
+            }
+            @foreach (Vw_PremierMessage Mes in Model)
+            {
+                isn++;
+                string _class = "";
+                string LastDate = "";
+                if (!Convert.ToBoolean(Mes.ClientRead.Value))
+                {
+                    _class = "text-bold";
+                }
+                if (Mes.updatedDate.HasValue)
+                {
+                    LastDate = Mes.updatedDate.Value.ToShortDateString();
+                }
+                <tr class="@_class" id="mes-@Mes.MessageISN">
+                    <td class="text-center">
+                        <span>
+                            @isn
+                        </span>
+                        @if (!Convert.ToBoolean(Mes.ClientRead.Value))
+                        {<span class="check"></span>}
+                    </td>
+                    <td>
+                        @LastDate
+                    </td>
+                    <td>
+                        @Mes.MsgSubject
+                    </td>
+                    <td>@Utility.Truncate(Mes.LastMessage, 100)</td>
+                    <td>
+
+                        <a href="@Url.Action("Detail", "Message", new { MessageId = Mes.MessageISN })" class="btn btn-info btn-action-6 btn-reply" data-toggle="modal" data-target=".modal-message-detail" data-isn="@Mes.MessageISN">Reply</a>
+
+                        <a href="@Url.Action("ViewAll","Message", new { MessageId = Mes.MessageISN })" class="btn btn-info btn-action-6 btn-reply btn-viewall" data-toggle="modal" data-target=".modal-message-all" data-isn="@Mes.MessageISN">View All</a>
+                        <a href="@Url.Action("MarkAsRead", "Message", new { MessageId = Mes.MessageISN })" class="btn btn-info btn-action-12">Mark as read</a>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+    </div>
+    <div class="modal-backdrop fade in hidden" id="modal-loading"><div class="loader">Loading...</div></div>
+    @section scripts{
+        <script>
+            $(document).ready(function () {
+
+                //
+                // init datatable
+                //
+                var pageLenght = 10;
+                var $table = $('#table-documents').DataTable({
+                    "pageLength": pageLenght, // record per page
+                    "lengthChange": false, // no record per page change
+                    "info": false, // no entities info
+                    "order": [[1, "desc"]], // set default sort by column 5 (added date)
+                    aoColumnDefs: [{ "bSortable": false, "aTargets": [0, 4] }] // disable sort in last column
+                });
+                var $tableDoc = $('#table-documents');
+                if ($table.page.info().recordsTotal) {
+                    onNumberRowSpan($table, pageLenght, $tableDoc);
+
+                    $(document).on('click', '.paginate_button, #table-documents thead th', { t: $table, l: pageLenght, d: $tableDoc }, onChangePageSpan);
+
+                    $('#table-documents_filter').find('input').keyup(function () {
+                        onNumberRowSpan($table, pageLenght, $tableDoc);
+                    });
+                }
+                //
+                // add class form-control to datatable search
+                $('.dataTables_filter').find('input').addClass('form-control inline');
+
+                //
+                // button edit document
+                //
+                $('#table-documents').on('click', '.btn-reply', function (e) {
+
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    var self = $(this);
+
+                    debugger;
+                    console.log('button reply clicked');
+
+                    var modal = $('.modal-message');
+                    var err = $('#error-msg-container');
+
+                    var href = self.prop('href');
+                    //var isn = self.data('isn');
+
+                    //if (isn === '') {
+                    //    // err.removeClass('hide').find('#error-msg').html('Document ISN not found');
+                    //    toastr.info('Document ISN not found');
+                    //    return;
+                    //}
+
+                    var backdrop = $("<div class='modal-backdrop fade in'></div>");
+                    var loading = $('#modal-loading');
+
+                    loading.removeClass('hidden');
+                    $('body').append(backdrop);
+
+
+                    var req = $.ajax({ url: href });
+
+                    req.fail(function (jqXHR) {
+                        // err.removeClass('hide').find('#error-msg').html('Unexpected error occurred. Please try again.');
+                        toastr.error('Request error. Please try again.');
+
+                        loading.hide();
+                        backdrop.remove();
+                    });
+
+                    req.done(function (resp) {
+                        // console.log('response',resp);
+
+                        if (resp === undefined || resp == '') {
+                            toastr.info('Unexpected error occurred. Please try again !!!');
+                            return;
+                        }
+
+                        //
+                        // load partial into modal content
+                        modal.find('.modal-content').html(resp);
+
+                        loading.hide();
+                        backdrop.remove();
+
+                        modal.modal({
+                            backdrop: 'static'
+                        });
+                    });
+
+                });
+                $('#table-documents').on('click', '.btn-reply', function (e) {
+                    var self = $(this);
+                    var isn = self.attr('data-isn');
+                    var selector = "#mes-" + isn;
+                    $markRead = $(selector);
+                    $markRead.removeClass('text-bold');
+                    $markRead.find('td:first-child span:nth-child(2)').removeClass('check');
+                });
+            });
+        </script>
+    }

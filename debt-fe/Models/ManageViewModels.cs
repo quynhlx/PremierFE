@@ -42,15 +42,22 @@ namespace debt_fe.Models
     public class ChangePasswordViewModel
     {
 
+        [DataType(DataType.Password)]
+        [Display(Name = "Old password")]
+        public string OldPassHidden { get; set; }
         [Required]
+        [DataType(DataType.Password)]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 1)]
+        [Compare("OldPassHidden", ErrorMessage = "The Old password is incorrect")]
         [Display(Name = "Old password")]
         public string OldPass { get; set; }
         [Required]
+        [DataType(DataType.Password)]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 1)]
         [Display(Name = "New password")]
         public string NewPass { get; set; }
         [Required]
+        [DataType(DataType.Password)]
         [Display(Name = "Confirm new password")]
         [Compare("NewPass", ErrorMessage = "The new password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }

@@ -14,6 +14,7 @@ namespace debt_fe.Models
 {
     public class MyProfileViewModal
     {
+        public string UserName { set; get; }
         private DateTime _lastRequest;
         public DateTime LastRequest
         {
@@ -62,7 +63,7 @@ namespace debt_fe.Models
                 this._Married = (int)value.SelectedValue;
             }
 		}
-
+        
         public string BestTimeToContact { set; get; }
 
         public string Address { set; get; }
@@ -126,18 +127,19 @@ namespace debt_fe.Models
         }
         public string CoZip { set; get; }
         public string CoEmail { set; get; }
+        public string ClientID { set; get; }
 
         public string StatusGetData { set; get; }
+        public string IsCoClient { set; get; }
+        public bool IsMFARequired { set; get; }
+
         public void GetMyProfile (int MemberISN)
         {
 
 
             var db = new PremierEntities();
-            var userInfos = db.xp_debtuser_getinfo(MemberISN);
-            var userInfo = userInfos.FirstOrDefault();
-
-            
-
+            //var userInfos = db.xp_debtuser_getinfo(MemberISN);
+            //var userInfo = userInfos.FirstOrDefault();
             
             var query = "xp_debtuser_getinfo";
             var parameters = new Hashtable();
@@ -148,26 +150,27 @@ namespace debt_fe.Models
             var ds = dataProvider.ExecuteStoreProcedure(query, parameters, out rsInt ) ;
             try
             {
+                this.UserName = ds.Tables[0].Rows[0]["memUserName"].ToString();
                 this.LastRequest = GetLastRequest(MemberISN);
-                this.FirstName = userInfo.memFirstName;
-                this.LastName = userInfo.memLastName;
-                this.HomePhone = userInfo.memHomePhone;
-                this.WorkPhone = userInfo.memWorkPhone;
-                this.CellPhone = userInfo.memPhone;
-                this.FaxNumber = userInfo.memFax;
-                this.Email = userInfo.memEmail;
-                this.DealerISN = userInfo.DealerISN;
+                this.FirstName = ds.Tables[0].Rows[0]["memFirstName"].ToString();
+                this.LastName = ds.Tables[0].Rows[0]["memLastName"].ToString();
+                this.HomePhone = ds.Tables[0].Rows[0]["memHomePhone"].ToString(); 
+                this.WorkPhone = ds.Tables[0].Rows[0]["memWorkPhone"].ToString(); 
+                this.CellPhone = ds.Tables[0].Rows[0]["memPhone"].ToString(); 
+                this.FaxNumber = ds.Tables[0].Rows[0]["memFax"].ToString(); 
+                this.ClientID = ds.Tables[0].Rows[0]["memFax"].ToString();
+                this.Email = ds.Tables[0].Rows[0]["memEmail"].ToString(); 
+                this.DealerISN =  Convert.ToInt32(ds.Tables[0].Rows[0]["DealerISN"]);
                 var attrRow = ds.Tables[1].Select("attID = 'BestTimeOfCall'");
-                
                 this.BestTimeToContact = attrRow.Length == 0 ? string.Empty : attrRow[0]["attValue"].ToString();
 
                 attrRow = ds.Tables[1].Select("attID = 'MarriedStatus'");
                 this._Married = attrRow.Length == 0 ? -1 : Convert.ToInt32(attrRow[0]["attValue"]);
 
-                this.Address = userInfo.memAddress;
-                this.City = userInfo.memCity;
-                this._State = userInfo.memState;
-                this.Zip = userInfo.memZip;
+                this.Address = ds.Tables[0].Rows[0]["memAddress"].ToString();
+                this.City = ds.Tables[0].Rows[0]["memCity"].ToString();
+                this._State = ds.Tables[0].Rows[0]["memState"].ToString();
+                this.Zip = ds.Tables[0].Rows[0]["memZip"].ToString();
 
                 attrRow = ds.Tables[1].Select("attID = 'Language'");
                 this.Language = attrRow.Length == 0 ? string.Empty : attrRow[0]["attValue"].ToString();
@@ -186,7 +189,12 @@ namespace debt_fe.Models
                 this.CoZip = attrRow.Length == 0 ? string.Empty : attrRow[0]["attValue"].ToString();
                 attrRow = ds.Tables[1].Select("attID = 'CoEmail'");
                 this.CoEmail = attrRow.Length == 0 ? string.Empty : attrRow[0]["attValue"].ToString();
-            }catch 
+                attrRow = ds.Tables[1].Select("attID = 'IsCoClient'");
+                this.IsCoClient = attrRow.Length == 0 ? string.Empty : attrRow[0]["attValue"].ToString();
+                attrRow = ds.Tables[1].Select("attID = 'ClientRequiredMFALogin'");
+                this.IsMFARequired = attrRow.Length == 0 ? true : Convert.ToBoolean(attrRow[0]["attValue"]);
+            }
+            catch 
                 (Exception ex)
             {
                 StatusGetData = ex.ToString();

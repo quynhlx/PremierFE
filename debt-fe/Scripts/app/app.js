@@ -60,6 +60,7 @@
         }
     }
 
+  
 
     $(document).ready(function () {
 
@@ -135,5 +136,61 @@
     });
 
 })();
+function onNumberRow($table, pageLenght, $tableDoc) {
+
+    // var $table = e.data.t, pageLenght = e.data.l;
+    
+
+    var currentPage = $table.page.info().page;
+    // if (currentPage === 0) currentPage = 1;
+
+    var rows = $tableDoc.find('tbody').children('tr');
+    console.log(rows, rows.length, currentPage, pageLenght);
+
+    $(rows).each(function (i, row) {
+        var count = i + 1;
+        var text = pageLenght * (currentPage) + count;
+        console.log(i, row, text);
+        var $td = $(row).children('td').first();
+        if ($td != null)
+            $td.text(text);
+        else {
+            console.log('error');
+        }
+        console.log(pageLenght * (currentPage) + i);
+    });
+}
+
+function onChangePage(e) {
+    var $table = e.data.t, pageLenght = e.data.l, $tableDoc = e.data.d;
+    onNumberRow($table, pageLenght, $tableDoc);
+}
+
+function onNumberRowSpan($table, pageLenght, $tableDoc) {
+
+    // var $table = e.data.t, pageLenght = e.data.l;
 
 
+    var currentPage = $table.page.info().page;
+    // if (currentPage === 0) currentPage = 1;
+
+    var rows = $tableDoc.find('tbody').children('tr');
+    console.log(rows, rows.length, currentPage, pageLenght);
+
+    $(rows).each(function (i, row) {
+        var count = i + 1;
+        var text = pageLenght * (currentPage) + count;
+        console.log(i, row, text);
+        var $td = $(row).children('td').first().children('span').first();
+        if ($td != null)
+            $td.text(text);
+        else {
+            console.log('error');
+        }
+    });
+}
+
+function onChangePageSpan(e) {
+    var $table = e.data.t, pageLenght = e.data.l, $tableDoc = e.data.d;
+    onNumberRowSpan($table, pageLenght, $tableDoc);
+}

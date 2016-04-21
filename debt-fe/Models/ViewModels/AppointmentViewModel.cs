@@ -8,6 +8,7 @@ namespace debt_fe.Models.ViewModels
 {
     public class AppointmentViewModel
     {
+        public int ISN { set; get; }
         public int No { set; get; }
         public string Datetime { set; get; }
         public AppointmentStatus Status { set; get; }
@@ -39,6 +40,11 @@ namespace debt_fe.Models.ViewModels
                 }
             }
         }
+        public bool HasAttachFile { set; get; }
+        public string CssActtachFile { get {  if ( !HasAttachFile) return "hidden"; else return string.Empty; }}
+        public int DownloadFile { get; set; }
+        public string With { set; get; }
+        public string Description { set; get; }
     }
     public enum AppointmentStatus
     {

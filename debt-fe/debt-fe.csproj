@@ -45,6 +45,10 @@
       <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.2.3\lib\net45\NLog.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="RightSignatures, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\RightSignatures.dll</HintPath>
@@ -186,6 +190,8 @@
     <Compile Include="Controllers\MessageController.cs" />
     <Compile Include="Controllers\MyAccountController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
+    <Compile Include="Controllers\ServiceController.cs" />
+    <Compile Include="Controllers\SignatureController.cs" />
     <Compile Include="DataAccessHelper\DataProvider.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -201,10 +207,22 @@
     <Compile Include="Models\DebtModel.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\DebtTemplate.cs">
+      <DependentUpon>PremierModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Document.cs">
+      <DependentUpon>PremierModels.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\DocumentModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManagementAccountModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\Member.cs">
+      <DependentUpon>PremierModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MemberExt2.cs">
+      <DependentUpon>PremierModels.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\MemberModel.cs" />
     <Compile Include="Models\MessageModels.cs" />
     <Compile Include="Models\MyProfileViewModal.cs" />
@@ -222,6 +240,7 @@
     <Compile Include="Models\ViewModels\ContactInformationViewModel.cs" />
     <Compile Include="Models\ViewModels\DebtViewModel.cs" />
     <Compile Include="Models\ViewModels\DocumentViewModel.cs" />
+    <Compile Include="Models\ViewModels\DowloadFileViewModels.cs" />
     <Compile Include="Models\ViewModels\HeaderInfoViewModel.cs" />
     <Compile Include="Models\ViewModels\SignatureViewModel.cs" />
     <Compile Include="Models\PremierModels.Context.cs">
@@ -239,7 +258,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>PremierModels.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\Vw_DebtExt_Appointment.cs">
+      <DependentUpon>PremierModels.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Vw_DebtExt_Creditor.cs">
+      <DependentUpon>PremierModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Vw_DebtExt_Document.cs">
+      <DependentUpon>PremierModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Vw_Member.cs">
       <DependentUpon>PremierModels.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Vw_PremierActivity.cs">
@@ -251,6 +279,9 @@
     <Compile Include="Models\Vw_TroubleTicket.cs">
       <DependentUpon>PremierModels.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\xp_debtext_document_cscheduleISN_Result.cs">
+      <DependentUpon>PremierModels.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\xp_premiermessage_viewall_Result.cs">
       <DependentUpon>PremierModels.tt</DependentUpon>
     </Compile>
@@ -260,7 +291,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Service\EmailService.cs" />
+    <Compile Include="Service\IEmailService.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Utilities\TimeZone.cs" />
     <Compile Include="Utilities\Utility.cs" />
     <Compile Include="Models\xp_debtuser_getinfo_Result.cs">
       <DependentUpon>PremierModels.tt</DependentUpon>
@@ -269,19 +303,26 @@
   <ItemGroup>
     <Content Include="App_Data\UpdateHistory.xml" />
     <Content Include="App_Data\USAState.xml" />
+    <Content Include="App_Data\XMLMergeField.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="ClientTracking.html" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="Content\css\font-awesome.css" />
-    <Content Include="Content\css\font-awesome.min.css" />
+    <Content Include="Content\box-model.css" />
+    <Content Include="Content\card.css">
+      <DependentUpon>card.less</DependentUpon>
+    </Content>
+    <Content Include="Content\card.min.css">
+      <DependentUpon>card.css</DependentUpon>
+    </Content>
     <Content Include="Content\extensions\bootstrapValidator.css" />
     <Content Include="Content\extensions\bootstrapValidator.min.css" />
     <Content Include="Content\extensions\box-model.css" />
     <Content Include="Content\extensions\jquery.dataTables.css" />
     <Content Include="Content\extensions\jquery.dataTables.min.css" />
-    <Content Include="Content\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\images\222.png" />
     <Content Include="Content\images\arrow.png" />
     <Content Include="Content\images\bag.png" />
@@ -309,6 +350,14 @@
     <Content Include="Content\images\sort_desc.png" />
     <Content Include="Content\images\sort_desc_disabled.png" />
     <Content Include="Content\images\user.png" />
+    <Content Include="Content\Mobile\mobile.css">
+      <DependentUpon>mobile.less</DependentUpon>
+    </Content>
+    <Content Include="Content\Mobile\mobile.min.css">
+      <DependentUpon>mobile.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Mobile\bootstrap.css" />
+    <Content Include="Content\Mobile\materialadmin.css" />
     <Content Include="Content\styles.css">
       <DependentUpon>styles.less</DependentUpon>
     </Content>
@@ -318,7 +367,12 @@
     <Content Include="Content\extensions\toastr.css" />
     <Content Include="Content\toastr.min.css" />
     <Content Include="Content\Videos\Premier-Docs-v3-01.mp4" />
+    <Content Include="css\font-awesome.css" />
+    <Content Include="css\font-awesome.min.css" />
+    <Content Include="EmailTemplates\Content-Send-2-Co-Client_to-Sign-via-Right-Signature.htm" />
+    <Content Include="EmailTemplates\EmailContact.htm" />
     <Content Include="favicon.ico" />
+    <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -328,12 +382,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.css.map" />
-    <Content Include="Content\images\Thumbs.db" />
-    <Content Include="Content\fonts\fontawesome-webfont.woff2" />
-    <Content Include="Content\fonts\fontawesome-webfont.woff" />
-    <Content Include="Content\fonts\fontawesome-webfont.ttf" />
-    <Content Include="Content\fonts\fontawesome-webfont.eot" />
-    <Content Include="Content\fonts\FontAwesome.otf" />
     <Content Include="Content\styles.less" />
     <Content Include="Content\styles.css.map">
       <DependentUpon>styles.css</DependentUpon>
@@ -361,9 +409,22 @@
     </Content>
     <Content Include="Properties\DataSources\System.Data.DataSet.datasource" />
     <None Include="compilerconfig.json" />
-    <Content Include="compilerconfig.json.defaults">
+    <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
+    </None>
+    <Content Include="NLog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="fonts\FontAwesome.otf" />
+    <Content Include="fonts\fontawesome-webfont.woff2" />
+    <Content Include="fonts\fontawesome-webfont.woff" />
+    <Content Include="fonts\fontawesome-webfont.ttf" />
+    <Content Include="fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\Mobile\mobile.less" />
+    <Content Include="Content\card.less" />
+    <None Include="NLog.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\PublishProfiles\Upcode70.pubxml" />
     <None Include="Service References\SMSService\WSAgent.disco" />
     <None Include="Service References\SMSService\configuration91.svcinfo" />
@@ -371,13 +432,10 @@
     <None Include="Service References\SMSService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </None>
     <Content Include="Scripts\jquery.countdown.js" />
     <Content Include="Scripts\jquery.countdown.min.js" />
-    <Content Include="XMLData\Message.xml">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="XMLData\DebtData.xml" />
     <Content Include="Html\Web.config" />
     <EntityDeploy Include="Models\PremierModels.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
@@ -423,8 +481,21 @@
     <Content Include="Views\Appointment\Index.cshtml" />
     <Content Include="Views\Shared\_Complaint.cshtml" />
     <Content Include="Views\Account\AuthenticationSMS.cshtml" />
-    <None Include="Service References\SMSService\WSAgent.wsdl" />
-    <None Include="Web.config" />
+    <None Include="Service References\SMSService\WSAgent.wsdl">
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="Views\Appointment\RecordModal.cshtml" />
+    <Content Include="Views\Appointment\DocumentModal.cshtml" />
+    <Content Include="Views\Shared\_LayoutMobile.cshtml" />
+    <Content Include="Views\Message\Mobile2.cshtml" />
+    <Content Include="Views\Appointment\Mobile.cshtml" />
+    <Content Include="Views\Activity\Mobile.cshtml" />
+    <Content Include="Views\Debt\Mobile.cshtml" />
+    <Content Include="Views\Document\_Send2YourCoClient.cshtml" />
+    <Content Include="Views\Signature\Index.cshtml" />
+    <Content Include="Views\Signature\Result.cshtml" />
+    <Content Include="Views\Message\Mobile.cshtml" />
+    <Content Include="Web.config" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />
     <Content Include="Views\Manage\Error.cshtml" />
     <None Include="Web.Debug.config">
@@ -460,7 +531,6 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Temp\Layout_bak.cshtml" />
     <Content Include="Views\Document\Index.cshtml" />
     <Content Include="Views\MyAccount\Index.cshtml" />
     <Content Include="Views\Shared\_LayoutLogin.cshtml" />
@@ -481,6 +551,8 @@
   <ItemGroup>
     <Folder Include="Uploads\" />
     <Folder Include="Views\Base\" />
+    <Folder Include="Views\Service\" />
+    <Folder Include="Views\Temp\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

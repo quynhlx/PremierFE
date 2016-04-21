@@ -4,12 +4,22 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="6163ec8869d64d7ba07fdfe99c18e4f6" Name="Diagram1" >
+      <Diagram DiagramId="6163ec8869d64d7ba07fdfe99c18e4f6" Name="Diagram1" ZoomLevel="75" >
         <EntityTypeShape EntityType="ROIModel.Vw_PremierMessage" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="ROIModel.PremierMessage" Width="1.5" PointX="3.375" PointY="0.75" />
         <EntityTypeShape EntityType="ROIModel.Vw_TroubleTicket" Width="1.5" PointX="0.75" PointY="4.75" />
-        <EntityTypeShape EntityType="ROIModel.Vw_DebtExt_Creditor" Width="1.5" PointX="3.375" PointY="4.75" />
+        <EntityTypeShape EntityType="ROIModel.Vw_DebtExt_Creditor" Width="2.125" PointX="2.875" PointY="4.75" />
         <EntityTypeShape EntityType="ROIModel.Vw_PremierActivity" Width="1.5" PointX="5.375" PointY="0.75" />
+        <EntityTypeShape EntityType="ROIModel.Vw_DebtExt_Document" Width="2.25" PointX="5.375" PointY="4.75" />
+        <EntityTypeShape EntityType="ROIModel.DebtTemplate" Width="1.5" PointX="7.375" PointY="0.75" />
+        <EntityTypeShape EntityType="ROIModel.Document" Width="1.5" PointX="8.75" PointY="6.25" />
+        <EntityTypeShape EntityType="ROIModel.Member" Width="3.25" PointX="11.625" PointY="1.125" />
+        <AssociationConnector Association="ROIModel.FK__Document__Member__11D4A34F" />
+        <AssociationConnector Association="ROIModel.FK__PremierMe__Membe__4E40F516" />
+        <EntityTypeShape EntityType="ROIModel.Vw_DebtExt_Appointment" Width="1.5" PointX="9.375" PointY="0.75" />
+        <EntityTypeShape EntityType="ROIModel.MemberExt2" Width="1.5" PointX="5.125" PointY="12.375" />
+        <AssociationConnector Association="ROIModel.FK__DebtTempl__Deale__7AF39FFC" />
+        <EntityTypeShape EntityType="ROIModel.Vw_Member" Width="1.5" PointX="7.375" PointY="12.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

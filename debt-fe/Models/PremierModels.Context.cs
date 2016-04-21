@@ -32,8 +32,15 @@ namespace debt_fe.Models
         public virtual DbSet<Vw_TroubleTicket> Vw_TroubleTicket { get; set; }
         public virtual DbSet<Vw_DebtExt_Creditor> Vw_DebtExt_Creditor { get; set; }
         public virtual DbSet<Vw_PremierActivity> Vw_PremierActivity { get; set; }
+        public virtual DbSet<Vw_DebtExt_Document> Vw_DebtExt_Document { get; set; }
+        public virtual DbSet<DebtTemplate> DebtTemplates { get; set; }
+        public virtual DbSet<Document> Documents { get; set; }
+        public virtual DbSet<Member> Members { get; set; }
+        public virtual DbSet<Vw_DebtExt_Appointment> Vw_DebtExt_Appointment { get; set; }
+        public virtual DbSet<MemberExt2> MemberExt2 { get; set; }
+        public virtual DbSet<Vw_Member> Vw_Member { get; set; }
     
-        public virtual int xp_debtext_client_insupd2(Nullable<int> memberISN, Nullable<int> salemanISN, Nullable<int> campaignISN, string memUserName, string memPassword, string memFax, string memFirstName, string memLastName, string memPhone, string memEmail, string memAddress, string memZip, string memCity, string memState, string memCompanyName, string memTitle, string memIM, Nullable<byte> memStatus, string memComment, Nullable<decimal> memCreditLine, Nullable<int> dealerISN, string aNI, Nullable<double> memCreditScore, Nullable<decimal> memApprovalPayment, Nullable<decimal> memApprovalAmount, string memSSN, Nullable<byte> memConnectedLO, Nullable<int> updatedBy, Nullable<byte> memTradeVehicle, string memYearVehicle, string memManufacturerVehicle, string memModelVehicle, Nullable<decimal> memMonthlyPayment, string memPolycomID, string memWeekDay, Nullable<decimal> memHomeValue, Nullable<decimal> memCurrentLeftOnLoan, Nullable<double> memInterestRate, Nullable<decimal> memMonthlyPaymentM, Nullable<decimal> memAppoxTotalDebt, string memTypeOfLoan, string memAnyLatePayment, string memApprovalOfRCredit, string memIsYourCreditGreat, string memTimeZoneFull, string memDomainName, Nullable<decimal> memPayOffAmount, Nullable<decimal> balance, string ratePlan, Nullable<System.DateTime> memDOB, Nullable<int> lastStepFlag, Nullable<byte> memReadyPurchaseNow, string xmlInfoExt, Nullable<int> phoneRechargeNo, string memDropID, Nullable<int> accountManagerISN)
+        public virtual int xp_debtext_client_insupd2(Nullable<int> memberISN, Nullable<int> salemanISN, Nullable<int> campaignISN, string memUserName, string memPassword, string memFax, string memFirstName, string memLastName, string memPhone, string memEmail, string memAddress, string memZip, string memCity, string memState, string memCompanyName, string memTitle, string memIM, Nullable<byte> memStatus, string memComment, Nullable<decimal> memCreditLine, Nullable<int> dealerISN, string aNI, Nullable<double> memCreditScore, Nullable<decimal> memApprovalPayment, Nullable<decimal> memApprovalAmount, string memSSN, Nullable<short> memTimeOption, Nullable<byte> memDST, Nullable<byte> memConnectedLO, Nullable<int> updatedBy, Nullable<byte> memTradeVehicle, string memYearVehicle, string memManufacturerVehicle, string memModelVehicle, Nullable<decimal> memMonthlyPayment, string memPolycomID, string memWeekDay, Nullable<decimal> memHomeValue, Nullable<decimal> memCurrentLeftOnLoan, Nullable<double> memInterestRate, Nullable<decimal> memMonthlyPaymentM, Nullable<decimal> memAppoxTotalDebt, string memTypeOfLoan, string memAnyLatePayment, string memApprovalOfRCredit, string memIsYourCreditGreat, string memTimeZoneFull, string memDomainName, Nullable<decimal> memPayOffAmount, Nullable<decimal> balance, string ratePlan, Nullable<System.DateTime> memDOB, Nullable<int> lastStepFlag, Nullable<byte> memReadyPurchaseNow, string xmlInfoExt, Nullable<int> phoneRechargeNo, string memDropID, Nullable<int> accountManagerISN)
         {
             var memberISNParameter = memberISN.HasValue ?
                 new ObjectParameter("MemberISN", memberISN) :
@@ -138,6 +145,14 @@ namespace debt_fe.Models
             var memSSNParameter = memSSN != null ?
                 new ObjectParameter("memSSN", memSSN) :
                 new ObjectParameter("memSSN", typeof(string));
+    
+            var memTimeOptionParameter = memTimeOption.HasValue ?
+                new ObjectParameter("memTimeOption", memTimeOption) :
+                new ObjectParameter("memTimeOption", typeof(short));
+    
+            var memDSTParameter = memDST.HasValue ?
+                new ObjectParameter("memDST", memDST) :
+                new ObjectParameter("memDST", typeof(byte));
     
             var memConnectedLOParameter = memConnectedLO.HasValue ?
                 new ObjectParameter("memConnectedLO", memConnectedLO) :
@@ -259,7 +274,7 @@ namespace debt_fe.Models
                 new ObjectParameter("AccountManagerISN", accountManagerISN) :
                 new ObjectParameter("AccountManagerISN", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("xp_debtext_client_insupd2", memberISNParameter, salemanISNParameter, campaignISNParameter, memUserNameParameter, memPasswordParameter, memFaxParameter, memFirstNameParameter, memLastNameParameter, memPhoneParameter, memEmailParameter, memAddressParameter, memZipParameter, memCityParameter, memStateParameter, memCompanyNameParameter, memTitleParameter, memIMParameter, memStatusParameter, memCommentParameter, memCreditLineParameter, dealerISNParameter, aNIParameter, memCreditScoreParameter, memApprovalPaymentParameter, memApprovalAmountParameter, memSSNParameter, memConnectedLOParameter, updatedByParameter, memTradeVehicleParameter, memYearVehicleParameter, memManufacturerVehicleParameter, memModelVehicleParameter, memMonthlyPaymentParameter, memPolycomIDParameter, memWeekDayParameter, memHomeValueParameter, memCurrentLeftOnLoanParameter, memInterestRateParameter, memMonthlyPaymentMParameter, memAppoxTotalDebtParameter, memTypeOfLoanParameter, memAnyLatePaymentParameter, memApprovalOfRCreditParameter, memIsYourCreditGreatParameter, memTimeZoneFullParameter, memDomainNameParameter, memPayOffAmountParameter, balanceParameter, ratePlanParameter, memDOBParameter, lastStepFlagParameter, memReadyPurchaseNowParameter, xmlInfoExtParameter, phoneRechargeNoParameter, memDropIDParameter, accountManagerISNParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("xp_debtext_client_insupd2", memberISNParameter, salemanISNParameter, campaignISNParameter, memUserNameParameter, memPasswordParameter, memFaxParameter, memFirstNameParameter, memLastNameParameter, memPhoneParameter, memEmailParameter, memAddressParameter, memZipParameter, memCityParameter, memStateParameter, memCompanyNameParameter, memTitleParameter, memIMParameter, memStatusParameter, memCommentParameter, memCreditLineParameter, dealerISNParameter, aNIParameter, memCreditScoreParameter, memApprovalPaymentParameter, memApprovalAmountParameter, memSSNParameter, memTimeOptionParameter, memDSTParameter, memConnectedLOParameter, updatedByParameter, memTradeVehicleParameter, memYearVehicleParameter, memManufacturerVehicleParameter, memModelVehicleParameter, memMonthlyPaymentParameter, memPolycomIDParameter, memWeekDayParameter, memHomeValueParameter, memCurrentLeftOnLoanParameter, memInterestRateParameter, memMonthlyPaymentMParameter, memAppoxTotalDebtParameter, memTypeOfLoanParameter, memAnyLatePaymentParameter, memApprovalOfRCreditParameter, memIsYourCreditGreatParameter, memTimeZoneFullParameter, memDomainNameParameter, memPayOffAmountParameter, balanceParameter, ratePlanParameter, memDOBParameter, lastStepFlagParameter, memReadyPurchaseNowParameter, xmlInfoExtParameter, phoneRechargeNoParameter, memDropIDParameter, accountManagerISNParameter);
         }
     
         public virtual ObjectResult<xp_debtuser_getinfo_Result> xp_debtuser_getinfo(Nullable<int> memberISN)
@@ -348,7 +363,7 @@ namespace debt_fe.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("xp_complaint_ins", memberISNParameter, complaintParameter, addedByParameter);
         }
     
-        public virtual int xp_debtext_document_signature_upd(Nullable<int> documentISN, string docFileName, Nullable<int> docSize, Nullable<System.DateTime> docSignatureDate, string docSignatureIP, string clientInfo, Nullable<int> updatedBy)
+        public virtual int xp_debtext_document_signature_upd(Nullable<int> documentISN, string docFileName, Nullable<int> docSize, Nullable<System.DateTime> docSignatureDate, string docSignatureIP, string clientInfo, string docGuid, string appendNotes, Nullable<int> updatedBy)
         {
             var documentISNParameter = documentISN.HasValue ?
                 new ObjectParameter("DocumentISN", documentISN) :
@@ -374,11 +389,19 @@ namespace debt_fe.Models
                 new ObjectParameter("ClientInfo", clientInfo) :
                 new ObjectParameter("ClientInfo", typeof(string));
     
+            var docGuidParameter = docGuid != null ?
+                new ObjectParameter("docGuid", docGuid) :
+                new ObjectParameter("docGuid", typeof(string));
+    
+            var appendNotesParameter = appendNotes != null ?
+                new ObjectParameter("AppendNotes", appendNotes) :
+                new ObjectParameter("AppendNotes", typeof(string));
+    
             var updatedByParameter = updatedBy.HasValue ?
                 new ObjectParameter("updatedBy", updatedBy) :
                 new ObjectParameter("updatedBy", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("xp_debtext_document_signature_upd", documentISNParameter, docFileNameParameter, docSizeParameter, docSignatureDateParameter, docSignatureIPParameter, clientInfoParameter, updatedByParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("xp_debtext_document_signature_upd", documentISNParameter, docFileNameParameter, docSizeParameter, docSignatureDateParameter, docSignatureIPParameter, clientInfoParameter, docGuidParameter, appendNotesParameter, updatedByParameter);
         }
     
         public virtual int xp_member_changepwd(Nullable<int> memberISN, string newPassword, Nullable<int> updatedBy)
@@ -413,6 +436,19 @@ namespace debt_fe.Models
                 new ObjectParameter("updatedBy", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("xp_debtext_client_password_upd", memberISNParameter, memPasswordParameter, updatedByParameter);
+        }
+    
+        public virtual ObjectResult<xp_debtext_document_cscheduleISN_Result> xp_debtext_document_cscheduleISN(Nullable<int> id, Nullable<int> dealerISN)
+        {
+            var idParameter = id.HasValue ?
+                new ObjectParameter("Id", id) :
+                new ObjectParameter("Id", typeof(int));
+    
+            var dealerISNParameter = dealerISN.HasValue ?
+                new ObjectParameter("DealerISN", dealerISN) :
+                new ObjectParameter("DealerISN", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<xp_debtext_document_cscheduleISN_Result>("xp_debtext_document_cscheduleISN", idParameter, dealerISNParameter);
         }
     }
 }

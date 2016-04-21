@@ -8,6 +8,10 @@ namespace debt_fe.Models
 {
     public class TemplateModel
     {
+        public TemplateModel()
+        {
+            List<Structs.MergeField> MergeFields = new List<Structs.MergeField>();
+        }
         public int TemplateId { get; set; }
         public string TemplateName { get; set; }
         public string TemplateDesc { get; set; }

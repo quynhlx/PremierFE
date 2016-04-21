@@ -1,6 +1,6 @@
 ﻿@{
     var BaseView = (debt_fe.Models.ViewModels.BaseViewModel)ViewBag.BaseViewModel;
-
+    var Profile = (debt_fe.Models.MyProfileViewModal)ViewBag.MyProfile;
     var memberId = -1;
     var debt = Request.Cookies["debt_extension"];
 
@@ -18,12 +18,12 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Premier Documents Client</title>
+    <title>Macklock Client</title>
     @Styles.Render("~/Content/css")
     @Styles.Render("~/Content/extensions")
     @Styles.Render("~/Content/custom")        
     @Scripts.Render("~/bundles/modernizr")
-
+    <link href="~/css/font-awesome.css" rel="stylesheet" />
     @*<link href="~/Content/toastr.css" rel="stylesheet" />*@
 </head>
 <body>
@@ -65,13 +65,14 @@
                 </div>
             </div>
         </div>
-        <footer>© Copyright 2015 Premier Documents Inc. All Rights Reserved.</footer>
+        <footer>© Copyright 2016 Macklock National Credit Inc. All Rights Reserved.</footer>
     </div>
 
     <input type="hidden" id="success" value="@TempData["success"]" />
     <input type="hidden" id="info" value="@TempData["info"]" />
     <input type="hidden" id="warning" value="@TempData["warning"]" />
     <input type="hidden" id="error" value="@TempData["error"]" />
+    <input type="hidden" id="musername" value="@BaseView.ManagerViewModel.Username" />
     @*<div class="chat-box hidden">
         <div class="chat-box-header">
             <label class="pull-left ml white text-bold">Customer</label>
@@ -93,13 +94,7 @@
             <button class="btn btn-sm btn-exp pull-right"><span class="glyphicon glyphicon-exclamation-sign"></span></button>
         </div>
     </div>*@
-    <div class="chat-box  box-minus">
-        <div class="chat-box-header">
-            Chat Support
-            <button class="btn pull-right " id="chat-minus"><span class="fa fa-expand" id="icon-minus"></span></button>
-        </div>
-        <iframe src="@ViewBag.BaseUrlChat/ChatHub/ChatClient?userid=@memberId" frameborder="0" id="chat-iframe"></iframe>
-    </div>
+    
     
 
     @Scripts.Render("~/bundles/jquery")
@@ -108,7 +103,20 @@
 
     <!--<script src="~/Scripts/app/app.validator.js"></script>-->
     @*<script src="~/Scripts/toastr.js"></script>*@
+    <script>
+        window.appmemail = '@BaseView.ManagerViewModel.Email';
+        window.appmusername = '@BaseView.ManagerViewModel.Username';
+        window.appusername = '@Profile.UserName';
+        window.appemail = '@Profile.Email';
+
+
+    </script>
     <script src="~/Scripts/app/app.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    @*<script src="https://www.premierdocprep.com/chat/publish/chat.client.ember.js"></script>*@
+    @*<script src="http://chat.vititalk.com/publish/chat.client.ember.js"></script>*@
+    <script src="http://chat2.quynhlx.com/publish/chat.client.ember.js"></script>
+
 
     @RenderSection("scripts", required: false)
     <script>
@@ -120,11 +128,6 @@
                     $("#modal-result").html(result);
                 }
             });
-        });
-        $('#chat-minus').click(function () {
-            $('.chat-box').toggleClass("box-minus");
-            $('#icon-minus').toggleClass("fa-expand");
-            $('#icon-minus').toggleClass("fa-minus");
         });
     </script>   
 

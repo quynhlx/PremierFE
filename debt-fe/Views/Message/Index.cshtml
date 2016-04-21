@@ -1,4 +1,5 @@
 ﻿@using debt_fe.Models
+@using debt_fe.Utilities
 @model IEnumerable<Vw_PremierMessage>
 @{
     ViewBag.Title = "Messages";
@@ -13,14 +14,14 @@
 </div>
 
 <div class="col-md-12 mt+++">
-    <table class="table table-bordered" id="table-documents">
+    <table class="table table-bordered hover" id="table-documents">
         <thead>
             <tr>
-                <th>No.</th>
-                <th>Date</th>
-                <th>Subject</th>
+                <th style="width: 50px;">No.</th>
+                <th style="width: 50px">Date</th>
+                <th style="width: 200px;">Subject</th>
                 <th>Last Message</th>
-                <th></th>
+                <th style="width: 45px"></th>
             </tr>
         </thead>
         <tbody>
@@ -40,21 +41,28 @@
                 {
                     LastDate = Mes.updatedDate.Value.ToShortDateString();
                 }
-                <tr class="@_class">
+                <tr class="@_class" id="mes-@Mes.MessageISN" >
                     <td class="text-center">
-                        @isn @if (!Convert.ToBoolean(Mes.ClientRead.Value))
+                        <span>
+                            @isn
+                        </span>
+                        @if (!Convert.ToBoolean(Mes.ClientRead.Value))
                         {<span class="check"></span>}
                     </td>
                     <td>
                         @LastDate
                     </td>
                     <td>
-                        @Mes.MsgSubject
+                        <a href="@Url.Action("ViewAll","Message", new { MessageId = Mes.MessageISN })" class="btn-reply btn-viewall" data-toggle="modal" data-target=".modal-message-all" data-isn="@Mes.MessageISN">@Mes.MsgSubject</a>
                     </td>
-                    <td>@Mes.LastMessage</td>
-                    <td style="width : 170px;">
-                        <a href="@Url.Action("ViewAll","Message", new { MessageId = Mes.MessageISN })" class="pull-right btn btn-info btn-reply" data-toggle="modal" data-target=".modal-message-all">View All</a>
-                        <a href="@Url.Action("Detail", "Message", new { MessageId = Mes.MessageISN })" class="mr pull-right btn btn-info btn-reply" data-toggle="modal" data-target=".modal-message-detail" data-isn="@Mes.MessageISN">Reply</a>
+                    <td>@Utility.Truncate(Mes.LastMessage, 100)</td>
+                    <td>
+
+                        <a href="@Url.Action("Detail", "Message", new { MessageId = Mes.MessageISN })" class="btn btn-info btn-reply" data-toggle="modal" data-target=".modal-message-detail" data-isn="@Mes.MessageISN">Reply</a>
+
+                        
+                        @*<a href="@Url.Action("MarkAsRead", "Message", new { MessageId = Mes.MessageISN })" class="btn btn-info btn-action-12">Mark as read</a>*@
+
                     </td>
                 </tr>
             }
@@ -71,18 +79,29 @@
             //
             // init datatable
             //
-            $('#table-documents').DataTable({
-                "pageLength": 10, // record per page
+            var pageLenght = 10;
+            var $table = $('#table-documents').DataTable({
+                "pageLength": pageLenght, // record per page
                 "lengthChange": false, // no record per page change
                 "info": false, // no entities info
                 "order": [[1, "desc"]], // set default sort by column 5 (added date)
-                aoColumnDefs: [{ "bSortable": false, "aTargets": [4] }] // disable sort in last column   
+                aoColumnDefs: [{ "bSortable": false, "aTargets": [0,4] }] // disable sort in last column
             });
+            var $tableDoc = $('#table-documents');
+            if ($table.page.info().recordsTotal) {
+                onNumberRowSpan($table, pageLenght, $tableDoc);
 
+                $(document).on('click', '.paginate_button, #table-documents thead th', { t: $table, l: pageLenght, d: $tableDoc }, onChangePageSpan);
+
+                $('#table-documents_filter').find('input').keyup(function () {
+                    onNumberRowSpan($table, pageLenght, $tableDoc);
+                });
+            }
             //
             // add class form-control to datatable search
             $('.dataTables_filter').find('input').addClass('form-control inline');
 
+            $(".dataTables_wrapper ").prepend('<a href="@Url.Action("MarkAllRead", "Message")" class="btn btn-info">Mark all read</a>');
             //
             // button edit document
             //
@@ -92,7 +111,7 @@
                 e.stopPropagation();
 
                 var self = $(this);
-
+                debugger;
                 console.log('button reply clicked');
 
                 var modal = $('.modal-message');
@@ -144,6 +163,19 @@
                     });
                 });
 
+            });
+
+            $('#table-documents').on('click', '.btn-reply', function (e) {
+                var self = $(this);
+                var isn = self.attr('data-isn');
+                var selector = "#mes-" + isn;
+                $markRead = $(selector);
+                $markRead.removeClass('text-bold');
+                $markRead.find('td:first-child span:nth-child(2)').removeClass('check');
+                var number = $('#message-unread').html();
+                if (number > 0) {
+                    $('#message-unread').html(number - 1);
+                }
             });
 
         });

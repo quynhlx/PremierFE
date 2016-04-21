@@ -27,7 +27,7 @@ namespace debt_fe.Models.ViewModels
         public string Status { 
             set { this._status = value;}
             get {
-                if (string.IsNullOrEmpty(_status)) return "Research";
+                if (string.IsNullOrEmpty(_status)) return "Waiting more info expected";
                 else return _status;
             }
         }

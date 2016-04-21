@@ -12,7 +12,15 @@
     #table-documents {
         border-bottom: 1px solid #ddd;
     }
-    
+
+    body {
+        counter-reset: section;
+    }
+
+    .tooltip {
+        max-width: 1000px !important;
+        z-index: 1000000000 !important;
+    }
 </style>
 
 <!-- Modal -->
@@ -30,7 +38,7 @@
         <h4 class="modal-title">Right Signature</h4>
     </div>
     <div class="modal-body">
-        
+
     </div>
 </div>
 
@@ -70,7 +78,7 @@
                 <th>Document Name</th>
                 <th>File</th>
                 <th>Creditor Name</th>
-                <th>Notes</th>
+                @*<th style="width:150px;">Notes</th>*@
                 <th>Date Added</th>
                 <th class="text-center">
                 </th>
@@ -82,34 +90,71 @@
                 if (doc.Public)
                 {
                     <tr>
-                        <td class="text-center">@(no++)</td>
+                        <td class="text-center no"></td>
                         <td>@Utility.Truncate(doc.DocName)</td>
                         <td>
                             @if (doc.IsSignatureDocument)
                             {
-                                if (string.IsNullOrEmpty(doc.FileName))
-                                {
-                                    <a href='@Url.Action("Signature", "Document", new { documentISNStr=doc.ID})' target="_blank" class="btn btn-primary btn-sign btn-sm display-block mb" data-document-id="@doc.ID">Sign</a>
-                                }
-                                else
+                                 if (!string.IsNullOrEmpty(doc.FileName))
                                 {
                                     <a href='@Url.Action("DownloadDocument", "Document", new { documentISN = doc.ID})' data-toggle="tooltip" data-placement="right" title="@doc.FileName" class="btn-download-file">@Utility.Truncate(doc.FileName, 10)</a>
                                 }
+                                else
+                                {
+                                    if (doc.docNoOfSign == 2)
+                                    {
+                                        if (doc.docSignatureDate.HasValue)
+                                        {
+                                            <div>
+                                                You have signed the document.<br />
+                                                Please send to @ViewBag.CoFullName to sign.
+                                            </div>
+                                                <a href='@Url.Action("SignatureSendToCoClient", "Document", new { documentISNStr = doc.ID })' target="_blank" class="btn btn-primary btn-sendclient btn-sm display-block mb" data-document-id="@doc.ID">Send to your Co-Client</a>
+                                            if (!string.IsNullOrEmpty(doc.docHistory))
+                                            {
+                                                <div>
+
+                                                    @Html.Raw(doc.Desc.Replace("\n", "<br/>")) <br />
+                                                    ------------- <br />
+                                                    Send to Co-Client: <br />
+                                                    @Html.Raw(doc.docHistory.Replace("\n", "<br/>"))
+
+
+                                                </div>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <a href='@Url.Action("Signature", "Document", new { documentISNStr=doc.ID})' target="_blank" class="btn btn-primary btn-sign btn-sm display-block mb" data-document-id="@doc.ID">Sign</a>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <a href='@Url.Action("Signature", "Document", new { documentISNStr=doc.ID})' target="_blank" class="btn btn-primary btn-sign btn-sm display-block mb" data-document-id="@doc.ID">Sign</a>
+                                    }
+                                }
+
                             }
                             else
                             {
                                 <a href='@Url.Action("DownloadDocument", "Document", new { documentISN = doc.ID})' data-toggle="tooltip" data-placement="right" title="@doc.FileName" class="btn-download-file">@Utility.Truncate(doc.FileName, 10)</a>
                             }
                         </td>
+
+
+
                         <td>@Utility.Truncate(doc.CreditorName)</td>
-                        <td>@Utility.Truncate(doc.Desc)</td>
-                        <td class="text-center">@string.Format("{0:MM/dd/yyyy}", doc.AddedDate)<br />@string.Format("{0:hh:mm tt}", doc.AddedDate)</td>
+                        @*<td>@Html.Raw(doc.Desc)</td>*@
+                        <td class="text-center"><span class="hidden">@string.Format("{0:yyyyMMddHHmmss}", doc.AddedDate)</span> @string.Format("{0:MM/dd/yyyy}", doc.AddedDate)<br />@Html.Raw(string.Format("{0:hh:mm tt} <br /> by {1}", doc.AddedDate, doc.UpdatedName))</td>
                         <td>
-                            <div class="text-center">
-                                <a href='@Url.Action("Edit", "Document", new { documentISN = doc.ID})' data-toggle="tooltip" data-placement="top" title="edit" data-isn="@doc.ID" class="btn btn-sm btn-edit-document">
-                                    <span class="glyphicon glyphicon-pencil"></span>
-                                </a>
-                            </div>
+                            @if (!doc.IsSignatureDocument)
+                            {
+                                <div class="text-center">
+                                    <a href='@Url.Action("Edit", "Document", new { documentISN = doc.ID })' data-toggle="tooltip" data-placement="bottom" title="edit" data-isn="@doc.ID" class="btn btn-sm btn-edit-document">
+                                        <span class="glyphicon glyphicon-pencil"></span>
+                                    </a>
+                                </div>
+                            }
                         </td>
                     </tr>
                 }
@@ -122,230 +167,289 @@
 
 
 @section scripts{
+    <script src="https://cdn.datatables.net/plug-ins/1.10.10/sorting/date-euro.js"></script>
     <script>
-    $(document).ready(function () {
-
-        //
-        // init datatable
-        //
-        $('#table-documents').DataTable({
-            "pageLength": 10, // record per page
-            "lengthChange": false, // no record per page change
-            "info": false, // no entities info
-            "order": [[0, "asc"]], // set default sort by column 5 (added date)
-            aoColumnDefs: [{ "bSortable": false, "aTargets": [6] }] // disable sort in last column
-        });
-
-        //
-        // add class form-control to datatable search
-        $('.dataTables_filter').find('input').addClass('form-control inline');
-        //
 
 
-        var btnupload ="<a href='@Url.Action("Upload","Document")' class='btn btn-primary pull-left' id='btn-upload-document'>Upload</a>"
-            $("#table-documents_filter").before(btnupload);
-        // button upload document click
-        //
-        $('#btn-upload-document').click(function (e) {
 
-            e.preventDefault();
-            e.stopPropagation();
+        $(document).ready(function () {
 
-            var self = $(this);
-            var modal = $('#modal-document');
-
-            var href = self.prop('href');
-
-            var backdrop = $("<div class='modal-backdrop fade in'></div>");
-            var loading = $('#modal-loading');
-
-            loading.removeClass('hidden');
-            $('body').append(backdrop);
-
-            var req = $.ajax({ url: href });
-
-            req.fail(function (jqXHR) {
-
-                loading.hide();
-                backdrop.remove();
-
-                console.log('load modal error', jqXHR);
-                toastr.error('Cannot upload new document. Please try again later.');
+            //
+            // init datatable
+            var pageLenght = 10;
+            var $table = $('#table-documents').DataTable({
+                "pageLength": pageLenght, // record per page
+                "lengthChange": false, // no record per page change
+                "info": false, // no entities info
+                "order": [[4, "desc"]], // set default sort by column 5 (added date)
+                aoColumnDefs: [{ "bSortable": false, "aTargets": [0, 5] }] // disable sort in last column
             });
+            var $tableDoc = $('#table-documents');
+            if ($table.page.info().recordsTotal) {
+                onNumberRow($table, pageLenght, $tableDoc);
 
-            req.done(function (resp) {
-                if (resp === undefined || resp == '') {
-                    toastr.info('Unexpected error occurred. Please try again !!!');
-                    return;
-                }
+                $(document).on('click', '.paginate_button, #table-documents thead th', { t: $table, l: pageLenght, d: $tableDoc }, onChangePage);
 
-                //
-                // load partial into modal content
-                modal.find('.modal-content').html(resp);
-
-                loading.hide();
-                backdrop.remove();
-
-                modal.modal({ backdrop: 'static' });
-            });
-
-
-        });
-
-        //
-        // button edit document
-        //
-        $('#table-documents').on('click', '.btn-edit-document', function (e) {
-
-            e.preventDefault();
-            e.stopPropagation();
-
-            var self = $(this);
-
-            console.log('button edit clicked');
-
-            var modal = $('#modal-document');
-            var err = $('#error-msg-container');
-
-            var href = self.prop('href');
-            var isn = self.data('isn');
-
-            if (isn === '') {
-                // err.removeClass('hide').find('#error-msg').html('Document ISN not found');
-                toastr.info('Document ISN not found');
-                return;
+                $('#table-documents_filter').find('input').keyup(function () {
+                    onNumberRow($table, pageLenght, $tableDoc);
+                });
             }
-
-            var backdrop = $("<div class='modal-backdrop fade in'></div>");
-            var loading = $('#modal-loading');
-
-            loading.removeClass('hidden');
-            $('body').append(backdrop);
+            $('.dataTables_filter').find('input').addClass('form-control inline');
 
 
-            var req = $.ajax({ url: href });
 
-            req.fail(function (jqXHR) {
-                // err.removeClass('hide').find('#error-msg').html('Unexpected error occurred. Please try again.');
-                toastr.error('Request error. Please try again.');
+            var btnupload = "<a href='@Url.Action("Upload","Document")' class='btn btn-primary pull-left' id='btn-upload-document'>Upload</a>"
+            $("#table-documents_filter").before(btnupload);
+            // button upload document click
+            //
+            $('#btn-upload-document').click(function (e) {
 
-                loading.hide();
-                backdrop.remove();
+                e.preventDefault();
+                e.stopPropagation();
+
+                var self = $(this);
+                var modal = $('#modal-document');
+
+                var href = self.prop('href');
+
+                var backdrop = $("<div class='modal-backdrop fade in'></div>");
+                var loading = $('#modal-loading');
+
+                loading.removeClass('hidden');
+                $('body').append(backdrop);
+
+                var req = $.ajax({ url: href });
+
+                req.fail(function (jqXHR) {
+
+                    loading.hide();
+                    backdrop.remove();
+
+                    console.log('load modal error', jqXHR);
+                    toastr.error('Cannot upload new document. Please try again later.');
+                });
+
+                req.done(function (resp) {
+                    if (resp === undefined || resp == '') {
+                        toastr.info('Unexpected error occurred. Please try again !!!');
+                        return;
+                    }
+
+                    //
+                    // load partial into modal content
+                    modal.find('.modal-content').html(resp);
+
+                    loading.hide();
+                    backdrop.remove();
+
+                    modal.modal({ backdrop: 'static' });
+                });
+
+
             });
 
-            req.done(function (resp) {
+            //
+            // button edit document
+            //
+            $('#table-documents').on('click', '.btn-edit-document', function (e) {
 
-                // console.log('response',resp);
+                e.preventDefault();
+                e.stopPropagation();
 
-                if (resp === undefined || resp == '') {
-                    toastr.info('Unexpected error occurred. Please try again !!!');
+                var self = $(this);
+
+                console.log('button edit clicked');
+
+                var modal = $('#modal-document');
+                var err = $('#error-msg-container');
+
+                var href = self.prop('href');
+                var isn = self.data('isn');
+
+                if (isn === '') {
+                    // err.removeClass('hide').find('#error-msg').html('Document ISN not found');
+                    toastr.info('Document ISN not found');
                     return;
                 }
 
+                var backdrop = $("<div class='modal-backdrop fade in'></div>");
+                var loading = $('#modal-loading');
+
+                loading.removeClass('hidden');
+                $('body').append(backdrop);
+
+
+                var req = $.ajax({ url: href });
+
+                req.fail(function (jqXHR) {
+                    // err.removeClass('hide').find('#error-msg').html('Unexpected error occurred. Please try again.');
+                    toastr.error('Request error. Please try again.');
+
+                    loading.hide();
+                    backdrop.remove();
+                });
+
+                req.done(function (resp) {
+
+                    // console.log('response',resp);
+
+                    if (resp === undefined || resp == '') {
+                        toastr.info('Unexpected error occurred. Please try again !!!');
+                        return;
+                    }
+
+                    //
+                    // load partial into modal content
+                    modal.find('.modal-content').html(resp);
+
+                    loading.hide();
+                    backdrop.remove();
+
+                    modal.modal({
+                        backdrop: 'static'
+                    });
+                });
+
+            });
+
+            //
+            // button sign
+            //
+            $('#table-documents').on('click', '.btn-sign', function (e) {
+
+                e.preventDefault();
+
+                var self = $(this);
+
                 //
-                // load partial into modal content
-                modal.find('.modal-content').html(resp);
+                // check document id is not empty
+                var docId = self.data('document-id');
+                if (docId === undefined || docId === '') {
+                    toastr.info('Document ISN not found!');
 
-                loading.hide();
-                backdrop.remove();
+                    return;
+                }
 
-                modal.modal({
-                    backdrop: 'static'
+                var url = self.prop('href');
+
+                var backdrop = $("<div class='modal-backdrop fade in'></div>");
+                var loading = $('#modal-loading');
+
+                loading.removeClass('hidden');
+                $('body').append(backdrop);
+
+
+                //
+                // get sign partial view
+                var req = $.ajax({ url: url });
+
+                req.fail(function (jqXHR, stt, err) {
+                    console.log(jqXHR);
+                    toastr.error('Request error occurred. Please try again.');
+                });
+
+                req.done(function (resp) {
+
+                    console.log(resp);
+
+                    if (resp === undefined || resp === null) {
+                        toastr.error('Unexpected error occurred. Please try again.');
+
+                        return;
+                    }
+
+                    if (!$.isNumeric(resp.code) || resp.code < 0) {
+                        toastr.error('Signer Role Not Mapping');
+
+                        return;
+                    }
+
+                    // window.open(resp.data);
+
+                    var iframe = $('<iframe>');
+                    iframe.prop('src', resp.data);
+
+                    var modal = $('#modal-document');
+                    var content = modal.find('.modal-content');
+
+                    //
+                    // clear old content
+                    content.html('');
+
+                    content.css('padding', '8px');
+
+                    modal.find('.modal-dialog').css('width', '728px');
+
+                    // var form = $("<form>", {action:'/Document/'});
+                    var wrapper = $('#modal-wrapper').clone().removeClass('hidden').removeAttr('id');
+                    wrapper.find('.modal-body').html(iframe);
+                    // .appendTo(content);
+                    content.append(wrapper);
+
+
+                    // modal.find('.modal-content').html(iframe).css('padding', '8px');
+                    modal.modal({ backdrop: 'static' });
+
+                });
+
+                req.complete(function () {
+                    // console.log('completed');
+                    backdrop.remove();
+                    loading.addClass('hidden');
                 });
             });
 
-        });
+            $('#table-documents').on('click', '.btn-sendclient', function (e) {
 
-        //
-        // button sign
-        //
-        $('#table-documents').on('click', '.btn-sign', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
 
-            e.preventDefault();
-
-            var self = $(this);
-
-            //
-            // check document id is not empty
-            var docId = self.data('document-id');
-            if (docId === undefined || docId === '') {
-                toastr.info('Document ISN not found!');
-
-                return;
-            }
-
-            var url = self.prop('href');
-
-            var backdrop = $("<div class='modal-backdrop fade in'></div>");
-            var loading = $('#modal-loading');
-
-            loading.removeClass('hidden');
-            $('body').append(backdrop);
-
-
-            //
-            // get sign partial view
-            var req = $.ajax({ url: url });
-
-            req.fail(function (jqXHR, stt, err) {
-                console.log(jqXHR);
-                toastr.error('Request error occurred. Please try again.');
-            });
-
-            req.done(function (resp) {
-
-                console.log(resp);
-
-                if (resp === undefined || resp === null) {
-                    toastr.error('Unexpected error occurred. Please try again.');
-
-                    return;
-                }
-
-                if (!$.isNumeric(resp.code) || resp.code < 0) {
-                    toastr.error('Signer Role Not Mapping');
-
-                    return;
-                }
-
-                // window.open(resp.data);
-
-                var iframe = $('<iframe>');
-                iframe.prop('src', resp.data);
-
+                var self = $(this);
                 var modal = $('#modal-document');
-                var content = modal.find('.modal-content');
 
-                //
-                // clear old content
-                content.html('');
+                var href = self.prop('href');
 
-                content.css('padding', '8px');
+                var backdrop = $("<div class='modal-backdrop fade in'></div>");
+                var loading = $('#modal-loading');
 
-                modal.find('.modal-dialog').css('width', '728px');
+                loading.removeClass('hidden');
+                $('body').append(backdrop);
 
-                // var form = $("<form>", {action:'/Document/'});
-                var wrapper = $('#modal-wrapper').clone().removeClass('hidden').removeAttr('id');
-                wrapper.find('.modal-body').html(iframe);
-                // .appendTo(content);
-                content.append(wrapper);
+                var req = $.ajax({ url: href });
 
+                req.fail(function (jqXHR) {
 
-                // modal.find('.modal-content').html(iframe).css('padding', '8px');
-                modal.modal({ backdrop: 'static' });
+                    loading.hide();
+                    backdrop.remove();
 
-            });
+                    console.log('load modal error', jqXHR);
+                    toastr.error('Cannot send to your Co-Client. Please try again later.');
+                });
 
-            req.complete(function () {
-                // console.log('completed');
-                backdrop.remove();
-                loading.addClass('hidden');
+                req.done(function (resp) {
+                    if (resp === undefined || resp == '') {
+                        toastr.info('Unexpected error occurred. Please try again !!!');
+                        return;
+                    }
+
+                    //
+                    // load partial into modal content
+                    modal.find('.modal-content').html(resp);
+
+                    loading.hide();
+                    backdrop.remove();
+
+                    modal.modal({ backdrop: 'static' });
+                });
+
             });
         });
-    });
     </script>
-<script>
-    $(".menu > li").removeClass("active");
-    $('#menu-doc').addClass("active");
-</script>
+    <script>
+        $(".menu > li").removeClass("active");
+        $('#menu-doc').addClass("active");
+
+
+
+    </script>
 }

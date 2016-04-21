@@ -220,7 +220,11 @@ namespace debt_fe.Controllers
             {
                 return RedirectToAction("Login", "Account");
             }
-            return View();
+            var viewModel = new ChangePasswordViewModel()
+            {
+                OldPassHidden = Session["CurrentPassword"].ToString()
+            };
+            return View(viewModel);
         }
 
         //
@@ -245,12 +249,13 @@ namespace debt_fe.Controllers
             //    return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
             //}
             var pass = Utility.ToMD5Hash(model.NewPass.Trim());
-
             var rs =  db.xp_debtext_client_password_upd(this.MemberISN, pass, -this.MemberISN);
-            if(rs > 0 && Session["CurrentPassword"].ToString() == model.OldPass.Trim())
+            if(rs > 0)
             {
+                Session["CurrentPassword"] = model.NewPass.Trim();
+                model.OldPassHidden = model.NewPass.Trim();
                 TempData["success"] = "Your password has been changed.";
-                return View(model);
+                return RedirectToAction("ChangePassword");
             }
             TempData["error"] = "Change password failed.";
             return View(model);

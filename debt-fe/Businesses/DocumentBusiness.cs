@@ -52,16 +52,41 @@ namespace debt_fe.Businesses
             parameters.Add("Action", "Contract Received");
             var table = _data.ExecuteStoreProcedure(store, parameters);
         }
-        public void UpdateDocSignature(int docID, string FileName, string UserIP, string BrowserInfo, int MemberISN)
+        public void UpdateDocSignature(int docID, string FileName, string UserIP, string BrowserInfo, int MemberISN, string docGUID = "", string AppendNotes = "")
         {
             var store = "xp_debtext_document_signature_upd";
             var parameters = new Hashtable();
             parameters.Add("DocumentISN", docID);
-            parameters.Add("docFileName", FileName);
-            parameters.Add("docSignatureIP", UserIP);
-            parameters.Add("ClientInfo", BrowserInfo);
             parameters.Add("updatedBy", MemberISN);
+            if (!string.IsNullOrEmpty(FileName))
+            {
+                parameters.Add("docFileName", FileName);
+            }
+
+            parameters.Add("ClientInfo", BrowserInfo);
+
+            if (!string.IsNullOrEmpty(UserIP))
+            {
+                parameters.Add("docSignatureIP", AppendNotes);
+            }
+            if (!string.IsNullOrEmpty(docGUID))
+            {
+                parameters.Add("docGUID", docGUID);
+            }
+            if (!string.IsNullOrEmpty(AppendNotes))
+            {
+                parameters.Add("AppendNotes", AppendNotes);
+            }
             _data.ExecuteStoreProcedure(store, parameters);
+        }
+
+        public void UpdateHistory (int docID, string note)
+        {
+            var query = "Update Document set docHistory=isnull(docHistory,'') + @note where DocumentISN = @docISN";
+            var parameters = new Hashtable();
+            parameters.Add("docISN", docID);
+            parameters.Add("note", note);
+            _data.ExecuteQuery(query, parameters);
         }
 
         private List<DocumentModel> GetDocumentsFromTable(DataTable table)
@@ -111,7 +136,9 @@ namespace debt_fe.Businesses
             doc.Desc = row["docDesc"].ToString();
             doc.CreditorName = row["cdtName"].ToString();
             doc.AddedDate = DateTime.Parse(row["docAddedDate"].ToString());
-
+            doc.UpdatedName = row["updatedName"].ToString();
+            doc.docNoOfSign = row["docNoOfSign"] == DBNull.Value ? 0 : Convert.ToInt32(row["docNoOfSign"]);
+            doc.docHistory = row["docHistory"].ToString();
             doc.Public = false;
             var isPublic = row["docPublic"].ToString();
             if (!string.IsNullOrEmpty(isPublic) && !string.IsNullOrWhiteSpace(isPublic))
@@ -139,6 +166,13 @@ namespace debt_fe.Businesses
             {
                 doc.CreditorISN = int.Parse(creditorISN);
             }
+
+            if(row["docSignatureDate"] != DBNull.Value)
+            {
+                doc.docSignatureDate = DateTime.Parse(row["docSignatureDate"].ToString());
+            }
+            
+
 
             return doc;
         }
@@ -281,8 +315,12 @@ namespace debt_fe.Businesses
             }
 
             var template = GetTemplateFromRow(table.Rows[0], memberISN);
+            if(template.MergeFields == null)
+            {
+                return template;
+            }
             string OutFirstPaymentDate = string.Empty;
-            string OutTerm = string.Empty;
+            int OutTerm = 0;
             var datas = GetScheduleOfPayment(memberISN, out OutFirstPaymentDate, out OutTerm );
             int i = 1;
             decimal TotalPaymentAmount = 0;
@@ -322,7 +360,7 @@ namespace debt_fe.Businesses
                     template.MergeFields.Add(new Structs.MergeField()
                     {
                         name = "Term",
-                        value = OutTerm
+                        value = OutTerm.ToString()
                     });
                     template.MergeFields.Add(new Structs.MergeField()
                     {
@@ -525,7 +563,7 @@ namespace debt_fe.Businesses
                                     if (mapFieldName == "CoClientFullName")
                                     {
                                         field.name = rowMapField["attID"].ToString();
-                                        field.value = userAttr.Select("attID ='CoFirstName'")[0]["attValue"].ToString() + " " + userAttr.Select("attID ='CoLastName'")[0]["attValue"].ToString();
+                                        field.value = userAttr.Select("attID ='CoFirstName'")[0]["attValue"].ToString().ToUpper() + " " + userAttr.Select("attID ='CoLastName'")[0]["attValue"].ToString().ToUpper();
                                         model.MergeFields.Add(field);
                                         continue;
                                     }
@@ -642,7 +680,7 @@ namespace debt_fe.Businesses
                             if (IsCoClient == "1")
                             {
                                 ReplaceField(model.MergeFields, "AcctOwnerName", "CoClientFullName");
-                                ReplaceField(model.MergeFields, "AcctOwnerDOB", "CoClienDOB");
+                                ReplaceField(model.MergeFields, "AcctOwnerDOB", "CoClientDOB");
                                 ReplaceField(model.MergeFields, "AcctOwnerSSN", "CoClientLast4SSN");
                                 ReplaceField(model.MergeFields, "AcctOwnerAddress", "CoClientAddress");
                                 ReplaceField(model.MergeFields, "AcctOwnerCity", "CoClientCity");
@@ -679,7 +717,7 @@ namespace debt_fe.Businesses
                             ReplaceFieldEmpty(model.MergeFields, "CoClientWorkPhone");
                             ReplaceFieldEmpty(model.MergeFields, "CoClientMobilePhone");
                             ReplaceFieldEmpty(model.MergeFields, "CoClientEmail");
-                            ReplaceFieldEmpty(model.MergeFields, "CoClienDOB");
+                            ReplaceFieldEmpty(model.MergeFields, "CoClientDOB");
                             ReplaceFieldEmpty(model.MergeFields, "CoClientLast4SSN");
                         }
                     }
@@ -832,6 +870,97 @@ namespace debt_fe.Businesses
           
             return result;
         }
+        public List<ScheduleOfPayment> GetScheduleOfPayment(int LeadISN, out string OutFirstPaymentDateStr, out int OutTerm)
+        {
+            OutFirstPaymentDateStr = string.Empty;
+            decimal OutTotalPaymentAmount = 0;
+            OutTerm = 18;
+            decimal OutTotalFee = 0;
+            var result = new List<ScheduleOfPayment>();
+
+            var parameters = new Hashtable();
+            parameters.Add("MemberISN", LeadISN);
+            int rs = 0;
+            var dsUserInfo = _data.ExecuteStoreProcedure("xp_debtuser_getinfo", parameters, out rs);
+            if (!IsEmptyDataSet(dsUserInfo))
+            {
+                DataRow row = dsUserInfo.Tables[0].Rows[0];
+                DataTable tb = dsUserInfo.Tables[1];
+                var PremierCCDebtFree = ConvertObjectToDecimal(getValueByID("PLANDEBTAMOUNT", tb), 0) * ConvertObjectToDecimal(0.40, 0);
+                var PremierPSLDebtFee = ConvertObjectToDecimal(getValueByID("PrivateStudentLoanAmount", tb), 0) * ConvertObjectToDecimal(0.40, 0);
+                var TotalFee = PremierCCDebtFree + PremierPSLDebtFee;
+                if (TotalFee >= 30000) TotalFee = 30000;
+                OutTotalFee = TotalFee;
+
+                //var monthlyServiceFee = 0;
+                var programLength = string.IsNullOrEmpty(getValueByID("PureProgramLength", tb)) ? "18" : getValueByID("PureProgramLength", tb);
+                OutTerm = Convert.ToInt32(programLength);
+                decimal TotalPaymentAmount = 0;
+                var BankingFee = 13.95 * (Convert.ToInt32(programLength) + 1);
+                var TotalSavingAmount = TotalFee + ConvertObjectToDecimal(BankingFee, 0);
+                var SavingsAmount = Math.Round(TotalSavingAmount / Convert.ToInt32(programLength), 2);
+                //var PaymentAmount = Math.Round(((TotalPaymentAmount + ConvertObjectToDecimal(BankingFee)) / ConvertObjectToInt(programLength)) - ConvertObjectToDecimal(13.95), 2);
+                var DateCurr = DateTime.Now;
+                var FirstPaymentDate = ConvertToDate(getValueByID("PureFirstPaymentDate", tb));
+                if (FirstPaymentDate == null) FirstPaymentDate = DateCurr.AddDays(1);
+                var SecondPaymentDate = ConvertToDate(getValueByID("Pure2ndPaymentDate", tb));
+                if (SecondPaymentDate == null) SecondPaymentDate = FirstPaymentDate.Value.AddMonths(1);
+                var numMonth = 0;
+                for (var i = 0; i < Convert.ToInt32(programLength); i++)
+                {
+                    if (i + 1 == Convert.ToInt32(programLength))
+                    {
+                        SavingsAmount = TotalSavingAmount;
+                    }
+                    else
+                    {
+                        TotalSavingAmount = TotalSavingAmount - SavingsAmount;
+                    }
+                    if (i == 0)
+                    {
+                        var payment = new ScheduleOfPayment()
+                        {
+                            LeadISN = LeadISN.ToString(),
+                            BankFee = "$13.95",
+                            PaymentDate = ConvertToDateString(FirstPaymentDate, "MM/dd/yyyy"),
+                            PaymentAmount = "$" + (SavingsAmount - Convert.ToDecimal(13.95)).ToString("#,##0.00"),
+                            SavingsAmount = "$" + SavingsAmount.ToString("#,##0.00")
+                        };
+                        result.Add(payment);
+                    }
+                    else if (i == 1)
+                    {
+                        var payment = new ScheduleOfPayment()
+                        {
+                            LeadISN = LeadISN.ToString(),
+                            BankFee = "$13.95",
+                            PaymentDate = ConvertToDateString(SecondPaymentDate, "MM/dd/yyyy"),
+                            PaymentAmount = "$" + (SavingsAmount - Convert.ToDecimal(13.95)).ToString("#,##0.00"),
+                            SavingsAmount = "$" + SavingsAmount.ToString("#,##0.00")
+                        };
+                        result.Add(payment);
+                    }
+                    else
+                    {
+                        numMonth++;
+                        var payDate = SecondPaymentDate.Value.AddMonths(numMonth);
+                        var payment = new ScheduleOfPayment()
+                        {
+                            LeadISN = LeadISN.ToString(),
+                            BankFee = "$13.95",
+                            PaymentDate = payDate.ToString("MM/dd/yyyy"),
+                            PaymentAmount = "$" + (SavingsAmount - Convert.ToDecimal(13.95)).ToString("#,##0.00"),
+                            SavingsAmount = "$" + SavingsAmount.ToString("#,##0.00")
+                        };
+                        result.Add(payment);
+                    }
+                    TotalPaymentAmount = TotalPaymentAmount + (SavingsAmount - Convert.ToDecimal(13.95));
+                }
+                OutTotalPaymentAmount = TotalPaymentAmount;
+                OutFirstPaymentDateStr = FirstPaymentDate.Value.ToString("MM/dd/yyyy");
+            }
+            return result;
+        }
         public class ScheduleOfPayment
         {
             public string LeadISN { get; set; }
@@ -897,8 +1026,7 @@ namespace debt_fe.Businesses
             parameters.Add("MemberISN", LeadISN);
             int rs = 0;
             var dsUserInfo = _data.ExecuteStoreProcedure("xp_debtuser_getinfo", parameters, out rs);
-            var dsCreditor = _data.ExecuteQuery("select * from Vw_DebtExt_Creditor where MemberISN=@MemberISN and cdtIsPush='1'", parameters);
-
+            var dsCreditor = _data.ExecuteQuery("select * from Vw_DebtExt_Creditor where MemberISN=@MemberISN and cdtIsPush='1' order by updatedDate desc", parameters);
 
             if (dsCreditor.Rows.Count > 0)
             {

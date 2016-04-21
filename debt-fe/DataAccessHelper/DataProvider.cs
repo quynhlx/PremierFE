@@ -346,7 +346,6 @@ namespace debt_fe.DataAccessHelper
 
             _connection.Open();
             var cmd = new SqlCommand(query, _connection);
-
             foreach (DictionaryEntry param in parameters)
             {
                 var name = param.Key.ToString().TrimStart('@');

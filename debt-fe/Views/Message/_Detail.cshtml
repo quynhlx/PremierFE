@@ -9,11 +9,11 @@
 </div>
 <div class="modal-body">
     <div class="row">
-        <div class="col-md-3"><p class="text-right">Subject:</p></div>
+        <div class="col-md-3"><p class="text-left">Subject:</p></div>
         <div class="col-md-9"><p class="text-left text-bold">@Model.MsgSubject</p></div>
     </div>
     <div class="row">
-        <div class="col-md-3"><p class="text-right">Last receive date:</p></div>
+        <div class="col-md-3"><p class="text-left">Last receive date:</p></div>
         <div class="col-md-9">
             <p class="text-left text-bold">
                @LastUpdated
@@ -21,7 +21,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-3"><p class="text-right">Last message:</p></div>
+        <div class="col-md-3"><p class="text-left">Last message:</p></div>
         <div class="col-md-9">
             <p class="text-left">
                 @Model.LastMessage
@@ -39,7 +39,9 @@
             </div>
             @Html.HiddenFor(m => m.MessageISN)
             <div class="col-md-12">
-                @Html.TextArea("message-content", new { cols = "77", rows = "8", wrap = "soft" })
+                @Html.TextArea("message-content", new { style = "width: 100%;", rows = "8", wrap = "soft" })
+
+
             </div>
         </div>
     }

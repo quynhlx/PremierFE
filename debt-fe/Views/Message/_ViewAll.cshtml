@@ -26,7 +26,7 @@
     <div class="row">
         <div class="col-md-12">
             <p class="text-left">
-                Content: @m.Content
+                @Html.Raw(m.Content.Replace("\r\n", "<br/>"))
             </p>
         </div>
     </div>
@@ -36,3 +36,5 @@
 <div class="modal-footer">
     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 </div>
+<script src="~/Scripts/jquery-1.11.3.js"></script>
+<script src="~/Scripts/bootstrap.js"></script>

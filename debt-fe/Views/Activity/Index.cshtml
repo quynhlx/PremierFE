@@ -14,19 +14,22 @@
     <table class="table table-bordered" id="table-documents">
         <thead>
             <tr>
-                <th class="col-md-7">Content</th>
-                <th class="col-md-3">Date</th>
+                <th class="col-md-1">No.</th>
+                <th class="col-md-6">Content</th>
+                <th class="col-md-3">Date Time</th>
                 <th class="col-md-2">By</th>
                
             </tr>
         </thead>
         <tbody>
+            @{int i = 1;}
             @foreach (var item in Model)
             {
                 <tr>
+                    <td class="text-center">@(i++)</td>
                     <td>@item.Content</td>
-                    <td>@item.updatedDate.Value.ToString("MM/dd/yyyy hh:mm tt")</td>
-                    <td>@item.addedName</td>
+                    <td class="text-center">@item.updatedDate.Value.ToString("MM/dd/yyyy hh:mm tt")</td>
+                    <td class="text-center">@item.addedName</td>
                 </tr>
             }
         </tbody>
@@ -42,14 +45,26 @@
             //
             // init datatable
             //
-            $('#table-documents').DataTable({
-                "pageLength": 10, // record per page
+            var pageLenght = 10;
+            $table =  $('#table-documents').DataTable({
+                "pageLength": pageLenght, // record per page
                 "lengthChange": false, // no record per page change
                 "info": false, // no entities info
-                "order": [[1, "desc"]], // set default sort by column 5 (added date)
-                aoColumnDefs: [{ "bSortable": false, "aTargets": [0,2] }] // disable sort in last column
+                "order": [[2, "desc"]], // set default sort by column 5 (added date)
+                aoColumnDefs: [{ "bSortable": false, "aTargets": [0] }] // disable sort in last column
             });
+            if ($table.page.info().recordsTotal) {
+                var $tableDoc = $('#table-documents');
+                onNumberRow($table, pageLenght, $tableDoc);
 
+                $(document).on('click', '.paginate_button, #table-documents thead th', { t: $table, l: pageLenght, d: $tableDoc }, onChangePage);
+
+                $('#table-documents_filter').find('input').keyup(function () {
+                    onNumberRow($table, pageLenght, $tableDoc);
+                });
+            }
+           
+            
             //
             // add class form-control to datatable search
             $('.dataTables_filter').find('input').addClass('form-control inline');

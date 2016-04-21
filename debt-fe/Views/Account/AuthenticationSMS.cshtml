@@ -77,6 +77,7 @@
     <script src="~/Scripts/toastr.min.js"></script>
     <script src="~/Scripts/plugins/toastr.js"></script>
     <script>
+        $("input").focus();
         var fiveSeconds = new Date().getTime() + 30000;
         $('#time-down').countdown(fiveSeconds)
             .on('update.countdown', function (event) {

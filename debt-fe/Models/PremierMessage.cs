@@ -23,5 +23,7 @@ namespace debt_fe.Models
         public Nullable<System.DateTime> updatedDate { get; set; }
         public Nullable<int> updatedBy { get; set; }
         public Nullable<byte> ClientRead { get; set; }
+    
+        public virtual Member Member { get; set; }
     }
 }

@@ -245,27 +245,6 @@ namespace debt_fe.Utilities
                 }
             }
 
-           /*
-            StringReader stream = null;
-            XmlTextReader reader = null;
-            try
-            {
-                DataSet xmlDS = new DataSet();
-                stream = new StringReader(xmlData);
-                // Load the XmlTextReader from the stream
-                reader = new XmlTextReader(stream);
-                xmlDS.ReadXml(reader);
-                return xmlDS;
-            }
-            catch
-            {
-                return null;
-            }
-            finally
-            {
-                if (reader != null) reader.Close();
-            }
-            */ 
             
         }
 
@@ -366,5 +345,5 @@ namespace debt_fe.Utilities
 
 			return states;
 		}
-	}
+    }
 }

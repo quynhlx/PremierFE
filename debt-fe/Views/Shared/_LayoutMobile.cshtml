@@ -1,0 +1,26 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link href="~/Content/Mobile/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/Mobile/materialadmin.css" rel="stylesheet" />
+    <link href="~/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Content/box-model.css" rel="stylesheet" />
+    <link href="~/Content/Mobile/mobile.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container-fluid">
+        @RenderBody()
+    </div>
+    <input type="hidden" id="success" value="@TempData["success"]" />
+    <input type="hidden" id="info" value="@TempData["info"]" />
+    <input type="hidden" id="warning" value="@TempData["warning"]" />
+    <input type="hidden" id="error" value="@TempData["error"]" />
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <script src="~/Scripts/app/app.js"></script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

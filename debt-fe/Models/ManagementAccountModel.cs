@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace debt_fe.Models
@@ -13,7 +14,16 @@ namespace debt_fe.Models
         public string Email { set; get; }
         public string Phone { set; get; }
         public string NameType = "Account Manager";
-
+        public string PhoneFormat
+        {
+            get
+            {
+                return Regex.Replace(Phone.Trim(new Char[] { ' ', '(', ')', '-' }), @"(\d{3})(\d{3})(\d{4})", "$1-$2-$3");
+            }
+        }
+        public string State { set; get; }
+        public string ClientID { set; get; }
+        public string Username { set; get; }
         public ManagementAccountModel(int MemberISN)
         {
             _dataProvider = new debt_fe.DataAccessHelper.DataProvider("tbone", "tbone");
@@ -22,53 +32,60 @@ namespace debt_fe.Models
             Phone = "";
             GetDataFromDataBase(MemberISN);
         }
+        public string MemberUserName { set; get; }
+
+
         public void GetDataFromDataBase(int MemberISN)
         {
             try
             {
 
-            
-            var paramNames2 = new List<string>
-			{
-				"MemberISN"
-			};
 
-            var paramValues2 = new System.Collections.ArrayList{MemberISN};
-            int rs;
-            var admin = _dataProvider.ExecuteStoreProcedure("xp_lead_accountmanager_getinfo", paramNames2, paramValues2, out rs);
-            if (admin.Tables[0].Rows.Count >0 )
+                var paramNames2 = new List<string>
             {
-                var Table = admin.Tables[0];
-                var ISN = (int)Table.Rows[0]["MemberISN"];
-                var paramNames3 = new List<string> { "MemberISN" };
+                "MemberISN"
+            };
 
-                var paramValues3 = new System.Collections.ArrayList{ISN};
-                var TableMember = _dataProvider.ExecuteQuery("select * from Vw_Debt_dMember where MemberISN = @MemberISN", paramNames3, paramValues3);
-                if (TableMember.Rows.Count  != 0)
+                var paramValues2 = new System.Collections.ArrayList { MemberISN };
+                int rs;
+                
+                // Lay thong tin admin
+                var admin = _dataProvider.ExecuteStoreProcedure("xp_lead_accountmanager_getinfo", paramNames2, paramValues2, out rs);
+                if (admin.Tables[0].Rows.Count > 0)
                 {
-                    this.FullName = TableMember.Rows[0]["memFullName"].ToString();
-                    this.Email = TableMember.Rows[0]["memEmail"].ToString();
-                    this.Phone = TableMember.Rows[0]["memPhone"].ToString();
-                }
-            }
-            else
-            {
-                var saleman = _dataProvider.ExecuteStoreProcedure("xp_debtuser_getinfo", paramNames2, paramValues2, out rs);
-                if(saleman.Tables[0].Rows.Count > 0 && saleman.Tables[0].Rows[0]["AgentISN"] != null)
-                {
-                    var salemanISN = Convert.ToInt32(saleman.Tables[0].Rows[0]["AgentISN"]);
-                    var paramNames4 = new List<string> { "MemberISN" };
-                    var paramValues4 = new System.Collections.ArrayList { salemanISN };
-                    var salemanTable = _dataProvider.ExecuteQuery("select * from Vw_DebtStaff where MemberISN= @MemberISN", paramNames4, paramValues4);
-                    if (salemanTable.Rows.Count > 0)
+                    var Table = admin.Tables[0];
+                    var ISN = (int)Table.Rows[0]["MemberISN"];
+                    this.Username = Table.Rows[0]["UserName"].ToString();
+                    var paramNames3 = new List<string> { "MemberISN" };
+
+                    var paramValues3 = new System.Collections.ArrayList { ISN };
+                    var TableMember = _dataProvider.ExecuteQuery("select * from Vw_Debt_dMember where MemberISN = @MemberISN", paramNames3, paramValues3);
+                    if (TableMember.Rows.Count != 0)
                     {
-                        this.FullName = salemanTable.Rows[0]["memUserName"].ToString();
-                        this.Email = salemanTable.Rows[0]["memEmail"].ToString();
-                        this.Phone = salemanTable.Rows[0]["memPhone"].ToString();
-                        NameType = "Account Salesman";
+                        this.FullName = TableMember.Rows[0]["memFullName"].ToString();
+                        this.Email = TableMember.Rows[0]["memEmail"].ToString();
+                        this.Phone = TableMember.Rows[0]["memPhone"].ToString();
                     }
                 }
-            }
+                else
+                {
+                    var saleman = _dataProvider.ExecuteStoreProcedure("xp_debtuser_getinfo", paramNames2, paramValues2, out rs);
+                    if (saleman.Tables[0].Rows.Count > 0 && saleman.Tables[0].Rows[0]["AgentISN"] != null)
+                    {
+                        var salemanISN = Convert.ToInt32(saleman.Tables[0].Rows[0]["AgentISN"]);
+                        var paramNames4 = new List<string> { "MemberISN" };
+                        var paramValues4 = new System.Collections.ArrayList { salemanISN };
+                        var salemanTable = _dataProvider.ExecuteQuery("select * from Vw_DebtStaff where MemberISN= @MemberISN", paramNames4, paramValues4);
+                        if (salemanTable.Rows.Count > 0)
+                        {
+                            this.FullName = salemanTable.Rows[0]["memUserName"].ToString();
+                            this.Email = salemanTable.Rows[0]["memEmail"].ToString();
+                            this.Phone = salemanTable.Rows[0]["memPhone"].ToString();
+                            this.Username = salemanTable.Rows[0]["memUserName"].ToString();
+                            NameType = "Account Salesman";
+                        }
+                    }
+                }
             }
             catch
             {

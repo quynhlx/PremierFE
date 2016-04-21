@@ -1,0 +1,131 @@
+﻿@using debt_fe.Models.ViewModels
+@model IEnumerable<DebtViewModel>
+@{
+    ViewBag.Title = "My Debts";
+    Layout = "~/Views/Shared/_LayoutMobile.cshtml";
+}
+
+<div class="modal fade modal-message" tabindex="-1" role="dialog" aria-labelledby="modalDetail">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content no-border-radius">
+
+        </div>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-bordered" id="table-documents">
+        <thead>
+            <tr class="text-center">
+                <th width="10" style="padding:5px;">No.</th>
+                <th>Debt Name</th>
+                <th>Creditor</th>
+                <th>Account#</th>
+                <th>Debt Amount($)</th>
+                <th>Current Collector</th>
+                <th>Current Status</th>
+                @*<th>Delinquency</th>
+                    <th>Graduation</th>
+                    <th>History / Last Action</th>*@
+            </tr>
+        </thead>
+        <tbody>
+            @{ int i = 1;}
+            @foreach (var debt in Model)
+            {
+                <tr class="text-center">
+                    <td >@(i++)</td>
+                    <td class="text-left">@debt.DebtName</td>
+                    <td class="text-left">@debt.Creditor</td>
+                    <td>@debt.AccountNumber</td>
+                    <td class="text-right">@debt.DebtAmountStr</td>
+                    <td class="text-left">@debt.Collector</td>
+                    <td>@debt.Status</td>
+                </tr>
+
+            }
+        </tbody>
+    </table>
+</div>
+<div class="modal-backdrop fade in hidden" id="modal-loading"><div class="loader">Loading...</div></div>
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+
+            //
+            // init datatable
+            //
+
+
+            //
+            // add class form-control to datatable search
+            //
+            // button edit document
+            //
+            $('#table-documents').on('click', '.detail-view', function (e) {
+
+                e.preventDefault();
+                e.stopPropagation();
+
+                var self = $(this);
+
+                console.log('button reply clicked');
+
+                var modal = $('.modal-message');
+                var err = $('#error-msg-container');
+                debugger;
+                var href = self.prop('href');
+                //var isn = self.data('isn');
+
+                //if (isn === '') {
+                //    // err.removeClass('hide').find('#error-msg').html('Document ISN not found');
+                //    toastr.info('Document ISN not found');
+                //    return;
+                //}
+
+                var backdrop = $("<div class='modal-backdrop fade in'></div>");
+                var loading = $('#modal-loading');
+
+                loading.removeClass('hidden');
+                $('body').append(backdrop);
+
+
+                var req = $.ajax({ url: href });
+
+                req.fail(function (jqXHR) {
+                    // err.removeClass('hide').find('#error-msg').html('Unexpected error occurred. Please try again.');
+                    toastr.error('Request error. Please try again.');
+
+                    loading.hide();
+                    backdrop.remove();
+                });
+
+                req.done(function (resp) {
+
+                    // console.log('response',resp);
+
+                    if (resp === undefined || resp == '') {
+                        toastr.info('Unexpected error occurred. Please try again !!!');
+                        return;
+                    }
+
+                    //
+                    // load partial into modal content
+                    modal.find('.modal-content').html(resp);
+
+                    loading.hide();
+                    backdrop.remove();
+
+                    modal.modal({
+                        backdrop: 'static'
+                    });
+                });
+
+            });
+
+        });
+
+    </script>
+
+    }

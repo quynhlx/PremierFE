@@ -29,7 +29,7 @@
         <div class="form-group">
             <label class="control-label col-md-3">Creditor</label>
             <div class="col-md-9">
-				@Html.DropDownListFor(m => m.SelectedCreditorID, Model.CreditorItems, "Select One",new { @class="form-control"})                                
+				@Html.DropDownListFor(m => m.SelectedCreditorID, Model.CreditorItems, " -- Select One -- ", new { @class="form-control"})                                
             </div>
         </div>
 
@@ -54,7 +54,8 @@
     </div>
 
 }
-
+<script src="~/Scripts/jquery-1.11.3.js"></script>
+<script src="~/Scripts/bootstrap.js"></script>
 <script src="~/Scripts/plugins/dropzone.js"></script>
 <script src="~/Scripts/app/app.validator.js"></script>
 <script src="~/Scripts/plugins/filedrop.js"></script>

@@ -1,0 +1,32 @@
+﻿@using debt_fe.Models.ViewModels
+@model IEnumerable<DocumentDownloadViewModel>
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">DOWNLOAD DOCUMENT</h4>
+    </div>
+    <div class="modal-body">
+        <h5 class="mt0">Schedule Date Time: <strong>@ViewBag.DateTime</strong></h5>
+        <table class="table  table-bordered">
+            <tr>
+                <th class="text-center">No.</th>
+                <th>File Name</th>
+                <th  class="text-center">Uploaded Date</th>
+            </tr>
+            @{
+                var index = 1;
+            }
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="text-center">@(index++)</td>
+                    <td><a href="@Url.Action("DownloadDocument",new {documentISN= item.Id})">@(item.FileName.Length < 20 ? item.FileName : item.FileName.Substring(0, 17) + "...")</a></td>
+                    <td class="text-center">@(item.UploadedDate.ToString("MM/dd/yyyy, hh:mm tt")) by @item.UpdatedBy</td>
+                </tr>
+            }
+
+        </table>
+    </div>
+
+</div>
+

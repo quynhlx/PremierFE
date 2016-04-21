@@ -1,0 +1,111 @@
+﻿@using debt_fe.Models.ViewModels
+@model IEnumerable<AppointmentViewModel>
+@{
+    ViewBag.Title = "Mobile";
+    Layout = "~/Views/Shared/_LayoutMobile.cshtml";
+}
+<div class="modal fade" id="Appointment-Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+
+    </div>
+</div>
+<div class="table-responsive">
+    <table class="table table-hover table-bordered" id="table-appointment">
+        <thead>
+            <tr>
+                <th width="10" style="padding:5px;">No.</th>
+                <th class="hidden"></th>
+                <th></th>
+                <th>Date Time</th>
+                <th>With</th>
+                <th>Status</th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+
+                <tr class="text-center">
+                    <td>@item.No</td>
+                    <td class="hidden"><a href="javascript:void(0)" class="modal-download hidden" data-modal="record" data-id="@item.ISN"><img src="~/Content/images/i_message.gif" /></a></td>
+                    <td><a href="javascript:void(0)" class="modal-download @item.CssActtachFile" data-modal="document" data-id="@item.ISN" data-download-id="@item.DownloadFile"><img src="~/Content/images/ico_test_caller_id.gif" /></a></td>
+                    <td>@item.Datetime</td>
+                    <td>@item.With</td>
+                    <td>@item.Status.ToString()</td>
+                    <td>@item.TypeStr</td>
+                    <td>@item.Description</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+@section scripts {
+    <script>
+        var pageLenght = 10;
+        $table = $('#table-appointment').DataTable({
+            "pageLength": pageLenght, // record per page
+            "lengthChange": false, // no record per page change
+            "info": false, // no entities info
+            "order": [[3, "desc"]], // set default sort by column 5 (added date)
+            aoColumnDefs: [{ "bSortable": false, "aTargets": [0 ,1, 2] }] // disable sort in last column
+        });
+        var $tableDoc = $('#table-appointment');
+
+        if ($table.page.info().recordsTotal) {
+            onNumberRow($table, pageLenght, $tableDoc);
+
+            $(document).on('click', '.paginate_button, #table-appointment thead th', { t: $table, l: pageLenght, d: $tableDoc }, onChangePage);
+
+            $('#table-documents_filter').find('input').keyup(function () {
+                onNumberRow($table, pageLenght, $tableDoc);
+            });
+        }
+
+        $('.dataTables_filter').find('input').addClass('form-control inline');
+        $(".menu > li").removeClass("active");
+        $('#menu-appoint').addClass("active");
+
+        $('.modal-download').click(function () {
+            var dataFileISN = $(this).attr('data-download-id');
+            if (dataFileISN != 0) {
+                var hrefDowloadFile = '@Url.Action("DownloadDocument")' + '?documentISN=' + dataFileISN;
+                window.location = hrefDowloadFile;
+
+                return;
+            }
+            var dataModal = $(this).attr('data-modal');
+            var dataId = $(this).attr('data-id');
+            var hrefRecord = '@Url.Action("DownloadRecordModal", "Appointment")' + '?id=' + dataId;
+            var hrefDocument = '@Url.Action("DownloadDocumentModal", "Appointment")' + '?id=' + dataId;
+            var modal = $('#Appointment-Modal');
+            switch (dataModal) {
+                case 'record':
+                    $.ajax(hrefRecord).done(function (rs) {
+                        $('.modal-dialog').html(rs);
+                        modal.modal();
+                    }).fail(function () {
+                        toastr.error('Unexpected error occurred. Please try again.');
+                    });
+                    break;
+                case 'document':
+                    $.ajax(hrefDocument).done(function (rs) {
+                        $('.modal-dialog').html(rs);
+                        modal.modal();
+                    }).fail(function () {
+                        toastr.error('Unexpected error occurred. Please try again.');
+                    });
+                    break;
+                default:
+                    return;
+            }
+        });
+
+
+
+
+
+    </script>
+}

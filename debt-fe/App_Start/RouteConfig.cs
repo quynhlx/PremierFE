@@ -12,12 +12,18 @@ namespace debt_fe
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
-
+           
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Document", action = "Index", id = UrlParameter.Optional }
             );
+            routes.MapRoute(
+               name: "SignatureDownload2",
+               url: "{controller}/{action}/{token}/{docId}",
+               defaults: new { controller = "Document", action = "SignatureDownload2", token = UrlParameter.Optional, docId = UrlParameter.Optional }
+           );
+
         }
     }
 }

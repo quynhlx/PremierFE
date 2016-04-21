@@ -31,9 +31,10 @@ namespace debt_fe.Models
 		public bool IsSignatureDocument { get; set; }
         public string SendIP { set; get; }
         public string SignatureIP { set; get; }
-
+        public DateTime? docSignatureDate { set; get; }
         private string _customFileName;
-
+        public int docNoOfSign { set; get; }
+        public string docHistory { set; get; }
         public string CustomFileName
         {
             get { return _customFileName; }

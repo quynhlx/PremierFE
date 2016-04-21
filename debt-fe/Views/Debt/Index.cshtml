@@ -21,7 +21,7 @@
                 <th>Creditor</th>
                 <th>Account#</th>
                 <th>Debt Amount($)</th>
-                <th>Current Collector</th>
+                <th class="text-center">Current Collector</th>
                 <th>Current Status</th>
                 @*<th>Delinquency</th>
                 <th>Graduation</th>
@@ -29,15 +29,16 @@
             </tr>
         </thead>
         <tbody>
+            @{ int i = 1;}
             @foreach (var debt in Model)
             {
                 <tr class="text-center">
-                    <td>@debt.Id</td>
+                    <td>@(i++)</td>
                     <td class="text-left">@debt.DebtName</td>
                     <td class="text-left">@debt.Creditor</td>
                     <td>@debt.AccountNumber</td>
                     <td class="text-right">@debt.DebtAmountStr</td>
-                    <td class="text-left">@debt.Collector</td>
+                    <td class="text-center">@debt.Collector</td>
                     <td>@debt.Status</td>
                 </tr>
                 
@@ -54,18 +55,10 @@
             //
             // init datatable
             //
-            $('#table-documents').DataTable({
-                "paging": false,
-                "lengthChange": false, // no record per page change
-                "info": false, // no entities info
-                "order": [[1, "asc"]], // set default sort by column 5 (added date)
-                aoColumnDefs: [{ "bSortable": false, "aTargets": [] }] // disable sort in last column   
-            });
+           
 
             //
             // add class form-control to datatable search
-            $('.dataTables_filter').find('input').addClass('form-control inline');
-            
             //
             // button edit document
             //
