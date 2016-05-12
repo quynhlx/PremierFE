@@ -45,6 +45,14 @@
       <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Net.Code.ADONet, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Net.Code.ADONet.3.0.35\lib\net45\Net.Code.ADONet.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\PushSharp\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.4.2.3\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
@@ -119,9 +127,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="EntityFramework">
       <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -175,6 +180,8 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Businesses\DocumentBusiness.cs" />
+    <Compile Include="Businesses\IPremierBusiness.cs" />
+    <Compile Include="Businesses\PremierBusiness.cs" />
     <Compile Include="Businesses\SignatureBusiness.cs" />
     <Compile Include="Controllers\Account2Controller.cs" />
     <Compile Include="Controllers\AccountController.cs" />
@@ -293,12 +300,13 @@
     </Compile>
     <Compile Include="Service\EmailService.cs" />
     <Compile Include="Service\IEmailService.cs" />
+    <Compile Include="SignInManager\PremierSignInManager.cs" />
+    <Compile Include="SignInManager\PremierUser.cs" />
+    <Compile Include="SignInManager\PremierUserManager.cs" />
+    <Compile Include="SignInManager\PremierUserStore.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Utilities\TimeZone.cs" />
     <Compile Include="Utilities\Utility.cs" />
-    <Compile Include="Models\xp_debtuser_getinfo_Result.cs">
-      <DependentUpon>PremierModels.tt</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\UpdateHistory.xml" />

@@ -104,11 +104,7 @@
           <Property Name="updatedBy" Type="int" />
           <Property Name="memAgentDate" Type="datetime" />
           <Property Name="memDOB" Type="datetime" />
-          <Property Name="memGender" Type="tinyint" />
           <Property Name="memAddedBy" Type="int" />
-          <Property Name="memAccountName" Type="nvarchar" MaxLength="50" />
-          <Property Name="memAccountComment" Type="nvarchar" MaxLength="500" />
-          <Property Name="BankISN" Type="int" />
         </EntityType>
         <EntityType Name="MemberExt2">
           <Key>
@@ -196,7 +192,6 @@ warning 6002: The table/view 'ROI.dbo.Vw_DebtExt_Creditor' does not have a prima
           <Property Name="cdtIsPush" Type="tinyint" />
           <Property Name="cdtSource" Type="tinyint" />
           <Property Name="PCreditorISN" Type="int" />
-          <Property Name="cdtDelinquent" Type="int" />
           <Property Name="addedUserName" Type="nvarchar" MaxLength="30" />
           <Property Name="updatedName" Type="nvarchar" MaxLength="30" />
           <Property Name="Creditor" Type="nvarchar" MaxLength="100" />
@@ -300,11 +295,7 @@ warning 6002: The table/view 'ROI.dbo.Vw_Member' does not have a primary key def
           <Property Name="updatedBy" Type="int" />
           <Property Name="memAgentDate" Type="datetime" />
           <Property Name="memDOB" Type="datetime" />
-          <Property Name="memGender" Type="tinyint" />
           <Property Name="memAddedBy" Type="int" />
-          <Property Name="memAccountName" Type="nvarchar" MaxLength="50" />
-          <Property Name="memAccountComment" Type="nvarchar" MaxLength="500" />
-          <Property Name="BankISN" Type="int" />
           <Property Name="memFullName" Type="nvarchar" MaxLength="61" />
           <Property Name="memFullName2" Type="nvarchar" MaxLength="61" />
           <Property Name="memBalance" Type="float" />
@@ -681,7 +672,6 @@ warning 6002: The table/view 'ROI.dbo.Vw_TroubleTicket' does not have a primary 
     [Vw_DebtExt_Creditor].[cdtIsPush] AS [cdtIsPush], 
     [Vw_DebtExt_Creditor].[cdtSource] AS [cdtSource], 
     [Vw_DebtExt_Creditor].[PCreditorISN] AS [PCreditorISN], 
-    [Vw_DebtExt_Creditor].[cdtDelinquent] AS [cdtDelinquent], 
     [Vw_DebtExt_Creditor].[addedUserName] AS [addedUserName], 
     [Vw_DebtExt_Creditor].[updatedName] AS [updatedName], 
     [Vw_DebtExt_Creditor].[Creditor] AS [Creditor], 
@@ -768,11 +758,7 @@ warning 6002: The table/view 'ROI.dbo.Vw_TroubleTicket' does not have a primary 
     [Vw_Member].[updatedBy] AS [updatedBy], 
     [Vw_Member].[memAgentDate] AS [memAgentDate], 
     [Vw_Member].[memDOB] AS [memDOB], 
-    [Vw_Member].[memGender] AS [memGender], 
     [Vw_Member].[memAddedBy] AS [memAddedBy], 
-    [Vw_Member].[memAccountName] AS [memAccountName], 
-    [Vw_Member].[memAccountComment] AS [memAccountComment], 
-    [Vw_Member].[BankISN] AS [BankISN], 
     [Vw_Member].[memFullName] AS [memFullName], 
     [Vw_Member].[memFullName2] AS [memFullName2], 
     [Vw_Member].[memBalance] AS [memBalance], 
@@ -1001,9 +987,6 @@ warning 6002: The table/view 'ROI.dbo.Vw_TroubleTicket' does not have a primary 
             <Parameter Name="memDropID" Mode="In" Type="String" />
             <Parameter Name="AccountManagerISN" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="xp_debtuser_getinfo" ReturnType="Collection(ROIModel.xp_debtuser_getinfo_Result)">
-          <Parameter Name="MemberISN" Mode="In" Type="Int32" />
-          </FunctionImport>
           <EntitySet Name="Vw_PremierMessage" EntityType="ROIModel.Vw_PremierMessage" />
           <FunctionImport Name="xp_premiermessage_new">
             <Parameter Name="MemberISN" Mode="In" Type="Int32" />
@@ -1077,105 +1060,6 @@ warning 6002: The table/view 'ROI.dbo.Vw_TroubleTicket' does not have a primary 
           </AssociationSet>
           <EntitySet Name="Vw_Member" EntityType="ROIModel.Vw_Member" />
         </EntityContainer>
-        <ComplexType Name="xp_debtuser_getinfo_Result">
-          <Property Type="Int32" Name="MemberISN" Nullable="false" />
-          <Property Type="String" Name="memUserName" Nullable="true" MaxLength="30" />
-          <Property Type="String" Name="memFirstName" Nullable="true" MaxLength="30" />
-          <Property Type="String" Name="memMiddleName" Nullable="true" MaxLength="30" />
-          <Property Type="String" Name="memLastName" Nullable="true" MaxLength="30" />
-          <Property Type="String" Name="memFullName" Nullable="true" MaxLength="100" />
-          <Property Type="DateTime" Name="updatedDate" Nullable="true" Precision="23" />
-          <Property Type="Int32" Name="updatedBy" Nullable="true" />
-          <Property Type="DateTime" Name="memSignUp" Nullable="true" Precision="23" />
-          <Property Type="String" Name="memFax" Nullable="true" MaxLength="20" />
-          <Property Type="String" Name="memSSN" Nullable="true" MaxLength="20" />
-          <Property Type="String" Name="memCompanyName" Nullable="true" MaxLength="100" />
-          <Property Type="String" Name="memTitle" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="memIM" Nullable="true" MaxLength="50" />
-          <Property Type="DateTime" Name="LastCall" Nullable="true" Precision="23" />
-          <Property Type="String" Name="LastANI" Nullable="true" MaxLength="30" />
-          <Property Type="Int32" Name="NoOfCall" Nullable="true" />
-          <Property Type="Int32" Name="Duration" Nullable="true" />
-          <Property Type="String" Name="memAddress" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="memCity" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="memState" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="memZip" Nullable="true" MaxLength="15" />
-          <Property Type="String" Name="memPhone" Nullable="true" MaxLength="20" />
-          <Property Type="String" Name="memEmail" Nullable="true" MaxLength="200" />
-          <Property Type="Int32" Name="LastSaleNoteISN" Nullable="true" />
-          <Property Type="String" Name="LastFiles" Nullable="true" MaxLength="500" />
-          <Property Type="String" Name="cvsContent" Nullable="true" MaxLength="800" />
-          <Property Type="DateTime" Name="cvsDate" Nullable="true" Precision="23" />
-          <Property Type="Byte" Name="memStatus" Nullable="false" />
-          <Property Type="String" Name="updatedName" Nullable="true" MaxLength="66" />
-          <Property Type="String" Name="AddedName" Nullable="true" MaxLength="66" />
-          <Property Type="Int32" Name="CampaignISN" Nullable="true" />
-          <Property Type="String" Name="cpnName" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="cpnDID" Nullable="true" MaxLength="20" />
-          <Property Type="Int32" Name="DealerISN" Nullable="true" />
-          <Property Type="Int32" Name="AdsAgencyISN" Nullable="true" />
-          <Property Type="Double" Name="memCreditScore" Nullable="true" />
-          <Property Type="Decimal" Name="memApprovalPayment" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="memApprovalAmount" Nullable="true" Precision="19" />
-          <Property Type="Byte" Name="memConnectedLO" Nullable="true" />
-          <Property Type="String" Name="memComment" Nullable="true" />
-          <Property Type="Int32" Name="AgentISN" Nullable="true" />
-          <Property Type="String" Name="saleman" Nullable="false" MaxLength="30" />
-          <Property Type="Int32" Name="salemanisn" Nullable="true" />
-          <Property Type="DateTime" Name="memAgentDate" Nullable="true" Precision="23" />
-          <Property Type="DateTime" Name="appDate" Nullable="true" Precision="23" />
-          <Property Type="Int32" Name="LastRecordingISN" Nullable="true" />
-          <Property Type="Int32" Name="LastFaxISN" Nullable="true" />
-          <Property Type="Int32" Name="GroupID" Nullable="true" />
-          <Property Type="String" Name="memPolycomID" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="memWeekDay" Nullable="true" MaxLength="20" />
-          <Property Type="String" Name="salemanFName" Nullable="true" MaxLength="30" />
-          <Property Type="String" Name="salemanLName" Nullable="true" MaxLength="30" />
-          <Property Type="Decimal" Name="memHomeValue" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="memCurrentLeftOnLoan" Nullable="true" Precision="19" />
-          <Property Type="Double" Name="memInterestRate" Nullable="true" />
-          <Property Type="Decimal" Name="memMonthlyPaymentM" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="memAppoxTotalDebt" Nullable="true" Precision="19" />
-          <Property Type="Double" Name="memTypeOfLoan" Nullable="true" />
-          <Property Type="String" Name="memAnyLatePayment" Nullable="true" MaxLength="256" />
-          <Property Type="String" Name="memApprovalOfRCredit" Nullable="true" MaxLength="256" />
-          <Property Type="String" Name="memIsYourCreditGreat" Nullable="true" MaxLength="256" />
-          <Property Type="Decimal" Name="memPayOffAmount" Nullable="true" Precision="19" />
-          <Property Type="String" Name="FaxFileName" Nullable="true" MaxLength="500" />
-          <Property Type="Int32" Name="fResult" Nullable="true" />
-          <Property Type="String" Name="fErrMsg" Nullable="true" MaxLength="500" />
-          <Property Type="Int32" Name="FaxConversationISN" Nullable="true" />
-          <Property Type="DateTime" Name="FaxDate" Nullable="true" Precision="23" />
-          <Property Type="String" Name="RecordingFileName" Nullable="true" MaxLength="500" />
-          <Property Type="Int32" Name="RecordingConversationISN" Nullable="true" />
-          <Property Type="DateTime" Name="RecordingDate" Nullable="true" Precision="23" />
-          <Property Type="Int32" Name="IsPrimaryLead" Nullable="false" />
-          <Property Type="Byte" Name="memTradeVehicle" Nullable="true" />
-          <Property Type="String" Name="memYearVehicle" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="memManufacturerVehicle" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="memModelVehicle" Nullable="true" MaxLength="200" />
-          <Property Type="Decimal" Name="memMonthlyPayment" Nullable="true" Precision="19" />
-          <Property Type="String" Name="memCountry" Nullable="true" MaxLength="50" />
-          <Property Type="Byte" Name="memReadyPurchaseNow" Nullable="true" />
-          <Property Type="DateTime" Name="memDOB" Nullable="true" Precision="23" />
-          <Property Type="DateTime" Name="FirstPaymentDate" Nullable="true" Precision="23" />
-          <Property Type="Double" Name="InvoiceAmount" Nullable="true" />
-          <Property Type="Double" Name="MainDebt" Nullable="true" />
-          <Property Type="Double" Name="MaxDebt" Nullable="true" />
-          <Property Type="Double" Name="Terms" Nullable="true" />
-          <Property Type="Int32" Name="NoOfPayment" Nullable="false" />
-          <Property Type="String" Name="memWorkPhone" Nullable="true" MaxLength="20" />
-          <Property Type="String" Name="memHomePhone" Nullable="true" MaxLength="20" />
-          <Property Type="Double" Name="DebtBalance" Nullable="true" />
-          <Property Type="Int32" Name="PhoneRechargeNo" Nullable="true" />
-          <Property Type="DateTime" Name="SaleDate" Nullable="true" Precision="23" />
-          <Property Type="Double" Name="TotalDebt" Nullable="true" />
-          <Property Type="String" Name="firstCallerID" Nullable="true" MaxLength="512" />
-          <Property Type="DateTime" Name="DeadDate" Nullable="true" Precision="23" />
-          <Property Type="DateTime" Name="CancelledDate" Nullable="true" Precision="23" />
-          <Property Type="String" Name="memDropID" Nullable="true" MaxLength="50" />
-          <Property Type="Int32" Name="AccountManagerISN" Nullable="true" />
-        </ComplexType>
         <EntityType Name="Vw_PremierMessage">
           <Key>
             <PropertyRef Name="MessageISN" />
@@ -1274,7 +1158,6 @@ warning 6002: The table/view 'ROI.dbo.Vw_TroubleTicket' does not have a primary 
           <Property Name="cdtIsPush" Type="Byte" />
           <Property Name="cdtSource" Type="Byte" />
           <Property Name="PCreditorISN" Type="Int32" />
-          <Property Name="cdtDelinquent" Type="Int32" />
           <Property Name="addedUserName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
           <Property Name="updatedName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
           <Property Name="Creditor" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
@@ -1432,10 +1315,7 @@ warning 6002: The table/view 'ROI.dbo.Vw_TroubleTicket' does not have a primary 
           <Property Name="memAddedBy" Type="Int32" />
           <NavigationProperty Name="Documents" Relationship="ROIModel.FK__Document__Member__11D4A34F" FromRole="Member" ToRole="Document" />
           <NavigationProperty Name="PremierMessages" Relationship="ROIModel.FK__PremierMe__Membe__4E40F516" FromRole="Member" ToRole="PremierMessage" />
-          <Property Name="memGender" Type="Byte" />
-          <Property Name="memAccountName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="memAccountComment" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="BankISN" Type="Int32" />
+         
         </EntityType>
         <Association Name="FK__Document__Member__11D4A34F">
           <End Type="ROIModel.Member" Role="Member" Multiplicity="0..1">
@@ -1699,10 +1579,7 @@ warning 6002: The table/view 'ROI.dbo.Vw_TroubleTicket' does not have a primary 
           <Property Name="MasterMFACode" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="EPPSUserName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
           <Property Name="EPPSPassword" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="memGender" Type="Byte" />
-          <Property Name="memAccountName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="memAccountComment" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="BankISN" Type="Int32" />
+
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1711,109 +1588,6 @@ warning 6002: The table/view 'ROI.dbo.Vw_TroubleTicket' does not have a primary 
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="ROIModelStoreContainer" CdmEntityContainer="PremierEntities" >
           <FunctionImportMapping FunctionImportName="xp_debtext_client_insupd2" FunctionName="ROIModel.Store.xp_debtext_client_insupd2" />
-          <FunctionImportMapping FunctionImportName="xp_debtuser_getinfo" FunctionName="ROIModel.Store.xp_debtuser_getinfo">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="ROIModel.xp_debtuser_getinfo_Result">
-                <ScalarProperty Name="MemberISN" ColumnName="MemberISN" />
-                <ScalarProperty Name="memUserName" ColumnName="memUserName" />
-                <ScalarProperty Name="memFirstName" ColumnName="memFirstName" />
-                <ScalarProperty Name="memMiddleName" ColumnName="memMiddleName" />
-                <ScalarProperty Name="memLastName" ColumnName="memLastName" />
-                <ScalarProperty Name="memFullName" ColumnName="memFullName" />
-                <ScalarProperty Name="updatedDate" ColumnName="updatedDate" />
-                <ScalarProperty Name="updatedBy" ColumnName="updatedBy" />
-                <ScalarProperty Name="memSignUp" ColumnName="memSignUp" />
-                <ScalarProperty Name="memFax" ColumnName="memFax" />
-                <ScalarProperty Name="memSSN" ColumnName="memSSN" />
-                <ScalarProperty Name="memCompanyName" ColumnName="memCompanyName" />
-                <ScalarProperty Name="memTitle" ColumnName="memTitle" />
-                <ScalarProperty Name="memIM" ColumnName="memIM" />
-                <ScalarProperty Name="LastCall" ColumnName="LastCall" />
-                <ScalarProperty Name="LastANI" ColumnName="LastANI" />
-                <ScalarProperty Name="NoOfCall" ColumnName="NoOfCall" />
-                <ScalarProperty Name="Duration" ColumnName="Duration" />
-                <ScalarProperty Name="memAddress" ColumnName="memAddress" />
-                <ScalarProperty Name="memCity" ColumnName="memCity" />
-                <ScalarProperty Name="memState" ColumnName="memState" />
-                <ScalarProperty Name="memZip" ColumnName="memZip" />
-                <ScalarProperty Name="memPhone" ColumnName="memPhone" />
-                <ScalarProperty Name="memEmail" ColumnName="memEmail" />
-                <ScalarProperty Name="LastSaleNoteISN" ColumnName="LastSaleNoteISN" />
-                <ScalarProperty Name="LastFiles" ColumnName="LastFiles" />
-                <ScalarProperty Name="cvsContent" ColumnName="cvsContent" />
-                <ScalarProperty Name="cvsDate" ColumnName="cvsDate" />
-                <ScalarProperty Name="memStatus" ColumnName="memStatus" />
-                <ScalarProperty Name="updatedName" ColumnName="updatedName" />
-                <ScalarProperty Name="AddedName" ColumnName="AddedName" />
-                <ScalarProperty Name="CampaignISN" ColumnName="CampaignISN" />
-                <ScalarProperty Name="cpnName" ColumnName="cpnName" />
-                <ScalarProperty Name="cpnDID" ColumnName="cpnDID" />
-                <ScalarProperty Name="DealerISN" ColumnName="DealerISN" />
-                <ScalarProperty Name="AdsAgencyISN" ColumnName="AdsAgencyISN" />
-                <ScalarProperty Name="memCreditScore" ColumnName="memCreditScore" />
-                <ScalarProperty Name="memApprovalPayment" ColumnName="memApprovalPayment" />
-                <ScalarProperty Name="memApprovalAmount" ColumnName="memApprovalAmount" />
-                <ScalarProperty Name="memConnectedLO" ColumnName="memConnectedLO" />
-                <ScalarProperty Name="memComment" ColumnName="memComment" />
-                <ScalarProperty Name="AgentISN" ColumnName="AgentISN" />
-                <ScalarProperty Name="saleman" ColumnName="saleman" />
-                <ScalarProperty Name="salemanisn" ColumnName="salemanisn" />
-                <ScalarProperty Name="memAgentDate" ColumnName="memAgentDate" />
-                <ScalarProperty Name="appDate" ColumnName="appDate" />
-                <ScalarProperty Name="LastRecordingISN" ColumnName="LastRecordingISN" />
-                <ScalarProperty Name="LastFaxISN" ColumnName="LastFaxISN" />
-                <ScalarProperty Name="GroupID" ColumnName="GroupID" />
-                <ScalarProperty Name="memPolycomID" ColumnName="memPolycomID" />
-                <ScalarProperty Name="memWeekDay" ColumnName="memWeekDay" />
-                <ScalarProperty Name="salemanFName" ColumnName="salemanFName" />
-                <ScalarProperty Name="salemanLName" ColumnName="salemanLName" />
-                <ScalarProperty Name="memHomeValue" ColumnName="memHomeValue" />
-                <ScalarProperty Name="memCurrentLeftOnLoan" ColumnName="memCurrentLeftOnLoan" />
-                <ScalarProperty Name="memInterestRate" ColumnName="memInterestRate" />
-                <ScalarProperty Name="memMonthlyPaymentM" ColumnName="memMonthlyPaymentM" />
-                <ScalarProperty Name="memAppoxTotalDebt" ColumnName="memAppoxTotalDebt" />
-                <ScalarProperty Name="memTypeOfLoan" ColumnName="memTypeOfLoan" />
-                <ScalarProperty Name="memAnyLatePayment" ColumnName="memAnyLatePayment" />
-                <ScalarProperty Name="memApprovalOfRCredit" ColumnName="memApprovalOfRCredit" />
-                <ScalarProperty Name="memIsYourCreditGreat" ColumnName="memIsYourCreditGreat" />
-                <ScalarProperty Name="memPayOffAmount" ColumnName="memPayOffAmount" />
-                <ScalarProperty Name="FaxFileName" ColumnName="FaxFileName" />
-                <ScalarProperty Name="fResult" ColumnName="fResult" />
-                <ScalarProperty Name="fErrMsg" ColumnName="fErrMsg" />
-                <ScalarProperty Name="FaxConversationISN" ColumnName="FaxConversationISN" />
-                <ScalarProperty Name="FaxDate" ColumnName="FaxDate" />
-                <ScalarProperty Name="RecordingFileName" ColumnName="RecordingFileName" />
-                <ScalarProperty Name="RecordingConversationISN" ColumnName="RecordingConversationISN" />
-                <ScalarProperty Name="RecordingDate" ColumnName="RecordingDate" />
-                <ScalarProperty Name="IsPrimaryLead" ColumnName="IsPrimaryLead" />
-                <ScalarProperty Name="memTradeVehicle" ColumnName="memTradeVehicle" />
-                <ScalarProperty Name="memYearVehicle" ColumnName="memYearVehicle" />
-                <ScalarProperty Name="memManufacturerVehicle" ColumnName="memManufacturerVehicle" />
-                <ScalarProperty Name="memModelVehicle" ColumnName="memModelVehicle" />
-                <ScalarProperty Name="memMonthlyPayment" ColumnName="memMonthlyPayment" />
-                <ScalarProperty Name="memCountry" ColumnName="memCountry" />
-                <ScalarProperty Name="memReadyPurchaseNow" ColumnName="memReadyPurchaseNow" />
-                <ScalarProperty Name="memDOB" ColumnName="memDOB" />
-                <ScalarProperty Name="FirstPaymentDate" ColumnName="FirstPaymentDate" />
-                <ScalarProperty Name="InvoiceAmount" ColumnName="InvoiceAmount" />
-                <ScalarProperty Name="MainDebt" ColumnName="MainDebt" />
-                <ScalarProperty Name="MaxDebt" ColumnName="MaxDebt" />
-                <ScalarProperty Name="Terms" ColumnName="Terms" />
-                <ScalarProperty Name="NoOfPayment" ColumnName="NoOfPayment" />
-                <ScalarProperty Name="memWorkPhone" ColumnName="memWorkPhone" />
-                <ScalarProperty Name="memHomePhone" ColumnName="memHomePhone" />
-                <ScalarProperty Name="DebtBalance" ColumnName="DebtBalance" />
-                <ScalarProperty Name="PhoneRechargeNo" ColumnName="PhoneRechargeNo" />
-                <ScalarProperty Name="SaleDate" ColumnName="SaleDate" />
-                <ScalarProperty Name="TotalDebt" ColumnName="TotalDebt" />
-                <ScalarProperty Name="firstCallerID" ColumnName="firstCallerID" />
-                <ScalarProperty Name="DeadDate" ColumnName="DeadDate" />
-                <ScalarProperty Name="CancelledDate" ColumnName="CancelledDate" />
-                <ScalarProperty Name="memDropID" ColumnName="memDropID" />
-                <ScalarProperty Name="AccountManagerISN" ColumnName="AccountManagerISN" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <EntitySetMapping Name="Vw_PremierMessage">
             <EntityTypeMapping TypeName="ROIModel.Vw_PremierMessage">
               <MappingFragment StoreEntitySet="Vw_PremierMessage">
@@ -1913,7 +1687,6 @@ warning 6002: The table/view 'ROI.dbo.Vw_TroubleTicket' does not have a primary 
                 <ScalarProperty Name="Creditor" ColumnName="Creditor" />
                 <ScalarProperty Name="updatedName" ColumnName="updatedName" />
                 <ScalarProperty Name="addedUserName" ColumnName="addedUserName" />
-                <ScalarProperty Name="cdtDelinquent" ColumnName="cdtDelinquent" />
                 <ScalarProperty Name="PCreditorISN" ColumnName="PCreditorISN" />
                 <ScalarProperty Name="cdtSource" ColumnName="cdtSource" />
                 <ScalarProperty Name="cdtIsPush" ColumnName="cdtIsPush" />
@@ -2038,10 +1811,6 @@ warning 6002: The table/view 'ROI.dbo.Vw_TroubleTicket' does not have a primary 
           <EntitySetMapping Name="Members">
             <EntityTypeMapping TypeName="ROIModel.Member">
               <MappingFragment StoreEntitySet="Member">
-                <ScalarProperty Name="BankISN" ColumnName="BankISN" />
-                <ScalarProperty Name="memAccountComment" ColumnName="memAccountComment" />
-                <ScalarProperty Name="memAccountName" ColumnName="memAccountName" />
-                <ScalarProperty Name="memGender" ColumnName="memGender" />
                 <ScalarProperty Name="memAddedBy" ColumnName="memAddedBy" />
                 <ScalarProperty Name="memDOB" ColumnName="memDOB" />
                 <ScalarProperty Name="memAgentDate" ColumnName="memAgentDate" />
@@ -2173,10 +1942,6 @@ warning 6002: The table/view 'ROI.dbo.Vw_TroubleTicket' does not have a primary 
           <EntitySetMapping Name="Vw_Member">
             <EntityTypeMapping TypeName="ROIModel.Vw_Member">
               <MappingFragment StoreEntitySet="Vw_Member">
-                <ScalarProperty Name="BankISN" ColumnName="BankISN" />
-                <ScalarProperty Name="memAccountComment" ColumnName="memAccountComment" />
-                <ScalarProperty Name="memAccountName" ColumnName="memAccountName" />
-                <ScalarProperty Name="memGender" ColumnName="memGender" />
                 <ScalarProperty Name="EPPSPassword" ColumnName="EPPSPassword" />
                 <ScalarProperty Name="EPPSUserName" ColumnName="EPPSUserName" />
                 <ScalarProperty Name="MasterMFACode" ColumnName="MasterMFACode" />

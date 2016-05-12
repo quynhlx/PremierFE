@@ -28,7 +28,6 @@ namespace debt_fe.Models
         public Nullable<byte> cdtIsPush { get; set; }
         public Nullable<byte> cdtSource { get; set; }
         public Nullable<int> PCreditorISN { get; set; }
-        public Nullable<int> cdtDelinquent { get; set; }
         public string addedUserName { get; set; }
         public string updatedName { get; set; }
         public string Creditor { get; set; }

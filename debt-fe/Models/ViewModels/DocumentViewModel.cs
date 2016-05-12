@@ -12,9 +12,10 @@ namespace debt_fe.Models.ViewModels
 {
 	public class DocumentViewModel
 	{
-        private DocumentBusiness _docBusiness;
+        //private DocumentBusiness _docBusiness;
+        private IPremierBusiness _premierBusiness; 
 
-		public string DocName { get; set; }
+        public string DocName { get; set; }
 		public HttpPostedFileBase UploadedFile { get; set; }
 		public string Creditor { get; set; }
 		public string Notes { get; set; }
@@ -39,7 +40,7 @@ namespace debt_fe.Models.ViewModels
 		public DocumentViewModel()
 		{
 			this._creditors = new List<CreditorModel>();
-            _docBusiness = new DocumentBusiness();
+            _premierBusiness = new PremierBusiness();
 		}
 
 		public DocumentViewModel(int memberISN) : this()
@@ -51,7 +52,7 @@ namespace debt_fe.Models.ViewModels
 		{
             this.DocumentISN = documentISN;
 
-            var documents = _docBusiness.GetDocuments(memberISN);
+            var documents = _premierBusiness.GetDocuments(memberISN);
 
             if (documents != null && documents.Count>0)
             {

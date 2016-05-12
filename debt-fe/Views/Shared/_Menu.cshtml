@@ -67,11 +67,11 @@
             {
                 <p style="font-size: small">Phone#: @Model.PhoneFormat</p>
             }
-            <p style="font-size: small">Email: @Model.Email</p>
+            @*<p style="font-size: small">Email: @Model.Email</p>*@
         }
     </div>
     <hr />
     <div class="text-center">
-        <button data-href="@Url.Action("Complaint", "Home", new { returnUrl = string.Format("{0}", HttpContext.Current.Request.Url.AbsoluteUri) })" class="mt btn btn-complaint">Communicate with Supervisor.</button>
+        <button data-href="@Url.Action("Complaint", "Home", new { returnUrl = string.Format("{0}", HttpContext.Current.Request.Url.AbsoluteUri) })" class="mt btn btn-complaint">Communicate with Supervisor</button>
     </div>
 </div>

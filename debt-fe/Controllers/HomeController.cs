@@ -53,11 +53,11 @@ namespace debt_fe.Controllers
             var rs = db.xp_complaint_ins(MemberISN, content, -MemberISN);
             if(rs > 0)
             {
-                TempData["success"] = "The complaint was successfully sent";
+                TempData["success"] = "Comment submitted";
             }
             else
             {
-                TempData["error"] = "The complaint was error sent";
+                TempData["error"] = "Comment cannot submitted";
             }
             return Redirect(url); 
         }

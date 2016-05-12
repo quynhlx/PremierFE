@@ -141,9 +141,5 @@ namespace debt_fe.Models
         public string MasterMFACode { get; set; }
         public string EPPSUserName { get; set; }
         public string EPPSPassword { get; set; }
-        public Nullable<byte> memGender { get; set; }
-        public string memAccountName { get; set; }
-        public string memAccountComment { get; set; }
-        public Nullable<int> BankISN { get; set; }
     }
 }

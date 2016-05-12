@@ -42,52 +42,7 @@ namespace debt_fe.Businesses
             return documents;
         }
 
-        public void UpdateLeadStatus(int memberISN, string status, int by)
-        {
-            var store = "xp_debt_lead_status_upd";
-            var parameters = new Hashtable();
-            parameters.Add("MemberISN", memberISN);
-            parameters.Add("Status", status);
-            parameters.Add("updatedBy", by);
-            parameters.Add("Action", "Contract Received");
-            var table = _data.ExecuteStoreProcedure(store, parameters);
-        }
-        public void UpdateDocSignature(int docID, string FileName, string UserIP, string BrowserInfo, int MemberISN, string docGUID = "", string AppendNotes = "")
-        {
-            var store = "xp_debtext_document_signature_upd";
-            var parameters = new Hashtable();
-            parameters.Add("DocumentISN", docID);
-            parameters.Add("updatedBy", MemberISN);
-            if (!string.IsNullOrEmpty(FileName))
-            {
-                parameters.Add("docFileName", FileName);
-            }
-
-            parameters.Add("ClientInfo", BrowserInfo);
-
-            if (!string.IsNullOrEmpty(UserIP))
-            {
-                parameters.Add("docSignatureIP", AppendNotes);
-            }
-            if (!string.IsNullOrEmpty(docGUID))
-            {
-                parameters.Add("docGUID", docGUID);
-            }
-            if (!string.IsNullOrEmpty(AppendNotes))
-            {
-                parameters.Add("AppendNotes", AppendNotes);
-            }
-            _data.ExecuteStoreProcedure(store, parameters);
-        }
-
-        public void UpdateHistory (int docID, string note)
-        {
-            var query = "Update Document set docHistory=isnull(docHistory,'') + @note where DocumentISN = @docISN";
-            var parameters = new Hashtable();
-            parameters.Add("docISN", docID);
-            parameters.Add("note", note);
-            _data.ExecuteQuery(query, parameters);
-        }
+     
 
         private List<DocumentModel> GetDocumentsFromTable(DataTable table)
         {
@@ -140,24 +95,13 @@ namespace debt_fe.Businesses
             doc.docNoOfSign = row["docNoOfSign"] == DBNull.Value ? 0 : Convert.ToInt32(row["docNoOfSign"]);
             doc.docHistory = row["docHistory"].ToString();
             doc.Public = false;
+            doc.UpdatedBy = row["updatedBy"] == DBNull.Value ? 0 : Convert.ToInt32(row["updatedBy"]);
             var isPublic = row["docPublic"].ToString();
             if (!string.IsNullOrEmpty(isPublic) && !string.IsNullOrWhiteSpace(isPublic))
             {
                 if (isPublic.Trim().Equals("1"))
                 {
                     doc.Public = true;
-                }
-            }
-
-            doc.IsSignatureDocument = false;
-
-            var canSign = row["docSignatureStatus"].ToString();
-
-            if (!string.IsNullOrEmpty(canSign))
-            {
-                if (canSign.Trim().Equals("1"))
-                {
-                    doc.IsSignatureDocument = true;
                 }
             }
 
@@ -177,6 +121,52 @@ namespace debt_fe.Businesses
             return doc;
         }
 
+     
+        public void UpdateLeadStatus(int memberISN, string status, int by)
+        {
+            var store = "xp_debt_lead_status_upd";
+            var parameters = new Hashtable();
+            parameters.Add("MemberISN", memberISN);
+            parameters.Add("Status", status);
+            parameters.Add("updatedBy", by);
+            parameters.Add("Action", "Contract Received");
+            var table = _data.ExecuteStoreProcedure(store, parameters);
+        }
+        public void UpdateDocSignature(int docID, string FileName, string UserIP, string BrowserInfo, int MemberISN, string docGUID = "", string AppendNotes = "")
+        {
+            var store = "xp_debtext_document_signature_upd";
+            var parameters = new Hashtable();
+            parameters.Add("DocumentISN", docID);
+            parameters.Add("updatedBy", MemberISN);
+            if (!string.IsNullOrEmpty(FileName))
+            {
+                parameters.Add("docFileName", FileName);
+            }
+
+            parameters.Add("ClientInfo", BrowserInfo);
+
+            if (!string.IsNullOrEmpty(UserIP))
+            {
+                parameters.Add("docSignatureIP", UserIP);
+            }
+            if (!string.IsNullOrEmpty(docGUID))
+            {
+                parameters.Add("docGUID", docGUID);
+            }
+            if (!string.IsNullOrEmpty(AppendNotes))
+            {
+                parameters.Add("AppendNotes", AppendNotes);
+            }
+            _data.ExecuteStoreProcedure(store, parameters);
+        }
+        public void UpdateHistory(int docID, string note)
+        {
+            var query = "Update Document set docHistory=isnull(docHistory,'') + @note where DocumentISN = @docISN";
+            var parameters = new Hashtable();
+            parameters.Add("docISN", docID);
+            parameters.Add("note", note);
+            _data.ExecuteQuery(query, parameters);
+        }
 
         public string GetDocumentPath(int documentISN, DateTime? addedDate)
         {
@@ -238,7 +228,7 @@ namespace debt_fe.Businesses
             parameters.Add("docStatus", document.Status);
             parameters.Add("docDesc", document.Desc);
             parameters.Add("docLastAction", document.LastAction);
-            parameters.Add("docSignatureStatus", document.IsSignatureDocument);
+            parameters.Add("docSignatureStatus", document.SignatureStatus);
             parameters.Add("CreditorISN", document.CreditorISN);
             parameters.Add("updatedBy", document.UpdatedBy);
             //parameters.Add("docSendIP", document.SendIP);

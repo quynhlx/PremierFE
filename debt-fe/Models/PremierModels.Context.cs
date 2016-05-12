@@ -277,15 +277,6 @@ namespace debt_fe.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("xp_debtext_client_insupd2", memberISNParameter, salemanISNParameter, campaignISNParameter, memUserNameParameter, memPasswordParameter, memFaxParameter, memFirstNameParameter, memLastNameParameter, memPhoneParameter, memEmailParameter, memAddressParameter, memZipParameter, memCityParameter, memStateParameter, memCompanyNameParameter, memTitleParameter, memIMParameter, memStatusParameter, memCommentParameter, memCreditLineParameter, dealerISNParameter, aNIParameter, memCreditScoreParameter, memApprovalPaymentParameter, memApprovalAmountParameter, memSSNParameter, memTimeOptionParameter, memDSTParameter, memConnectedLOParameter, updatedByParameter, memTradeVehicleParameter, memYearVehicleParameter, memManufacturerVehicleParameter, memModelVehicleParameter, memMonthlyPaymentParameter, memPolycomIDParameter, memWeekDayParameter, memHomeValueParameter, memCurrentLeftOnLoanParameter, memInterestRateParameter, memMonthlyPaymentMParameter, memAppoxTotalDebtParameter, memTypeOfLoanParameter, memAnyLatePaymentParameter, memApprovalOfRCreditParameter, memIsYourCreditGreatParameter, memTimeZoneFullParameter, memDomainNameParameter, memPayOffAmountParameter, balanceParameter, ratePlanParameter, memDOBParameter, lastStepFlagParameter, memReadyPurchaseNowParameter, xmlInfoExtParameter, phoneRechargeNoParameter, memDropIDParameter, accountManagerISNParameter);
         }
     
-        public virtual ObjectResult<xp_debtuser_getinfo_Result> xp_debtuser_getinfo(Nullable<int> memberISN)
-        {
-            var memberISNParameter = memberISN.HasValue ?
-                new ObjectParameter("MemberISN", memberISN) :
-                new ObjectParameter("MemberISN", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<xp_debtuser_getinfo_Result>("xp_debtuser_getinfo", memberISNParameter);
-        }
-    
         public virtual int xp_premiermessage_new(Nullable<int> memberISN, string subject, string content, Nullable<int> updatedBy)
         {
             var memberISNParameter = memberISN.HasValue ?

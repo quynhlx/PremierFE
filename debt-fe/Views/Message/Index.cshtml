@@ -102,6 +102,7 @@
             $('.dataTables_filter').find('input').addClass('form-control inline');
 
             $(".dataTables_wrapper ").prepend('<a href="@Url.Action("MarkAllRead", "Message")" class="btn btn-info">Mark all read</a>');
+            $(".dataTables_wrapper ").prepend('<a href="@Url.Action("AddNewMessage", "Message")" class="btn btn-info mr" id="new-message">New Message</a>');
             //
             // button edit document
             //

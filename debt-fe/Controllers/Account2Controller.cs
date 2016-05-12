@@ -68,7 +68,7 @@ namespace debt_fe.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult Login(LoginViewModel model, string returnUrl)
+        public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
             if (!ModelState.IsValid)
             {
@@ -82,8 +82,8 @@ namespace debt_fe.Controllers
             // build craft version
             //
 
-            /*
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+
+            var result = await SignInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -97,7 +97,7 @@ namespace debt_fe.Controllers
                     ModelState.AddModelError("", "Invalid login attempt.");
                     return View(model);
             }
-             */
+
 
             return View();
         }

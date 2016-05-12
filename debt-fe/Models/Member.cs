@@ -62,10 +62,6 @@ namespace debt_fe.Models
         public Nullable<System.DateTime> memAgentDate { get; set; }
         public Nullable<System.DateTime> memDOB { get; set; }
         public Nullable<int> memAddedBy { get; set; }
-        public Nullable<byte> memGender { get; set; }
-        public string memAccountName { get; set; }
-        public string memAccountComment { get; set; }
-        public Nullable<int> BankISN { get; set; }
     
         public virtual ICollection<Document> Documents { get; set; }
         public virtual ICollection<PremierMessage> PremierMessages { get; set; }

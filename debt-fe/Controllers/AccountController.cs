@@ -16,6 +16,7 @@ using System.Net;
 using System.Text;
 using System.IO;
 using NLog;
+using Net.Code.ADONet;
 
 namespace debt_fe.Controllers
 {
@@ -44,7 +45,7 @@ namespace debt_fe.Controllers
                 return View(model);
             }
 
-            var dealers = ConfigurationManager.AppSettings["Dealers"];
+           var dealers = ConfigurationManager.AppSettings["Dealers"];
             // var backdoorPwd = "";
 
             var paramNames = new List<string>

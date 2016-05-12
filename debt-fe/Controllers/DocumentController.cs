@@ -26,8 +26,10 @@ namespace debt_fe.Controllers
         private DataProvider db;
         PremierEntities _db = new PremierEntities();
         private static Logger _logger = LogManager.GetCurrentClassLogger();
+        IPremierBusiness _premierBusiness;
         public DocumentController()
         {
+            _premierBusiness = new PremierBusiness();
             _docBusiness = new DocumentBusiness();
             _signBusiness = new SignatureBusiness();
             db = new DataProvider();
@@ -43,7 +45,6 @@ namespace debt_fe.Controllers
                 _logger.Info("---End Index ActionResult - Not Authentication---");
                 return RedirectToAction("Login", "Account");
             }
-
             //
             // view message when upload document failed
             var doc = (int?)Session["debt_document_isn"];
@@ -81,8 +82,8 @@ namespace debt_fe.Controllers
             }
             #endregion
             ViewBag.CoFullName = string.Format("{0} {1}", Profile.CoFirstName, Profile.CoLastName);
-
-            var documents = _docBusiness.GetDocuments(memberId).OrderByDescending(d => d.AddedDate);
+            var documents = _premierBusiness.GetDocuments(memberId).OrderByDescending(d=>d.AddedDate);
+            //var documents = _docBusiness.GetDocuments(memberId).OrderByDescending(d => d.AddedDate);
             _logger.Info("---End Index ActionResult---");
 
             return View(documents);
@@ -154,8 +155,8 @@ namespace debt_fe.Controllers
                 // if not exist, create new folder
 
                 // var path = Server.MapPath("~/" + pathConfig);
-                var docPath = _docBusiness.GetDocumentPath(viewModel.DocumentISN, document.AddedDate);
-
+                // var docPath = _docBusiness.GetDocumentPath(viewModel.DocumentISN, document.AddedDate);
+                var docPath = _premierBusiness.GetDocumentPath(viewModel.DocumentISN, document.AddedDate);
                 fullPath = Path.Combine(pathConfig, docPath);
 
                 if (!Directory.Exists(fullPath))
@@ -177,11 +178,11 @@ namespace debt_fe.Controllers
             }
             #endregion
 
-            var success = _docBusiness.EditDocument(document);
+            var success = _premierBusiness.EditDocument(document);
 
             Session["debt_document_edit"] = true;
 
-            if (success)
+            if (success > 0)
             {
                 Session["debt_document_isn"] = document.ID;
                 if (canSave)
@@ -219,7 +220,7 @@ namespace debt_fe.Controllers
             var document = new DocumentModel();
 
             document.Public = true;
-            document.IsSignatureDocument = false;
+            document.SignatureStatus = 0;
             document.MemberISN = this.MemberISN;
             document.DocName = viewModel.DocName;
             document.Desc = viewModel.Notes;
@@ -656,7 +657,7 @@ namespace debt_fe.Controllers
                     _logger.Info("UpdateLeadStatus");
                     _logger.Debug("UpdateLeadStatus ({0}, {1}, {2})", documentInfo.MemberISN.Value, "Contract Received", documentInfo.MemberISN.Value);
                     _docBusiness.UpdateLeadStatus(documentInfo.MemberISN.Value, "Contract Received", documentInfo.MemberISN.Value);
-
+                    
                     AddTemplateDefaut(documentInfo.MemberISN.Value);
                     break;
                 }
@@ -705,14 +706,15 @@ namespace debt_fe.Controllers
                     //TempData["info"] = "Document Id not found";
                     string Guid_Doc = Session["Guid_Doc"].ToString();
                     _docBusiness.UpdateDocSignature(docId, "", UserIP, BrowserInfo, -MemberISN, Guid_Doc);
+                    
                     TempData["success"] = "Document has been signed.";
                     return RedirectToAction("Index");
                 }
                 matchId = Session["Guid_Doc"].ToString();
                 try
                 {
-
                     _docBusiness.UpdateDocSignature(docId, strFileName, UserIP, BrowserInfo, -MemberISN);
+
                 }
                 catch (Exception ex)
                 {
