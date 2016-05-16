@@ -102,7 +102,25 @@
             $('.dataTables_filter').find('input').addClass('form-control inline');
 
             $(".dataTables_wrapper ").prepend('<a href="@Url.Action("MarkAllRead", "Message")" class="btn btn-info">Mark all read</a>');
-            $(".dataTables_wrapper ").prepend('<a href="@Url.Action("AddNewMessage", "Message")" class="btn btn-info mr" id="new-message">New Message</a>');
+            $(".dataTables_wrapper ").prepend('<a href="@Url.Action("NewMessage", "Message")" class="btn btn-info mr" id="btn-new-message">New Message</a>');
+            $(document).on('click', "#btn-new-message", function () {
+                var modal = $('.modal-message');
+                var backdrop = $("<div class='modal-backdrop fade in'></div>");
+                var loading = $('#modal-loading');
+                loading.removeClass('hidden');
+                $('body').append(backdrop);
+                $.get($(this).attr("href"), function (resp) {
+                    modal.find('.modal-content').html(resp);
+                    loading.hide();
+                    backdrop.remove();
+
+                    modal.modal({
+                        backdrop: 'static'
+                    });
+                });
+                return false;
+            });
+
             //
             // button edit document
             //

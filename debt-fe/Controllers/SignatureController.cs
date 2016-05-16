@@ -1,4 +1,5 @@
-﻿using debt_fe.Models;
+﻿using debt_fe.Businesses;
+using debt_fe.Models;
 using NLog;
 using RightSignatures;
 using System;
@@ -14,27 +15,33 @@ namespace debt_fe.Controllers
     {
         PremierEntities _db = new PremierEntities();
         private static Logger _logger = LogManager.GetCurrentClassLogger();
-
+        IPremierBusiness _premierBusiness = new PremierBusiness();
         // GET: Signature
-        public ActionResult Index(int isn, string token)
+        public ActionResult Index(int isn, int docId)
         {
             _logger.Info("---start signature from email co-client---");
-            _logger.Debug("isn = {0}; token = {1}", isn, token);
-            var documentInfo = _db.Vw_DebtExt_Document.SingleOrDefault(d => d.MemberISN == isn && d.docGuid == token);
+            _logger.Debug("isn = {0}; docId = {1}", isn, docId);
+            var documentInfo = _premierBusiness.GetSigntureDocument(docId);
+            if(!string.IsNullOrEmpty(documentInfo.FileName))
+            {
+                documentInfo = _premierBusiness.GetSubSigntureDocument(docId, true);
+            }
             if(documentInfo == null)
             {
                 _logger.Error("This document is not exist.");
                 return RedirectToAction("Result", new { message = "This document is not exist." });
             }
+
+            string token = documentInfo.DocGUID;
             MyProfileViewModal profile = new MyProfileViewModal();
-            profile.GetMyProfile(documentInfo.MemberISN.Value);
+            profile.GetMyProfile(documentInfo.MemberISN);
             if (documentInfo.docSignatureDate.HasValue && documentInfo.docSignatureDate.Value.AddDays(30) <= DateTime.Now)
             {
                 _logger.Info("This document expired to sign.");
                 _logger.Debug("This document expired to sign. docSignatureDate = {0}", documentInfo.docSignatureDate.Value);
                 return RedirectToAction("Result", new { message = "This document expired to sign." });
             }
-            if (!string.IsNullOrEmpty(documentInfo.docFileName))
+            if (!string.IsNullOrEmpty(documentInfo.FileName))
             {
                 _logger.Info("This document has been signed.");
                 _logger.Debug("This document has been signed by {0} {1} and {2} {3}.", profile.FirstName, profile.LastName, profile.CoFirstName, profile.CoLastName);
@@ -42,7 +49,7 @@ namespace debt_fe.Controllers
             }
             var urlRedirect = Url.Action("SignatureDownload2", "Document");
             var urlBase = Request.Url.GetLeftPart(UriPartial.Authority) + Url.Content("~");
-            urlRedirect = urlRedirect.TrimEnd('/') + "/" + token + "/" + documentInfo.DocumentISN;
+            urlRedirect = urlRedirect.TrimEnd('/') + "/" + token + "/" + documentInfo.ID;
             var scheme = Request.Url.Scheme;
             var host = Request.Url.Host;
             var redirect = string.Format("{0}://{1}/{2}", scheme, host.TrimEnd('/'), urlRedirect);

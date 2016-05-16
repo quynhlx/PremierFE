@@ -15,12 +15,9 @@ namespace debt_fe.Controllers
             db = new PremierEntities();
         }
         // GET: Message
+        [Authorize]
         public ActionResult Index()
         {
-            if (!Authentication)
-            {
-                return RedirectToAction("Login", "Account");
-            }
             //var Messages = MessageModels.ReadXML("~/XMLData/Message.xml", typeof(List<MessageModels>));
             var Messages = db.Vw_PremierMessage.Where(p => p.MemberISN == MemberISN).OrderByDescending(m=>m.addedDate);
             int numberUnread = db.Vw_PremierMessage.Where(p => p.MemberISN == MemberISN && p.ClientRead == 0).ToList().Count;
@@ -42,10 +39,14 @@ namespace debt_fe.Controllers
         }
         public ActionResult Mobile(string username, string hashpass)
         {
-            if (this.MobileLogin(username, hashpass) < 0 || MemberISN < 0)
+            if(!User.Identity.IsAuthenticated)
             {
-                return RedirectToAction("Login", "Account");
+                if (this.MobileLogin(username, hashpass) < 0 || MemberISN < 0)
+                {
+                    return RedirectToAction("Login", "Account");
+                }
             }
+           
             var Messages = db.Vw_PremierMessage.Where(p => p.MemberISN == MemberISN).OrderByDescending(m => m.addedDate);
             int numberUnread = db.Vw_PremierMessage.Where(p => p.MemberISN == MemberISN && p.ClientRead == 0).ToList().Count;
 
@@ -83,6 +84,28 @@ namespace debt_fe.Controllers
 
             return PartialView("_Detail", Message);
         }
+        public ActionResult NewMessage ()
+        {
+            return PartialView("_NewMessage");
+        }
+        [HttpPost]
+        public ActionResult NewMessage(FormCollection form)
+        {
+            var content = form.Get("message-content").ToString();
+            var subject = form.Get("subject").ToString();
+
+            var db = Net.Code.ADONet.Db.FromConfig("Premier");
+            var sproc = db.StoredProcedure("xp_premiermessage_new").WithParameters(new { MemberISN = this.MemberISN, Subject = subject, Content = content, updatedBy = -this.MemberISN });
+            sproc.AsNonQuery();
+            TempData["success"] = "Message has been sent";
+            if (TempData["IsMobile"] != null && (bool)(TempData["IsMobile"]))
+            {
+                return RedirectToAction("Mobile", new { username = TempData["username"], hashpass = TempData["hashpass"] });
+            }
+            return RedirectToAction("Index");
+        }
+
+
         [HttpPost]
         public ActionResult Reply(FormCollection form)
         {

@@ -184,6 +184,7 @@
     <Compile Include="Businesses\PremierBusiness.cs" />
     <Compile Include="Businesses\SignatureBusiness.cs" />
     <Compile Include="Controllers\Account2Controller.cs" />
+    <Compile Include="Controllers\Account1Controller.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ActivityController.cs" />
     <Compile Include="Controllers\AppointmentController.cs" />
@@ -236,6 +237,7 @@
     <Compile Include="Models\PremierMessage.cs">
       <DependentUpon>PremierModels.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SignatureDocumentModel.cs" />
     <Compile Include="Models\SignatureModel.cs" />
     <Compile Include="Models\StateModel.cs" />
     <Compile Include="Models\TemplateModel.cs" />
@@ -506,6 +508,8 @@
     <Content Include="Web.config" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />
     <Content Include="Views\Manage\Error.cshtml" />
+    <Content Include="Views\Account\VerifyCode.cshtml" />
+    <Content Include="Views\Message\_NewMessage.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

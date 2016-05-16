@@ -17,7 +17,49 @@ namespace debt_fe.SignInManager
         : base(userManager, authenticationManager)
         {
         }
+        public async Task<bool> SendTwoFactorCodeAsync(string provider, string Id)
+        {
+            var userId = await GetVerifiedUserIdAsync();
+            if (userId == null)
+            {
+                userId = Id;
+            }
 
+            var token = await UserManager.GenerateTwoFactorTokenAsync(userId, provider);
+            // See IdentityConfig.cs to plug in Email/SMS services to actually send the code
+            await UserManager.NotifyTwoFactorTokenAsync(userId, provider, token);
+            return true;
+        }
+        public override Task<SignInStatus> TwoFactorSignInAsync(string provider, string code, bool isPersistent, bool rememberBrowser)
+        {
+            return base.TwoFactorSignInAsync(provider, code, isPersistent, rememberBrowser);
+        }
+
+
+        public async Task<SignInStatus> TwoFactorSignIn(string provider, string code, bool isPersistent, bool rememberBrowser)
+        {
+            var userId = await GetVerifiedUserIdAsync();
+            if (userId == null)
+            {
+                return SignInStatus.Failure;
+            }
+            var user = await UserManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return SignInStatus.Failure;
+            }
+            
+            if (await UserManager.VerifyTwoFactorTokenAsync(user.Id, provider, code))
+            {
+                // When token is verified correctly, clear the access failed count used for lockout
+                //await UserManager.ResetAccessFailedCountAsync(user.Id);
+                await SignInAsync(user, isPersistent, rememberBrowser);
+                return SignInStatus.Success;
+            }
+            // If the token is incorrect, record the failure which also may cause the user to be locked out
+            //await UserManager.AccessFailedAsync(user.Id);
+            return SignInStatus.Failure;
+        }
         public override async Task<SignInStatus> PasswordSignInAsync(string userName, string password, bool isPersistent, bool shouldLockout)
         {
             var user = await UserManager.FindByNameAsync(userName);
@@ -33,19 +75,17 @@ namespace debt_fe.SignInManager
         }
         private async Task<SignInStatus> SignInOrTwoFactor(PremierUser user, bool isPersistent)
         {
-            var id = Convert.ToString(user.Id);
 
             if (UserManager.SupportsUserTwoFactor
                 && await UserManager.GetTwoFactorEnabledAsync(user.Id)
-                && !await AuthenticationManager.TwoFactorBrowserRememberedAsync(id))
+                && !await AuthenticationManager.TwoFactorBrowserRememberedAsync(user.Id))
             {
                 var identity = new ClaimsIdentity(
                     DefaultAuthenticationTypes.TwoFactorCookie);
 
-                identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, id));
+                identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id));
 
                 AuthenticationManager.SignIn(identity);
-
                 return SignInStatus.RequiresVerification;
             }
             await SignInAsync(user, isPersistent, false);

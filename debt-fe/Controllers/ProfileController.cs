@@ -54,13 +54,9 @@ namespace debt_fe.Controllers
 
             return View();
         }
+        [Authorize]
         public ActionResult MyProfile ()
         {
-            if (!Authentication)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-            
             //DataSet ds = LoadData(this.MemberISN, out returnValue);
             var myProfile = new MyProfileViewModal();
             myProfile.GetMyProfile(this.MemberISN);

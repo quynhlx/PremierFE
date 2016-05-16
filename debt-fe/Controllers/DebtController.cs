@@ -12,12 +12,9 @@ namespace debt_fe.Controllers
     {
         PremierEntities db = new PremierEntities();
         // GET: Debt
+        [Authorize]
         public ActionResult Index()
         {
-            if (!Authentication)
-            {
-                return RedirectToAction("Login", "Account");
-            }
             //var Debt = DebtModel.ReadXML("~/XMLData/DebtData.xml", typeof(List<DebtModel>));
             var debts = db.Vw_DebtExt_Creditor.Where(d => d.cdtIsPush.Value != byte.MinValue && d.DebtRemoved == 0 &&d.MemberISN == this.MemberISN).ToList();
             var model = new List<DebtViewModel>();
@@ -68,6 +65,8 @@ namespace debt_fe.Controllers
             return View(model);
 
         }
+
+        [Authorize]
         public ActionResult Detail(int id)
         {
             var debt = db.Vw_DebtExt_Creditor.SingleOrDefault(d => d.CreditorISN == id);

@@ -45,6 +45,10 @@ namespace debt_fe.Models
         public int? docNoOfSign { set; get; }
         public string docHistory { set; get; }
         public string DocGUID { set; get; }
+        public bool IsSubSingature { set; get; }
+        public int? GroupId { set; get; }
+        public bool OneSigntureCompleted { set; get; }
+        public bool SigntureCompleted { set; get; }
         //
         private string _customFileName;
         public string CustomFileName

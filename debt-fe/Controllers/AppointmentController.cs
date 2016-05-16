@@ -19,12 +19,9 @@ namespace debt_fe.Controllers
     {
         PremierEntities db = new PremierEntities();
         // GET: Appointment
+        [Authorize]
         public ActionResult Index()
         {
-            if (!Authentication)
-            {
-                return RedirectToAction("Login", "Account");
-            }
             var troubleTicket = db.Vw_DebtExt_Appointment.Where(t => t.tblDate.HasValue && t.MemberISN == MemberISN).OrderByDescending(m => m.tblDate).ToList() ;
             var model = new List<AppointmentViewModel>();
             int i = 1;

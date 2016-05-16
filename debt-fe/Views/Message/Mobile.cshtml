@@ -27,6 +27,11 @@
     .btn-o:hover {
         color: #0094ff;
     }
+    .add-new-message:hover {
+          background-color: #ffffff !important;
+          color: #000000;
+          cursor: pointer;
+    }
 </style>
 <div class="container">
     <div class="modal fade modal-message" tabindex="-1" role="dialog" aria-labelledby="modalMessageDetail">
@@ -37,6 +42,11 @@
         </div>
     </div>
     <div class="mt+"></div>
+    <div class="card">
+        <div class="card-body style-success add-new-message" data-href="@Url.Action("NewMessage", "Message")">
+            <i class="fa fa-plus"></i> New Message
+        </div>
+    </div>
     @foreach (var item in Model)
     {
         var check = "";
@@ -72,7 +82,23 @@
 <div class="modal-backdrop fade in hidden" id="modal-loading"><div class="loader">Loading...</div></div>
 @section scripts {
     <script>
+        $(document).on('click', ".add-new-message", function () {
+            var modal = $('.modal-message');
+            var backdrop = $("<div class='modal-backdrop fade in'></div>");
+            var loading = $('#modal-loading');
+            loading.removeClass('hidden');
+            $('body').append(backdrop);
+            $.get($(this).data("href"), function (resp) {
+                modal.find('.modal-content').html(resp);
+                loading.hide();
+                backdrop.remove();
 
+                modal.modal({
+                    backdrop: 'static'
+                });
+            });
+            return false;
+        });
         $('.card').on('click', '.btn-reply', function (e) {
 
             e.preventDefault();

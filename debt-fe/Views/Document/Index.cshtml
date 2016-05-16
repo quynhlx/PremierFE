@@ -89,75 +89,92 @@
             {
                 if (doc.Public)
                 {
-                    <tr>
-                        <td class="text-center no"></td>
-                        <td>@Utility.Truncate(doc.DocName)</td>
-                        <td>
-                            @if (doc.IsSignatureDocument)
+                    if (!doc.IsSubSingature)
+                    {
+                        <tr>
+                            <td class="text-center no"></td>
+                            <td>@Utility.Truncate(doc.DocName)</td>
+                            <td>
+                                @if (doc.IsSignatureDocument)
                             {
-                                 if (!string.IsNullOrEmpty(doc.FileName))
+                                if (doc.SigntureCompleted)
                                 {
-                                    <a href='@Url.Action("DownloadDocument", "Document", new { documentISN = doc.ID})' data-toggle="tooltip" data-placement="right" title="@doc.FileName" class="btn-download-file">@Utility.Truncate(doc.FileName, 10)</a>
+                            <a href='@Url.Action("DownloadDocument", "Document", new { documentISN = doc.ID })' data-toggle="tooltip" data-placement="right" title="@doc.FileName" class="btn-download-file">@Utility.Truncate(doc.FileName, 10)</a>
                                 }
                                 else
                                 {
                                     if (doc.docNoOfSign.Value == 2)
                                     {
-                                        if (doc.docSignatureDate.HasValue)
+                                        if (doc.OneSigntureCompleted)
                                         {
-                                            <div>
-                                                You have signed the document.<br />
-                                                Please send to @ViewBag.CoFullName to sign.
-                                            </div>
-                                                <a href='@Url.Action("SignatureSendToCoClient", "Document", new { documentISNStr = doc.ID })' target="_blank" class="btn btn-primary btn-sendclient btn-sm display-block mb" data-document-id="@doc.ID">Send to your Co-Client</a>
+                            <div>
+                                You have signed the document.<br />
+                                Please send to @ViewBag.CoFullName to sign.
+                            </div>
+                            <a href='@Url.Action("SignatureSendToCoClient", "Document", new { documentISN = doc.ID })' target="_blank" class="btn btn-primary btn-sendclient btn-sm display-block mb" data-document-id="@doc.ID">Send to your Co-Client</a>
                                             if (!string.IsNullOrEmpty(doc.docHistory))
                                             {
-                                                <div>
+                            <div>
 
-                                                    @Html.Raw(doc.Desc.Replace("\n", "<br/>")) <br />
-                                                    ------------- <br />
-                                                    Send to Co-Client: <br />
-                                                    @Html.Raw(doc.docHistory.Replace("\n", "<br/>"))
+                                @Html.Raw(doc.Desc.Replace("\n", "<br/>")) <br />
+                                ------------- <br />
+                                Send to Co-Client: <br />
+                                @Html.Raw(doc.docHistory.Replace("\n", "<br/>"))
 
 
-                                                </div>
+                            </div>
                                             }
                                         }
                                         else
                                         {
-                                            <a href='@Url.Action("Signature", "Document", new { documentISNStr=doc.ID})' target="_blank" class="btn btn-primary btn-sign btn-sm display-block mb" data-document-id="@doc.ID">Sign</a>
+                            <a href='@Url.Action("Signature", "Document", new { documentISN = doc.ID })' target="_blank" class="btn btn-primary btn-sign btn-sm display-block mb" data-document-id="@doc.ID">Sign</a>
                                         }
                                     }
                                     else
                                     {
-                                        <a href='@Url.Action("Signature", "Document", new { documentISNStr=doc.ID})' target="_blank" class="btn btn-primary btn-sign btn-sm display-block mb" data-document-id="@doc.ID">Sign</a>
+                            <a href='@Url.Action("Signature", "Document", new { documentISN = doc.ID })' target="_blank" class="btn btn-primary btn-sign btn-sm display-block mb" data-document-id="@doc.ID">Sign</a>
                                     }
                                 }
 
                             }
                             else
                             {
-                                <a href='@Url.Action("DownloadDocument", "Document", new { documentISN = doc.ID})' data-toggle="tooltip" data-placement="right" title="@doc.FileName" class="btn-download-file">@Utility.Truncate(doc.FileName, 10)</a>
+                            <a href='@Url.Action("DownloadDocument", "Document", new { documentISN = doc.ID })' data-toggle="tooltip" data-placement="right" title="@doc.FileName" class="btn-download-file">@Utility.Truncate(doc.FileName, 10)</a>
                             }
-                        </td>
+                            </td>
 
-
-
-                        <td>@Utility.Truncate(doc.CreditorName)</td>
-                        @*<td>@Html.Raw(doc.Desc)</td>*@
-                        <td class="text-center"><span class="hidden">@string.Format("{0:yyyyMMddHHmmss}", doc.AddedDate)</span> @string.Format("{0:MM/dd/yyyy}", doc.AddedDate)<br />@Html.Raw(string.Format("{0:hh:mm tt} <br /> by {1}", doc.AddedDate, doc.UpdatedName))</td>
-                        <td>
-                            @if (!doc.IsSignatureDocument)
+                            <td>@Utility.Truncate(doc.CreditorName)</td>
+                            @*<td>@Html.Raw(doc.Desc)</td>*@
+                            <td class="text-center"><span class="hidden">@string.Format("{0:yyyyMMddHHmmss}", doc.AddedDate)</span> @string.Format("{0:MM/dd/yyyy}", doc.AddedDate)<br />@Html.Raw(string.Format("{0:hh:mm tt} <br /> by {1}", doc.AddedDate, doc.UpdatedName))</td>
+                            <td>
+                            @if (!doc.IsSignatureDocument && (int)ViewBag.MemberISN == doc.AddedBy)
                             {
-                                <div class="text-center">
-                                    <a href='@Url.Action("Edit", "Document", new { documentISN = doc.ID })' data-toggle="tooltip" data-placement="bottom" title="edit" data-isn="@doc.ID" class="btn btn-sm btn-edit-document">
-                                        <span class="glyphicon glyphicon-pencil"></span>
-                                    </a>
-                                </div>
+                            <div class="text-center">
+                                <a href='@Url.Action("Edit", "Document", new { documentISN = doc.ID })' data-toggle="tooltip" data-placement="bottom" title="edit" data-isn="@doc.ID" class="btn btn-sm btn-edit-document">
+                                    <span class="glyphicon glyphicon-pencil"></span>
+                                </a>
+                            </div>
                             }
-                        </td>
-                    </tr>
+                            </td>
+                        </tr>
+                    }
+                    else if (!string.IsNullOrEmpty(doc.FileName))
+                    {
+                        <tr>
+                            <td class="text-center no"></td>
+                            <td>@Utility.Truncate(doc.DocName)</td>
+                            <td>
+                                <a href='@Url.Action("DownloadDocument", "Document", new { documentISN = doc.ID })' data-toggle="tooltip" data-placement="right" title="@doc.FileName" class="btn-download-file">@Utility.Truncate(doc.FileName, 10)</a>
+
+                            </td>
+                            <td>@Utility.Truncate(doc.CreditorName)</td>
+                            <td class="text-center"><span class="hidden">@string.Format("{0:yyyyMMddHHmmss}", doc.AddedDate)</span> @string.Format("{0:MM/dd/yyyy}", doc.AddedDate)<br />@Html.Raw(string.Format("{0:hh:mm tt} <br /> by {1}", doc.AddedDate, doc.UpdatedName))</td>
+                            <td></td>
+                        </tr>
+
+                    }
                 }
+
             }
         </tbody>
     </table>
@@ -169,11 +186,7 @@
 @section scripts{
     <script src="https://cdn.datatables.net/plug-ins/1.10.10/sorting/date-euro.js"></script>
     <script>
-
-
-
         $(document).ready(function () {
-
             //
             // init datatable
             var pageLenght = 10;
@@ -195,8 +208,6 @@
                 });
             }
             $('.dataTables_filter').find('input').addClass('form-control inline');
-
-
 
             var btnupload = "<a href='@Url.Action("Upload","Document")' class='btn btn-primary pull-left' id='btn-upload-document'>Upload</a>"
             $("#table-documents_filter").before(btnupload);
@@ -316,21 +327,23 @@
             // button sign
             //
             $('#table-documents').on('click', '.btn-sign', function (e) {
-
                 e.preventDefault();
-
                 var self = $(this);
-
-                //
-                // check document id is not empty
                 var docId = self.data('document-id');
                 if (docId === undefined || docId === '') {
                     toastr.info('Document ISN not found!');
 
                     return;
                 }
-
                 var url = self.prop('href');
+                signture(url, docId);
+            });
+            function signture(href, docId) {
+                //
+                // check document id is not empty
+                
+
+                var url = href;
 
                 var backdrop = $("<div class='modal-backdrop fade in'></div>");
                 var loading = $('#modal-loading');
@@ -397,7 +410,8 @@
                     backdrop.remove();
                     loading.addClass('hidden');
                 });
-            });
+            };
+             @Html.Raw(TempData["FuntionSignture"])
 
             $('#table-documents').on('click', '.btn-sendclient', function (e) {
 
@@ -444,12 +458,10 @@
 
             });
         });
+       
     </script>
     <script>
         $(".menu > li").removeClass("active");
         $('#menu-doc').addClass("active");
-
-
-
     </script>
 }

@@ -1,13 +1,12 @@
 ﻿<link href="~/Content/extensions/bootstrapValidator.css" rel="stylesheet" />
 @using (Html.BeginForm("SignatureSendToCoClient", "Document", FormMethod.Post, htmlAttributes: new { @class = "form"}))
     {
-        string docId = ViewBag.docId;
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="modalDocument">Send to your Co-Client</h4>
     </div>
     <div class="modal-body">
-        @Html.Hidden("docId", docId)
+        @Html.Hidden("docId", (int)ViewBag.docId)
         <div class="form-group">
             <label class="control-label">Please enter the email address of Co-Client</label>
                 @Html.TextBox("coclientemail", (string)ViewBag.email, new { @class = "form-control", maxlength = "50" })

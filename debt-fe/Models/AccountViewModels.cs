@@ -37,6 +37,22 @@ namespace debt_fe.Models
         public bool RememberBrowser { get; set; }
 
         public bool RememberMe { get; set; }
+
+        public string PhoneNumber { set; get; }
+
+        public string HideNumber
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(PhoneNumber)) return "N/A";
+                else
+                {
+                    PhoneNumber.Trim(new char[] { '(', ')' });
+                    if (PhoneNumber.Length > 4) return PhoneNumber.Substring(PhoneNumber.Length - 4, 4);
+                    else return "N/A";
+                }
+            }
+        }
     }
 
     public class ForgotViewModel
@@ -49,8 +65,6 @@ namespace debt_fe.Models
     public class LoginViewModel
     {
         [Required]
-        // [Display(Name = "Email")]
-        // [EmailAddress]
         public string Username { get; set; }
 
         [Required]

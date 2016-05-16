@@ -15,7 +15,6 @@ namespace debt_fe.Businesses
         /// <returns>List<DocumentModel></returns>
         List<DocumentModel> GetDocuments(int memberISN);
 
-        //Actions
         /// <summary>
         /// Cập nhập lại document Signature, và thêm ghi chú
         /// </summary>
@@ -30,11 +29,33 @@ namespace debt_fe.Businesses
         /// <param name="doc">DocumentModel</param>
         /// <returns></returns>
         int EditSignatureDocument(DocumentModel doc);
+
+        /// <summary>
+        /// Update thông tin document
+        /// </summary>
+        /// <param name="doc"></param>
+        /// <returns></returns>
         int EditDocument(DocumentModel doc);
 
 
         int UpdateLeadStatus(int MemberISN, string Status, int UpdatedBy);
         int UpdateHistory(int DocId, string Note);
         string GetDocumentPath(int DocId, DateTime? AddedDate);
+        SigntureStatus GetStatusSigntureDocument(int Id);
+        DocumentModel GetSigntureDocument(int Id);
+        DocumentModel GetSubSigntureDocument(int Id, bool IdIsMain);
+
+        int UpdateDocGuid(int docId, string docGuid);
+
+        int DownloadSigntureDocumentFromServer(DocumentModel doc, int userId);
+        void AddTemplateDefaut(int userId);
+        void RollBackSigntureDocument(int docId);
+
+    }
+    public enum SigntureStatus
+    {
+        None,
+        Wait,
+        Signed
     }
 }

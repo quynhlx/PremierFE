@@ -53,8 +53,6 @@ namespace debt_fe
             string numberPhone = message.Destination;
             // Plug in your SMS service here to send a text message.
             var inboundDID = ConfigurationManager.AppSettings["PhoneDealer"].ToString();
-            var usernameSMS = ConfigurationManager.AppSettings["UsernameSMS"].ToString();
-            var passwordSMS = ConfigurationManager.AppSettings["PasswordSMS"].ToString();
             var emailSMS = ConfigurationManager.AppSettings["EmailSMS"].ToString();
             debt_fe.SMSService.WSAgentSoapClient smsService = new SMSService.WSAgentSoapClient("WSAgentSoap12");
             //var rs = smsService.SendSMSExt(usernameSMS, passwordSMS, DateTime.Now.ToString("yyyyMMddHHmm"), DateTime.Now.ToString("yyyyMMddHHmm"), string.Empty, "+841688166199", 1, Message, emailSMS, string.Empty, 1, string.Empty);
@@ -69,7 +67,7 @@ namespace debt_fe
             {
                 string sURL = ConfigurationManager.AppSettings["PhoneAPI_Url"];
                 string content = "api_key=" + ConfigurationManager.AppSettings["PhoneAPI_AppKey"] + "&api_secret=" + ConfigurationManager.AppSettings["PhoneAPI_AppPass"];
-                content += "&to=" + "1" + strPhoneTo + "&from=" + "1" + strPhoneFrom;
+                content += "&to=" + strPhoneTo + "&from=" + "1" + strPhoneFrom;
                 content += "&text=" + strMessage;
                 content += "&callback=" + ConfigurationManager.AppSettings["PhoneAPI_UrlCallback"];
              

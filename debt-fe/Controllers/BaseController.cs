@@ -1,5 +1,6 @@
 ﻿using debt_fe.Models;
 using debt_fe.Models.ViewModels;
+using debt_fe.SignInManager;
 using debt_fe.Utilities;
 using System;
 using System.Collections;
@@ -9,6 +10,9 @@ using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.Owin.Security;
 
 namespace debt_fe.Controllers
 {
@@ -66,32 +70,9 @@ namespace debt_fe.Controllers
         {
             get
             {
-
-                var debt = Request.Cookies["debt_extension"];
-
-                if (debt == null || string.IsNullOrEmpty(debt.Values["memberId"]))
-                {
-                    return -1;
-                }
-
-                var memberId = debt.Values["memberId"];
-                return int.Parse(memberId);
-            }
-            set
-            {
-                _memberISN = value;
-
-                // Session["debt_member_isn"] = _memberISN;
-                var debt = Request.Cookies["debt_extension"];
-                if (debt == null)
-                {
-                    debt = new HttpCookie("debt_extension");
-                    debt.Expires = DateTime.Now.AddDays(7);
-                }
-
-                debt.Values["memberId"] = _memberISN.ToString();
-
-                Response.AppendCookie(debt);
+                string UserId = User.Identity.GetUserId();
+                if (string.IsNullOrEmpty(UserId)) return 0;
+                return Convert.ToInt32(UserId);
             }
         }
         
@@ -168,31 +149,68 @@ namespace debt_fe.Controllers
         }
         public int MobileLogin (string username, string hasspass)
         {
-            var dealers = ConfigurationManager.AppSettings["Dealers"];
-            var paramNames = new List<string>
-            {
-                "username", "password", "dealers"
-            };
+            //var dealers = ConfigurationManager.AppSettings["Dealers"];
+            //var paramNames = new List<string>
+            //{
+            //    "username", "password", "dealers"
+            //};
 
-            var paramValues = new ArrayList
-            {
+            //var paramValues = new ArrayList
+            //{
 
-                username, hasspass, dealers
-            };
-            int clientISN;
-            var clientInfo = _dataProvider.ExecuteStoreProcedure("xp_debtext_client_login", paramNames, paramValues, out clientISN);
-            var cookie = Request.Cookies["debt_extension"];
-            if (cookie == null)
+            //    username, hasspass, dealers
+            //};
+            //int clientISN;
+            //var clientInfo = _dataProvider.ExecuteStoreProcedure("xp_debtext_client_login", paramNames, paramValues, out clientISN);
+            //var cookie = Request.Cookies["debt_extension"];
+            //if (cookie == null)
+            //{
+            //    cookie = new HttpCookie("debt_extension");
+            //}
+
+            //cookie.Expires = DateTime.Now.AddDays(7);
+            //cookie.Values["memberId"] = clientISN.ToString();
+            //Response.AppendCookie(cookie);
+            var user = UserManager.FindByName(username);
+            if (user == null || !string.Equals(user.PasswordHash, hasspass, StringComparison.OrdinalIgnoreCase))
             {
-                cookie = new HttpCookie("debt_extension");
+                return -1;
             }
+            SignInManager.SignInAsync(user, true, false);
 
-            cookie.Expires = DateTime.Now.AddDays(7);
-            cookie.Values["memberId"] = clientISN.ToString();
-            Response.AppendCookie(cookie);
-
-            return clientISN;
+            return user.ISN;
         }
+
+        public BaseController() { }
+        public BaseController(PremierUserManager userManager)
+        {
+            this.UserManager = userManager;
+        }
+        private PremierUserManager _userManager;
+        public PremierUserManager UserManager
+        {
+            get
+            {
+                return _userManager ?? HttpContext.GetOwinContext().Get<PremierUserManager>();
+            }
+            private set
+            {
+                _userManager = value;
+            }
+        }
+        private PremierSignInManager _signInManager;
+        public PremierSignInManager SignInManager
+        {
+            get
+            {
+                return _signInManager ?? HttpContext.GetOwinContext().Get<PremierSignInManager>();
+            }
+            private set
+            {
+                _signInManager = value;
+            }
+        }
+
     }
 
 
