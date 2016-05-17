@@ -13,43 +13,12 @@ namespace debt_fe.Controllers
 {
     public class ManageController : BaseController
     {
-        private ApplicationSignInManager _signInManager;
-        private ApplicationUserManager _userManager;
 
         public ManageController()
         {
            
         }
 
-        public ManageController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
-        {
-            UserManager = userManager;
-            SignInManager = signInManager;
-        }
-
-        public ApplicationSignInManager SignInManager
-        {
-            get
-            {
-                return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
-            }
-            private set 
-            { 
-                _signInManager = value; 
-            }
-        }
-
-        public ApplicationUserManager UserManager
-        {
-            get
-            {
-                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
-            }
-            private set
-            {
-                _userManager = value;
-            }
-        }
 
         //
         // GET: /Manage/Index
@@ -216,13 +185,9 @@ namespace debt_fe.Controllers
         // GET: /Manage/ChangePassword
         public ActionResult ChangePassword()
         {
-            if (!Authentication)
-            {
-                return RedirectToAction("Login", "Account");
-            }
+
             var viewModel = new ChangePasswordViewModel()
             {
-                OldPassHidden = Session["CurrentPassword"].ToString()
             };
             return View(viewModel);
         }
@@ -232,30 +197,25 @@ namespace debt_fe.Controllers
 
         PremierEntities db = new PremierEntities();
         [HttpPost]
-        public async Task<ActionResult> ChangePassword(ChangePasswordViewModel model)
+        public ActionResult ChangePassword(ChangePasswordViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
-            //var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
-            //if (result.Succeeded)
-            //{
-            //    var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
-            //    if (user != null)
-            //    {
-            //        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-            //    }
-            //    return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
-            //}
+            var oldPass = Utility.ToMD5Hash(model.OldPass.Trim());
+            var user = this.UserManager.FindById(this.MemberISN.ToString());
+            if (!string.Equals(user.PasswordHash, oldPass, StringComparison.OrdinalIgnoreCase))
+            {
+                ModelState.AddModelError("", "The Old password is incorrect.");
+                return View(model);
+            }
             var pass = Utility.ToMD5Hash(model.NewPass.Trim());
             var rs =  db.xp_debtext_client_password_upd(this.MemberISN, pass, -this.MemberISN);
             if(rs > 0)
             {
-                Session["CurrentPassword"] = model.NewPass.Trim();
-                model.OldPassHidden = model.NewPass.Trim();
                 TempData["success"] = "Your password has been changed.";
-                return RedirectToAction("ChangePassword");
+                return View(model);
             }
             TempData["error"] = "Change password failed.";
             return View(model);
@@ -339,17 +299,6 @@ namespace debt_fe.Controllers
             return result.Succeeded ? RedirectToAction("ManageLogins") : RedirectToAction("ManageLogins", new { Message = ManageMessageId.Error });
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && _userManager != null)
-            {
-                _userManager.Dispose();
-                _userManager = null;
-            }
-
-            base.Dispose(disposing);
-        }
-
 #region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
@@ -385,7 +334,7 @@ namespace debt_fe.Controllers
             var user = UserManager.FindById(User.Identity.GetUserId());
             if (user != null)
             {
-                return user.PhoneNumber != null;
+                return user.Phone != null;
             }
             return false;
         }

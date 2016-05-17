@@ -91,6 +91,7 @@ namespace debt_fe.Controllers
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
                     var user = UserManager.FindByName(model.Username);
+                    if(CheckWhiteIP(user)) SignInManager.SignIn(user, true, false);
                     if (! await SignInManager.SendTwoFactorCodeAsync("Phone Code", user.Id))
                     {
                         ModelState.AddModelError("", "Send Two Factor Code Failed.");
@@ -182,7 +183,16 @@ namespace debt_fe.Controllers
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             return RedirectToAction("Login", "Account");
         }
-
+        protected bool CheckWhiteIP(PremierUser user)
+        {
+                var currentIP = this.Request.UserHostAddress.ToString();
+                var query = Net.Code.ADONet.Db.FromConfig("premier").Sql("select * from Vw_WhiteIPAddr where whtPortal = @whtPortal and whtIPAddr = @IPAddr and DealerISN = @DealerISN").WithParameters(new { whtPortal = 1, IPAddr = currentIP, DealerISN = user.DealerISN }).AsEnumerable();
+                if (query.Count() > 0)
+                {
+                    return true;
+                }
+                return false;
+        }
 
     }
 }

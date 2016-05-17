@@ -21,10 +21,10 @@ namespace debt_fe.Models
         public bool Status { get; set; }
         public string Desc { get; set; }
         public DateTime? UpdatedDate { get; set; }
-        public int UpdatedBy { get; set; }
+        public int? UpdatedBy { get; set; }
         public int CampaignISN { get; set; }
         public string AddedName { get; set; }
-        public int AddedBy { get; set; }
+        public int? AddedBy { get; set; }
         public string UpdatedName { get; set; }
         public string LastAction { get; set; }
         public int SignatureStatus { get; set; }

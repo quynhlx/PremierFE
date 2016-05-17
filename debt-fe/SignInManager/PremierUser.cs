@@ -24,6 +24,7 @@ namespace debt_fe.SignInManager
         public string Email { set; get; }
         public string PasswordHash { set; get; }
         public bool TwoFactorEnabled { set; get; }
+        public int DealerISN { set; get; }
     }
    
 

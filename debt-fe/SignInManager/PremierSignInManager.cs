@@ -95,6 +95,5 @@ namespace debt_fe.SignInManager
         {
             return new PremierSignInManager(context.GetUserManager<PremierUserManager>(), context.Authentication);
         }
-
     }
 }

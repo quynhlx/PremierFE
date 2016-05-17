@@ -200,7 +200,6 @@ namespace debt_fe.Controllers
 
             return RedirectToAction("Index");
         }
-
         [Authorize]
         [HttpPost]
         public ActionResult UploadDocument(DocumentViewModel viewModel)
@@ -361,10 +360,10 @@ namespace debt_fe.Controllers
         {
             _logger.Info("---Open modal Signature Send To CoClient---");
             _logger.Debug("documentISNStr = {0}", documentISN);
+            _logger.Debug("CoEmail = {0}", Profile.CoEmail);
 
             ViewBag.docId = documentISN;
             ViewBag.email = Profile.CoEmail;
-
             _logger.Info("---return modal Signature Send To CoClient---");
             return PartialView("_Send2YourCoClient");
         }
@@ -376,7 +375,6 @@ namespace debt_fe.Controllers
 
             string documentISNStr = form.Get("docId");
             string coclientemail = form.Get("coclientemail");
-
             int docId = Convert.ToInt32(documentISNStr);
 
             _logger.Debug("documentISNStr = {0}", documentISNStr);
@@ -569,7 +567,7 @@ namespace debt_fe.Controllers
              * 
              * */
         }
-        [Authorize]
+
         public ActionResult SignatureDownload2(string token, int? docId)
         {
             _logger.Info("---Start Download Signature 2---");
@@ -665,7 +663,7 @@ namespace debt_fe.Controllers
                     _logger.Info("UpdateLeadStatus");
                     _logger.Debug("UpdateLeadStatus ({0}, {1}, {2})", documentSignture.MemberISN, "Contract Received", documentSignture.MemberISN);
                     _docBusiness.UpdateLeadStatus(documentSignture.MemberISN, "Contract Received", documentSignture.MemberISN);
-                    AddTemplateDefaut(documentSignture.MemberISN);
+                   
                     break;
                 }
                 else
@@ -678,10 +676,11 @@ namespace debt_fe.Controllers
 
             if (mainDoc.SigntureCompleted)
             {
+                AddTemplateDefaut(documentSignture.MemberISN);
                 return RedirectToAction("Result", "Signature", new { message = "Document has been signed." });
             }
 
-            return RedirectToAction("Index", "Signature", new { isn = documentSignture.MemberISN, docId = documentSignture.ID });
+            return RedirectToAction("Index",  "Signature", new { isn = documentSignture.MemberISN, docId = documentSignture.ID });
            
         }
         [Authorize]
@@ -762,7 +761,7 @@ namespace debt_fe.Controllers
                                     _premierBusiness.RollBackSigntureDocument(documentSignature.GroupId.Value);
                                     return RedirectToAction("Index");
                                 }
-                                _premierBusiness.AddTemplateDefaut(this.MemberISN);
+                                AddTemplateDefaut(this.MemberISN);
                             }
                            catch (Exception ex)
                             {
@@ -882,7 +881,7 @@ namespace debt_fe.Controllers
                 parameters.Add("docPublic", docPublic);
                 parameters.Add("docDesc", docDesc);
                 parameters.Add("docName", docName);
-                parameters.Add("updatedBy", updatedBy);
+                parameters.Add("updatedBy", DBNull.Value);
                 parameters.Add("docLastAction", docLast);
                 result = (int)db.ExecuteStoreProcedure("xp_debtext_documenttask_insupd", parameters);
 
@@ -906,7 +905,6 @@ namespace debt_fe.Controllers
 
             return result;
         }
-
         [Authorize]
         public ActionResult Message()
         {

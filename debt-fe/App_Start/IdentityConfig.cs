@@ -52,6 +52,8 @@ namespace debt_fe
         {
             string numberPhone = message.Destination;
             // Plug in your SMS service here to send a text message.
+            var db = Net.Code.ADONet.Db.FromConfig("premier");
+            
             var inboundDID = ConfigurationManager.AppSettings["PhoneDealer"].ToString();
             var emailSMS = ConfigurationManager.AppSettings["EmailSMS"].ToString();
             debt_fe.SMSService.WSAgentSoapClient smsService = new SMSService.WSAgentSoapClient("WSAgentSoap12");
@@ -65,9 +67,10 @@ namespace debt_fe
             var sReturn = string.Empty;
             try
             {
+
                 string sURL = ConfigurationManager.AppSettings["PhoneAPI_Url"];
                 string content = "api_key=" + ConfigurationManager.AppSettings["PhoneAPI_AppKey"] + "&api_secret=" + ConfigurationManager.AppSettings["PhoneAPI_AppPass"];
-                content += "&to=" + strPhoneTo + "&from=" + "1" + strPhoneFrom;
+                content += "&to=1" + strPhoneTo + "&from=" + "1" + strPhoneFrom;
                 content += "&text=" + strMessage;
                 content += "&callback=" + ConfigurationManager.AppSettings["PhoneAPI_UrlCallback"];
              

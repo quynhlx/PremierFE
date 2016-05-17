@@ -1460,11 +1460,6 @@ select {
     box-sizing: content-box;
 }
 
-.tooltip {
-  min-width: 75px;
-  max-width: 500px;
-}
-
 .btn-action-12 {
     margin-top: 4px;
     width: 160px !important;

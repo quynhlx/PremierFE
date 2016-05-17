@@ -19,9 +19,17 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Macklock Client</title>
-    @Styles.Render("~/Content/css")
-    @Styles.Render("~/Content/extensions")
-    @Styles.Render("~/Content/custom")        
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <link href="~/css/font-awesome.css" rel="stylesheet" />
+    <link href="~/Content/extensions/bootstrapValidator.css" rel="stylesheet" />
+    <link href="~/Content/extensions/jquery.dataTables.css" rel="stylesheet" />
+    <link href="~/Content/extensions/toastr.css" rel="stylesheet" />
+    <link href="~/Content/extensions/box-model.css" rel="stylesheet" />
+    <link href="~/Content/styles.css" rel="stylesheet" />
+    <link href="~/Content/site.css" rel="stylesheet" />
+
+
+    @*@Styles.Render("~/Content/css")*@
     @Scripts.Render("~/bundles/modernizr")
     <link href="~/css/font-awesome.css" rel="stylesheet" />
     @*<link href="~/Content/toastr.css" rel="stylesheet" />*@
@@ -99,7 +107,7 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
-    @Scripts.Render("~/bundles/plugins")
+    @Scripts.Render("~/bundles/plugin")
 
     <!--<script src="~/Scripts/app/app.validator.js"></script>-->
     @*<script src="~/Scripts/toastr.js"></script>*@

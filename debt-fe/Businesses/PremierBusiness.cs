@@ -106,7 +106,12 @@ namespace debt_fe.Businesses
 
         public int EditDocument(DocumentModel doc)
         {
-            var query = _db.Sql("update Document set MemberISN=@memberISN, docName=@name, docDesc=@desc, CreditorISN=@creditorISN , docFileName=@fileName, docSize=@fileSize where DocumentISN=@ISN");
+            string sqlQuery = "update Document set MemberISN=@memberISN, docName=@name, docDesc=@desc, CreditorISN=@creditorISN , docFileName=@fileName, docSize=@fileSize where DocumentISN=@ISN";
+            if (string.IsNullOrWhiteSpace(doc.FileName))
+            {
+                sqlQuery = "update Document set MemberISN=@memberISN, docName=@name, docDesc=@desc, CreditorISN=@creditorISN , docSize=@fileSize where DocumentISN=@ISN";
+            }
+            var query = _db.Sql(sqlQuery);
             query.WithParameters(new
             {
                 fileName = doc.FileName,
@@ -178,14 +183,15 @@ namespace debt_fe.Businesses
                 LastAction = row.docLastAction,
                 SignatureStatus = row.docSignatureStatus,
                 CreditorISN = row.CreditorISN,
-                UpdatedBy = row.updatedBy,
+                UpdatedBy = row.updatedBy != null? row.updatedBy : 0,
                 AddedDate = row.docAddedDate,
                 docSignatureDate = row.docSignatureDate,
-                AddedBy = row.docAddedBy,
+                AddedBy =  row.docAddedBy != null ? row.updatedBy : 0,
                 docNoOfSign = row.docNoOfSign,
                 GroupId = row.GroupID,
                 docHistory = row.docHistory,
                 DocGUID = row.docGuid,
+                AddedName = row.docAddedName
                 
 
             }).ToList();
@@ -203,7 +209,7 @@ namespace debt_fe.Businesses
                         {
                             doc.OneSigntureCompleted = true;
                         }
-                        if (list.Count(d => !string.IsNullOrEmpty(d.FileName)) == list.Count(d => d.GroupId == docGroupId))
+                        if (list.Count(d => !string.IsNullOrEmpty(d.FileName) && d.GroupId == docGroupId) == list.Count(d => d.GroupId == docGroupId))
                         {
                             doc.SigntureCompleted = true;
                         }
@@ -434,7 +440,7 @@ namespace debt_fe.Businesses
                 );
             return sproc.AsNonQuery();
         }
-        private int DocumentEdit(int DocumentISN, int MemberISN, string docFileName, string docSize, string docPublic, string docDesc, string CreditorISN, string docName, int docLast, int updatedBy)
+        private int DocumentEdit(int DocumentISN, int MemberISN, string docFileName, string docSize, string docPublic, string docDesc, string CreditorISN, string docName, int docLast)
         {
             _logger.Info("---Start DocumentEdit---");
             if (string.IsNullOrEmpty(CreditorISN))
@@ -447,7 +453,6 @@ namespace debt_fe.Businesses
                     docPublic = docPublic,
                     docDesc = docDesc,
                     docName = docName,
-                    updatedBy = updatedBy,
                     docLastAction = docLast
                 });
                 return sproc.AsNonQuery();
@@ -464,7 +469,6 @@ namespace debt_fe.Businesses
                     docPublic = docPublic,
                     docDesc = docDesc,
                     docName = docName,
-                    updatedBy = updatedBy,
                     docLastAction = docLast,
                     CreditorISN = CreditorISN
                 });
@@ -482,12 +486,12 @@ namespace debt_fe.Businesses
                 var templateId = ConfigurationManager.AppSettings["TeamplateISN_CreateLead"];
                 //var dsTemplateName = new DataProvider().ExecuteQuery("Select TemplateISN, tplName, tplFile From DebtTemplate Where TemplateISN in (" + templateId + ")");
 
-                var query = _db.Sql("Select TemplateISN, tplName, tplFile From DebtTemplate Where TemplateISN in (@templateId)").WithParameter("templateId", templateId);
+                var query = _db.Sql("Select TemplateISN, tplName, tplFile From DebtTemplate Where TemplateISN in (" + templateId + ")");
                 var templates = query.AsEnumerable().Select(row => new { row.TemplateISN, row.tplName, row.tplFile }).ToList();
 
                 foreach (var item in templates)
                 {
-                    var docISN = DocumentEdit(0, userId, item.tplFile , null, "1", null, null, item.tplName, 2, -userId);
+                    var docISN = DocumentEdit(0, userId, item.tplFile , null, "1", null, null, item.tplName, 2);
                     if(docISN > 0) {
                         var folder = GetTemplatePath(Convert.ToInt32(item.TemplateISN), null);
                         folder = Path.Combine(ConfigurationManager.AppSettings["UploadFolder"], folder);

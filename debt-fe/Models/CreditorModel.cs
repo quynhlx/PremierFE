@@ -10,6 +10,7 @@ namespace debt_fe.Models
 		public int ID { get; set; }
 		public string Name { get; set; }
 		public string AccountNumber { get; set; }
+        public string DebtName { set; get; }
 		// private string _viewName;
 		public string ViewName
 		{

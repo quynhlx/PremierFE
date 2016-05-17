@@ -21,51 +21,18 @@ namespace debt_fe.Controllers
         // GET: Base
         private debt_fe.DataAccessHelper.DataProvider _dataProvider = new DataAccessHelper.DataProvider();
         private PremierEntities db = new PremierEntities();
-        private int _memberISN;
-        private bool _useAuthenticationSMS;
-        public string MasterCode {
-            get
-            {
-                var code = string.Empty;
-                try
-                {
-                    code = ConfigurationManager.AppSettings["MasterCode"].ToString();
-                }
-                catch { }
-                return code;
-            }
-        }
-
-        public MyProfileViewModal Profile 
-        {
-             get {
-                 if (this.MemberISN < 0) return null;
-                 var profile = new MyProfileViewModal();
-                 profile.GetMyProfile(this.MemberISN);
-                 return profile;
-             }
-        }
-        public bool UseAuthenticationSMS
+        public new MyProfileViewModal Profile
         {
             get
             {
-                _useAuthenticationSMS = false;
-                try
-                {
-                    _useAuthenticationSMS = Convert.ToBoolean(ConfigurationManager.AppSettings["useAuthenticationSMS"].ToString());
-                }
-                catch { }
-                return _useAuthenticationSMS;
+                if (this.MemberISN < 0) return null;
+                var profile = new MyProfileViewModal();
+                profile.GetMyProfile(this.MemberISN);
+                return profile;
             }
         }
-        public bool Authentication { 
-            get {
-
-                if (Session["Authentication"] != null &&  Session["Authentication"].ToString() == Utility.ToMD5Hash(this.MemberISN.ToString()))
-                    return true;
-                else return false;
-            } 
-        } 
+       
+       
         public int MemberISN
         {
             get
@@ -107,17 +74,6 @@ namespace debt_fe.Controllers
             }
         }
 
-        public DataTable DealerProfile
-        {
-            get
-            {
-                if (Session["DealerProfile"] != null)
-                {
-                    return (DataTable)Session["DealerProfile"];
-                }
-                else return null;
-            }
-        }
         protected override void OnAuthentication(System.Web.Mvc.Filters.AuthenticationContext filterContext)
         {
             base.OnAuthentication(filterContext);

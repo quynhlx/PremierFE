@@ -28,7 +28,7 @@ namespace debt_fe.SignInManager
         public async Task<PremierUser> FindByIdAsync(string userId)
         {
             int id = Convert.ToInt32(userId);
-            var sproc = _db.Sql("select * from Member where MemberISN = @MemberISN").WithParameter("MemberISN", id);
+            var sproc = _db.Sql("select * from Vw_Debt_dMember where MemberISN = @MemberISN").WithParameters(new { MemberISN = userId });
             var result = await sproc.AsEnumerableAsync();
             var users = result.Select(row =>
             new PremierUser
@@ -39,26 +39,27 @@ namespace debt_fe.SignInManager
                 LastName = row.memLastName,
                 Phone = row.memPhone,
                 UserName = row.memUserName,
-                PasswordHash = row.memPassword
+                DealerISN = row.DealerISN
             });
             var user = users.FirstOrDefault();
             if (user != null)
             {
-                var query2 = _db.Sql("select val_number as TwoFactorEnabled  from MemberExt3 where AttributeISN = 581 and MemberISN  = 67956").
-                    WithParameter("MemberISN", user.ISN).AsEnumerable().Select(row => new { TwoFactorEnabled = row.TwoFactorEnabled });
-                int? mfa = Convert.ToInt32(query2.FirstOrDefault().TwoFactorEnabled);
-                if (mfa.HasValue && mfa.Value == 1)
+                var query2 = _db.Sql("select val_number as TwoFactorEnabled , Member.memPassword from MemberExt3 join Member on MemberExt3.MemberISN = Member.MemberISN where AttributeISN = 581 and Member.MemberISN  = @MemberISN").
+                    WithParameter("MemberISN", user.ISN).AsEnumerable().Select(row => new { TwoFactorEnabled = row.TwoFactorEnabled, Password = row.memPassword });
+                var userext = query2.FirstOrDefault();
+                int? mfa = Convert.ToInt32(userext.TwoFactorEnabled);
+                if (mfa.HasValue && mfa.Value == 0 || !mfa.HasValue)
                 {
                     user.TwoFactorEnabled = true;
                 }
+                user.PasswordHash = userext.Password;
             }
             return user;
         }
         public async Task<PremierUser> FindByNameAsync(string userName)
         {
-            var query = _db.Sql("select * from Member where memUserName = @userName").WithParameter("userName", userName);
-            var result = await query.AsEnumerableAsync();
-            var users = result.Select(row =>
+            var query = _db.Sql("select * from Vw_Debt_dMember where memUserName = @userName").WithParameters(new { userName = userName }).AsEnumerable() ;
+            var users = query.Select(row =>
             new PremierUser
             {
                 Id = Convert.ToString(row.MemberISN),
@@ -67,18 +68,22 @@ namespace debt_fe.SignInManager
                 LastName = row.memLastName,
                 Phone = row.memPhone,
                 UserName = row.memUserName,
-                PasswordHash = row.memPassword
+                //PasswordHash = row.memPassword,
+                DealerISN = row.DealerISN
             });
             var user = users.FirstOrDefault();
             if(user != null)
             {
-                var query2 = _db.Sql("select val_number as TwoFactorEnabled  from MemberExt3 where AttributeISN = 581 and MemberISN  = 67956").
-                    WithParameter("MemberISN", user.ISN).AsEnumerable().Select(row => new { TwoFactorEnabled = row.TwoFactorEnabled });
-                int? mfa = Convert.ToInt32(query2.FirstOrDefault().TwoFactorEnabled);
-                if (mfa.HasValue && mfa.Value == 1)
+                var query2 = _db.Sql("select val_number as TwoFactorEnabled, Member.memPassword  from MemberExt3 join Member on MemberExt3.MemberISN = Member.MemberISN where AttributeISN = 581 and Member.MemberISN = @MemberISN").
+                    WithParameter("MemberISN", user.ISN).AsEnumerable().Select(row => new { TwoFactorEnabled = row.TwoFactorEnabled , Password = row.memPassword });
+                var userext = query2.FirstOrDefault();
+                int? mfa = Convert.ToInt32 (userext.TwoFactorEnabled);
+                if (mfa.HasValue && mfa.Value ==  0 || !mfa.HasValue)
                 {
                     user.TwoFactorEnabled = true;
                 }
+                user.PasswordHash = userext.Password;
+
             }
             return user;
         }

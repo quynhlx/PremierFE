@@ -96,6 +96,8 @@ namespace debt_fe.Models.ViewModels
 					creditors.Add(creditor);
 				}
 			}
+            //var query = ADo
+
 
 			return creditors;
 		}

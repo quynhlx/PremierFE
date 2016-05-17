@@ -40,10 +40,6 @@
             $('.validator-con').html("Must be under 255 characters");
             return;
         }
-        if ($('#subject').val().length === 0) {
-            $('.validator-sub').html("Subject is required");
-            return;
-        }
         $('#reply-message').submit()
         ('.validator').html("");
     });

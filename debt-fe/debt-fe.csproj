@@ -184,7 +184,6 @@
     <Compile Include="Businesses\PremierBusiness.cs" />
     <Compile Include="Businesses\SignatureBusiness.cs" />
     <Compile Include="Controllers\Account2Controller.cs" />
-    <Compile Include="Controllers\Account1Controller.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ActivityController.cs" />
     <Compile Include="Controllers\AppointmentController.cs" />
@@ -332,7 +331,6 @@
     <Content Include="Content\extensions\bootstrapValidator.min.css" />
     <Content Include="Content\extensions\box-model.css" />
     <Content Include="Content\extensions\jquery.dataTables.css" />
-    <Content Include="Content\extensions\jquery.dataTables.min.css" />
     <Content Include="Content\images\222.png" />
     <Content Include="Content\images\arrow.png" />
     <Content Include="Content\images\bag.png" />

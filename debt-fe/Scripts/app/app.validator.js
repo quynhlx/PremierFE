@@ -10,7 +10,7 @@
 
     var nameVal = {
         validators: {
-            notEmpty: { message: 'Name is required' },
+            notEmpty: { message: 'Document name is required' },
             stringLength: { max: 50, min: 3, message: 'Name is too short' }
         }
     };
@@ -23,6 +23,7 @@
 
     var fileUploadVal = {
         validators: {
+            notEmpty: { message: 'File name is required' },
             file: {
                 maxSize: 1048576,   // 1MB
                 // maxTotalSize: 10485760, // 10MB
@@ -30,7 +31,15 @@
             }
         }
     };
-
+    var fileEditVal = {
+        validators: {
+            file: {
+                maxSize: 1048576,   // 1MB
+                // maxTotalSize: 10485760, // 10MB
+                message: 'Maximum size allowed is 1MB'
+            }
+        }
+    };
     var formDocumentSetup = {
         feedbackIcons: feedbackIcons,
         fields: {
@@ -39,6 +48,14 @@
             Notes: descriptionVal
         }
     };
+    var formeditDocumentSetup = {
+        feedbackIcons: feedbackIcons,
+        fields: {
+            DocName: nameVal,
+            UploadedFile: fileEditVal,
+            Notes: descriptionVal
+        }
+    }; $('#form-edit-document').bootstrapValidator(formeditDocumentSetup);
 
     $('#form-upload-document').bootstrapValidator(formDocumentSetup);
     
