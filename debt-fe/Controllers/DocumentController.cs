@@ -19,7 +19,6 @@ using NLog;
 
 namespace debt_fe.Controllers
 {
-    [Authorize]
     public class DocumentController : BaseController
     {
         private DocumentBusiness _docBusiness;
@@ -367,6 +366,7 @@ namespace debt_fe.Controllers
             _logger.Info("---return modal Signature Send To CoClient---");
             return PartialView("_Send2YourCoClient");
         }
+
         [Authorize]
         [HttpPost]
         public ActionResult SignatureSendToCoClient(FormCollection form)
@@ -582,7 +582,7 @@ namespace debt_fe.Controllers
 
             }
             var documentSignture = _premierBusiness.GetSigntureDocument(docId.Value);
-            if(documentSignture == null)
+            if (documentSignture == null)
             {
                 documentSignture = _premierBusiness.GetSubSigntureDocument(docId.Value, false);
             }
@@ -663,7 +663,7 @@ namespace debt_fe.Controllers
                     _logger.Info("UpdateLeadStatus");
                     _logger.Debug("UpdateLeadStatus ({0}, {1}, {2})", documentSignture.MemberISN, "Contract Received", documentSignture.MemberISN);
                     _docBusiness.UpdateLeadStatus(documentSignture.MemberISN, "Contract Received", documentSignture.MemberISN);
-                   
+
                     break;
                 }
                 else
@@ -676,13 +676,14 @@ namespace debt_fe.Controllers
 
             if (mainDoc.SigntureCompleted)
             {
-                AddTemplateDefaut(documentSignture.MemberISN);
+                _premierBusiness.AddTemplateDefaut(documentSignture.MemberISN);
                 return RedirectToAction("Result", "Signature", new { message = "Document has been signed." });
             }
 
-            return RedirectToAction("Index",  "Signature", new { isn = documentSignture.MemberISN, docId = documentSignture.ID });
-           
+            return RedirectToAction("Index", "Signature", new { isn = documentSignture.MemberISN, docId = documentSignture.ID });
+
         }
+
         [Authorize]
         public ActionResult SignatureDownload(int docId)
         {
@@ -708,92 +709,93 @@ namespace debt_fe.Controllers
                 OneSigntureCompleted = documentSignature.OneSigntureCompleted;
                 Guid_Doc = documentSignature.DocGUID;
             }
-            var fileName = string.Empty;
-            try
+
+            var strFileName = GenerateFileName();
+
+            var docPath = _docBusiness.GetDocumentPath(docId, null);
+            //
+            // update signature filename after sign
+            var UserIP = string.Empty;
+            var BrowserInfo = string.Format("Browser {0}", Request.Browser.Browser);
+            UserIP = Request.ServerVariables["REMOTE_ADDR"];
+            var currentTime = DateTime.Now;
+
+            //docNoOfSign
+            int? docNoOfSign = documentSignature.docNoOfSign;
+
+            if (!OneSigntureCompleted)
             {
-
-                var fileTemplate = "NOlimit";
-
-                if (Profile._State.Equals("TX") || Profile._State.Equals("LA") || Profile._State.Equals("WV") || Profile._State.Equals("DE")
-                        || Profile._State.Equals("NE") || Profile._State.Equals("CA") || Profile._State.Equals("MO") || Profile._State.Equals("MI") || Profile._State.Equals("OH"))
+                // ký file đầu tiên docID = groupID
+                if (documentSignature.GroupId.HasValue && docId == documentSignature.GroupId.Value)
                 {
-                    fileTemplate = "180daylimit";
-                }
-                var strFileName = string.Format("Contract_{0}_{1}_{2}.pdf", fileTemplate, Profile.ClientID, DateTime.Now.Ticks.ToString());
-                var uploadFolder = ConfigurationManager.AppSettings["UploadFolder"];
-                var docPath = _docBusiness.GetDocumentPath(docId, null);
-
-                //
-                // update signature filename after sign
-                var UserIP = string.Empty;
-                var BrowserInfo = string.Format("Browser {0}", Request.Browser.Browser);
-                UserIP = Request.ServerVariables["REMOTE_ADDR"];
-                var currentTime = DateTime.Now;
-
-                //docNoOfSign
-                int? docNoOfSign = documentSignature.docNoOfSign;
-
-                if (!OneSigntureCompleted)
-                {
-                    //TempData["info"] = "Document Id not found";
-                   
-                    _docBusiness.UpdateDocSignature(docId, "", UserIP, BrowserInfo, -MemberISN, Guid_Doc);
-                    if (_premierBusiness.GetStatusSigntureDocument(documentSignature.GroupId.Value) == SigntureStatus.Signed)
+                    documentSignature.FileName = strFileName;
+                    documentSignature.ID = docId;
+                    documentSignature.DocGUID = Guid_Doc;
+                    if (docNoOfSign.HasValue && docNoOfSign.Value == 1)
                     {
-                        if (docNoOfSign.HasValue && docNoOfSign.Value == 1)
+                        int rs = _premierBusiness.DownloadSigntureDocumentFromServer(documentSignature, this.MemberISN);
+                        if (rs < 0)
+                        {
+                            TempData["error"] = "Download signature failed";
+                            _premierBusiness.RollBackSigntureDocument(documentSignature.GroupId.Value);
+                            return RedirectToAction("Index");
+                        }
+                        else
                         {
                             _docBusiness.UpdateDocSignature(documentSignature.GroupId.Value, strFileName, UserIP, BrowserInfo, -MemberISN, "");
-                            _docBusiness.UpdateDocSignature(docId, strFileName, UserIP, BrowserInfo, -MemberISN, Guid_Doc);
-                            documentSignature.FileName = strFileName;
-                            documentSignature.ID = docId;
-                            documentSignature.DocGUID = Guid_Doc;
-                            var mainSigntureDoc = _premierBusiness.GetSigntureDocument(documentSignature.GroupId.Value);
-                            try
-                            {
-                                int rs = _premierBusiness.DownloadSigntureDocumentFromServer(mainSigntureDoc, this.MemberISN);
-                                int rs1 = _premierBusiness.DownloadSigntureDocumentFromServer(documentSignature, this.MemberISN);
-                                if (rs < 0 || rs1 < 0)
-                                {
-                                    TempData["error"] = "Download signature failed";
-
-                                    //Nên rollback lại document trở về lúc ban đầu. để kí lại
-                                    _premierBusiness.RollBackSigntureDocument(documentSignature.ID);
-                                    _premierBusiness.RollBackSigntureDocument(documentSignature.GroupId.Value);
-                                    return RedirectToAction("Index");
-                                }
-                                AddTemplateDefaut(this.MemberISN);
-                            }
-                           catch (Exception ex)
-                            {
-                                TempData["error"] = "Download signature failed <br/>" + ex.Message;
-                                _premierBusiness.RollBackSigntureDocument(documentSignature.ID);
-                                _premierBusiness.RollBackSigntureDocument(documentSignature.GroupId.Value);
-                            }
+                            TempData["success"] = "Document has been signed.";
                         }
+                    }
+                    else
+                    {
+                        _docBusiness.UpdateDocSignature(documentSignature.GroupId.Value, "", UserIP, BrowserInfo, -MemberISN, "");
+                        TempData["success"] = "Document has been signed.";
+                    }
+                }
+                // ký file file thứ 2
+                else
+                {
+                    documentSignature.FileName = strFileName;
+                    documentSignature.ID = docId;
+                    documentSignature.DocGUID = Guid_Doc;
+                    if (docNoOfSign.HasValue && docNoOfSign.Value == 1)
+                    {
+                        int rs1 = _premierBusiness.DownloadSigntureDocumentFromServer(documentSignature, this.MemberISN);
+                        if (rs1 < 0)
+                        {
+                            TempData["error"] = "Download signature failed";
+                            //Nên rollback lại document trở về lúc ban đầu. để kí lại
+                            _premierBusiness.RollBackSigntureDocument(documentSignature.ID);
+                            return RedirectToAction("Index");
+                        }
+                        else
+                        {
+                                _docBusiness.UpdateDocSignature(docId, strFileName, UserIP, BrowserInfo, -MemberISN, Guid_Doc);
+                                 _premierBusiness.AddTemplateDefaut(this.MemberISN);
+                                TempData["success"] = "Document has been signed.";
+                                return RedirectToAction("Index");
+                        }
+                    }
+                    else
+                    {
+                        _docBusiness.UpdateDocSignature(docId, "", UserIP, BrowserInfo, -MemberISN, Guid_Doc);
                         TempData["success"] = "Document has been signed.";
                         return RedirectToAction("Index");
                     }
-
-                    var urlRedirect = Url.Action("Signature", "Document", new { documentISN = docId });
-                    var scheme = Request.Url.Scheme;
-                    var host = Request.Url.Host;
-                    var redirect = string.Format("{0}://{1}/{2}", scheme, host.TrimEnd('/'), urlRedirect.TrimStart('/'));
-                    // Ở local thì chạy đoạn code này
-                    //redirect = string.Format("http://localhost:{0}/{1}", Request.Url.Port, urlRedirect);
-
-                    string funtionSignture = string.Format("signture('{0}',{1});", redirect, docId);
-                    TempData["success"] = "Document has been signed.";
-                    TempData["FuntionSignture"] = funtionSignture;
-                    return RedirectToAction("Index");
                 }
-            }
-            catch (Exception ex)
-            {
-                TempData["error"] = "Download signature failed <br/>" + ex.Message;
+
+                var urlRedirect = Url.Action("Signature", "Document", new { documentISN = docId });
+                var scheme = Request.Url.Scheme;
+                var host = Request.Url.Host;
+                var redirect = string.Format("{0}://{1}/{2}", scheme, host.TrimEnd('/'), urlRedirect.TrimStart('/'));
+                // Ở local thì chạy đoạn code này
+                //redirect = string.Format("http://localhost:{0}/{1}", Request.Url.Port, urlRedirect);
+
+                string funtionSignture = string.Format("signture('{0}',{1});", redirect, docId);
+
+                TempData["FuntionSignture"] = funtionSignture;
                 return RedirectToAction("Index");
             }
-
-
             return RedirectToAction("Index");
         }
         public void AddTemplateDefaut(int mISN = 0)
@@ -802,10 +804,10 @@ namespace debt_fe.Controllers
             try
             {
                 var parameters = new Hashtable();
-                parameters.Add("@MemberISN", MemberISN);
+                parameters.Add("@MemberISN", mISN);
                 // var check = new DataProvider().ExecuteQuery("select Count(*) from Vw_DebtExt_Document where MemberISN=@LeadISN and docLastAction='2'", parameters);
                 //if (ConvertObjectToInt(check) < 2)
-                var check = _db.Vw_DebtExt_Document.Where(m => m.MemberISN == MemberISN && m.docLastAction == "2").Count();
+                var check = _db.Vw_DebtExt_Document.Where(m => m.MemberISN == mISN && m.docLastAction == "2").Count();
                 if (check >= 2) return;
                 var templateId = ConfigurationManager.AppSettings["TeamplateISN_CreateLead"];
                 var dsTemplateName = new DataProvider().ExecuteQuery("Select TemplateISN, tplName, tplFile From DebtTemplate Where TemplateISN in (" + templateId + ")");
@@ -816,7 +818,7 @@ namespace debt_fe.Controllers
                         var tempISN = row["TemplateISN"].ToString();
                         var templateName = row["tplName"].ToString();
                         var fileName = row["tplFile"].ToString();
-                        var docISN = DocumentEdit(0, MemberISN, fileName, null, "1", null, null, templateName, 2, -MemberISN);
+                        var docISN = DocumentEdit(0, mISN, fileName, null, "1", null, null, templateName, 2, -mISN);
                         if (docISN > 0)
                         {
                             var folder = GetTemplatePath(Convert.ToInt32(tempISN), null);
@@ -881,7 +883,6 @@ namespace debt_fe.Controllers
                 parameters.Add("docPublic", docPublic);
                 parameters.Add("docDesc", docDesc);
                 parameters.Add("docName", docName);
-                parameters.Add("updatedBy", DBNull.Value);
                 parameters.Add("docLastAction", docLast);
                 result = (int)db.ExecuteStoreProcedure("xp_debtext_documenttask_insupd", parameters);
 
@@ -897,7 +898,6 @@ namespace debt_fe.Controllers
                 parameters.Add("docDesc", docDesc);
                 parameters.Add("CreditorISN", CreditorISN);
                 parameters.Add("docName", docName);
-                parameters.Add("updatedBy", updatedBy);
                 parameters.Add("docLastAction", docLast);
                 result = (int)db.ExecuteStoreProcedure("xp_debtext_documenttask_insupd", parameters);
             }
@@ -934,7 +934,17 @@ namespace debt_fe.Controllers
             _logger.Info("---End DownloadSignatureAsync---");
 
         }
+        private string GenerateFileName()
+        {
+            var fileTemplate = "NOlimit";
 
+            if (Profile._State.Equals("TX") || Profile._State.Equals("LA") || Profile._State.Equals("WV") || Profile._State.Equals("DE")
+                    || Profile._State.Equals("NE") || Profile._State.Equals("CA") || Profile._State.Equals("MO") || Profile._State.Equals("MI") || Profile._State.Equals("OH"))
+            {
+                fileTemplate = "180daylimit";
+            }
+            return string.Format("Contract_{0}_{1}_{2}.pdf", fileTemplate, Profile.ClientID, DateTime.Now.Ticks.ToString());
+        }
 
     }
 }

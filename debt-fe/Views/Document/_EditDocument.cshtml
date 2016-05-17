@@ -29,12 +29,24 @@
 			</div>
 		</div>
 
-		<div class="form-group">
-			<label class="control-label col-md-3">Creditor</label>
-			<div class="col-md-9">
-				@Html.DropDownListFor(m => m.SelectedCreditorID, Model.CreditorItems, " -- Select One -- ",new { @class = "form-control" })
-			</div>
-		</div>
+        <div class="form-group">
+            <label class="control-label col-md-3">Debt Name</label>
+            <div class="col-md-9">
+                <select name="SelectedCreditorID" id="SelectedCreditorID" class="form-control" onchange="dllChange();">
+                    <option value=""> -- Select One -- </option>
+                    @foreach (var item in Model.Creditors)
+                    {
+                        <option data-creditor="@item.ViewName" value="@item.ID"> @item.DebtName</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-3">Creditor</label>
+            <div class="col-md-9">
+                <input disabled type="text" id="creditor-view-name" class="form-control" />
+            </div>
+        </div>
 
 		<div class="form-group">
 			<label class="control-label col-md-3">Notes</label>
@@ -61,5 +73,10 @@
 <script src="~/Scripts/plugins/dropzone.js"></script>
 <script src="~/Scripts/app/app.validator.js"></script>
 <script src="~/Scripts/plugins/filedrop.js"></script>
-
+<script>
+    function dllChange(){
+        var x = $('#SelectedCreditorID :selected').data('creditor');
+        document.getElementById("creditor-view-name").value = x;
+    }
+</script>
 
