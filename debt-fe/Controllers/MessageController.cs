@@ -37,11 +37,11 @@ namespace debt_fe.Controllers
             return View(Messages);
 
         }
-        public ActionResult Mobile(string username, string hashpass)
+        public ActionResult Mobile(string username, string pass)
         {
             if(!User.Identity.IsAuthenticated)
             {
-                if (this.MobileLogin(username, hashpass) < 0 || MemberISN < 0)
+                if (this.MobileLogin(username, pass) < 0)
                 {
                     return RedirectToAction("Login", "Account");
                 }
@@ -62,7 +62,7 @@ namespace debt_fe.Controllers
             Response.AppendCookie(debt);
             TempData["IsMobile"] = true;
             TempData["username"] = username;
-            TempData["hashpass"] = hashpass;
+            TempData["hashpass"] = pass;
             ViewBag.numberUnread = numberUnread;
             return View(Messages);
         }
@@ -148,7 +148,6 @@ namespace debt_fe.Controllers
             }
             return RedirectToAction("Index");
         }
-
         public ActionResult ViewAll(int MessageId)
         {
             var MessageHistorys = db.xp_premiermessage_viewall(MessageId).ToList();

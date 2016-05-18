@@ -20,11 +20,14 @@ namespace debt_fe.Controllers
             var activities = db.Vw_PremierActivity.Where(m => m.MemberISN == MemberISN).OrderByDescending(a=>a.updatedDate);
             return View(activities);
         }
-        public ActionResult Mobile(string username, string hashpass)
+        public ActionResult Mobile(string username, string pass)
         {
-            if (this.MobileLogin(username, hashpass) < 0 || MemberISN < 0)
+            if (!User.Identity.IsAuthenticated)
             {
-                return RedirectToAction("Login", "Account");
+                if (this.MobileLogin(username, pass) < 0)
+                {
+                    return RedirectToAction("Login", "Account");
+                }
             }
             var activities = db.Vw_PremierActivity.Where(m => m.MemberISN == MemberISN).OrderByDescending(a => a.updatedDate);
             return View(activities);

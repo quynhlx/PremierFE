@@ -77,12 +77,21 @@ namespace debt_fe.SignInManager
                 var query2 = _db.Sql("select val_number as TwoFactorEnabled, Member.memPassword  from MemberExt3 join Member on MemberExt3.MemberISN = Member.MemberISN where AttributeISN = 581 and Member.MemberISN = @MemberISN").
                     WithParameter("MemberISN", user.ISN).AsEnumerable().Select(row => new { TwoFactorEnabled = row.TwoFactorEnabled , Password = row.memPassword });
                 var userext = query2.FirstOrDefault();
-                int? mfa = Convert.ToInt32 (userext.TwoFactorEnabled);
-                if (mfa.HasValue && mfa.Value ==  0 || !mfa.HasValue)
+                if(userext != null)
                 {
-                    user.TwoFactorEnabled = true;
+                    int? mfa = Convert.ToInt32(userext.TwoFactorEnabled);
+                    if (mfa.HasValue && mfa.Value == 0 || !mfa.HasValue)
+                    {
+                        user.TwoFactorEnabled = true;
+                    }
                 }
-                user.PasswordHash = userext.Password;
+                var query3 = _db.Sql("select memPassword from Member where MemberISN = @UserISN ").WithParameter("UserISN", user.ISN);
+                var Reader = query3.AsReader();
+                if(Reader.Read())
+                {
+                    user.PasswordHash = Reader.GetString(0);
+                }
+            
 
             }
             return user;

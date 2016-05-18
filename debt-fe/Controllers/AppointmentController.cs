@@ -52,11 +52,14 @@ namespace debt_fe.Controllers
             }
             return View(model);
         }
-        public ActionResult Mobile(string username, string hashpass)
+        public ActionResult Mobile(string username, string pass)
         {
-            if (this.MobileLogin(username, hashpass) < 0 || MemberISN < 0)
+            if (!User.Identity.IsAuthenticated)
             {
-                return RedirectToAction("Login", "Account");
+                if (this.MobileLogin(username, pass) < 0)
+                {
+                    return RedirectToAction("Login", "Account");
+                }
             }
             var troubleTicket = db.Vw_DebtExt_Appointment.Where(t => t.tblDate.HasValue && t.MemberISN == MemberISN).OrderByDescending(m => m.tblDate).ToList();
             var model = new List<AppointmentViewModel>();

@@ -676,7 +676,7 @@ namespace debt_fe.Controllers
 
             if (mainDoc.SigntureCompleted)
             {
-                _premierBusiness.AddTemplateDefaut(documentSignture.MemberISN);
+                AddTemplateDefaut(documentSignture.MemberISN);
                 return RedirectToAction("Result", "Signature", new { message = "Document has been signed." });
             }
 
@@ -771,7 +771,7 @@ namespace debt_fe.Controllers
                         else
                         {
                                 _docBusiness.UpdateDocSignature(docId, strFileName, UserIP, BrowserInfo, -MemberISN, Guid_Doc);
-                                 _premierBusiness.AddTemplateDefaut(this.MemberISN);
+                                 AddTemplateDefaut(this.MemberISN);
                                 TempData["success"] = "Document has been signed.";
                                 return RedirectToAction("Index");
                         }

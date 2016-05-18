@@ -103,7 +103,7 @@ namespace debt_fe.Controllers
             ViewBag.BaseUrlChat = System.Configuration.ConfigurationManager.AppSettings["BaseUrlChat"];
             ViewBag.MyProfile = Profile;
         }
-        public int MobileLogin (string username, string hasspass)
+        public int MobileLogin (string username, string pass)
         {
             //var dealers = ConfigurationManager.AppSettings["Dealers"];
             //var paramNames = new List<string>
@@ -128,7 +128,7 @@ namespace debt_fe.Controllers
             //cookie.Values["memberId"] = clientISN.ToString();
             //Response.AppendCookie(cookie);
             var user = UserManager.FindByName(username);
-            if (user == null || !string.Equals(user.PasswordHash, hasspass, StringComparison.OrdinalIgnoreCase))
+            if (user == null || !string.Equals(user.PasswordHash, pass, StringComparison.OrdinalIgnoreCase))
             {
                 return -1;
             }

@@ -80,7 +80,7 @@ namespace debt_fe.Models.ViewModels
 		private List<CreditorModel> GetCreditors(int memberISN)
 		{
             Net.Code.ADONet.Db db = Net.Code.ADONet.Db.FromConfig("premier");
-            var query = db.Sql("select Creditor, CreditorISN, cdtName, cdtAcctNo  from Vw_DebtExt_Creditor where MemberISN=@MemberISN").WithParameter("MemberISN", memberISN);
+            var query = db.Sql("select Creditor, CreditorISN, cdtName, cdtAcctNo  from Vw_DebtExt_Creditor where MemberISN=@MemberISN and cdtIsPush =1").WithParameter("MemberISN", memberISN);
             var creditors = query.AsEnumerable().Select(row => new CreditorModel() {
                 ID = row.CreditorISN,
                 AccountNumber = row.cdtAcctNo,

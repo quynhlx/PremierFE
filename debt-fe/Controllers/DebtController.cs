@@ -37,11 +37,14 @@ namespace debt_fe.Controllers
             return View(model);        
    
         }
-        public ActionResult Mobile(string username, string hashpass)
+        public ActionResult Mobile(string username, string pass)
         {
-            if (this.MobileLogin(username, hashpass) < 0 || MemberISN < 0)
+            if (!User.Identity.IsAuthenticated)
             {
-                return RedirectToAction("Login", "Account");
+                if (this.MobileLogin(username, pass) < 0)
+                {
+                    return RedirectToAction("Login", "Account");
+                }
             }
             //var Debt = DebtModel.ReadXML("~/XMLData/DebtData.xml", typeof(List<DebtModel>));
             var debts = db.Vw_DebtExt_Creditor.Where(d => d.cdtIsPush.Value != byte.MinValue && d.DebtRemoved == 0 && d.MemberISN == this.MemberISN).ToList();

@@ -133,6 +133,10 @@ namespace debt_fe.SignInManager
                 return IsPhoneNumberConfirmed;
             });
         }
+        public override Task<PremierUser> FindByNameAsync(string userName)
+        {
+            return base.FindByNameAsync(userName);
+        }
     }
     public class MD5PasswordHasher : IPasswordHasher
     {
