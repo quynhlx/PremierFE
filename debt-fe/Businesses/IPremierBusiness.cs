@@ -50,7 +50,9 @@ namespace debt_fe.Businesses
         int DownloadSigntureDocumentFromServer(DocumentModel doc, int userId);
         void AddTemplateDefaut(int userId);
         void RollBackSigntureDocument(int docId);
-
+        bool CheckIsSignture(int docId);
+        void MarkIsSignture(int docId);
+        void UnMarkIsSignture(int docId);
     }
     public enum SigntureStatus
     {

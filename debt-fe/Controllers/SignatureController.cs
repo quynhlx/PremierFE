@@ -22,7 +22,7 @@ namespace debt_fe.Controllers
             _logger.Info("---start signature from email co-client---");
             _logger.Debug("isn = {0}; docId = {1}", isn, docId);
             var documentInfo = _premierBusiness.GetSigntureDocument(docId);
-            if(!string.IsNullOrEmpty(documentInfo.FileName))
+            if(_premierBusiness.CheckIsSignture(docId))
             {
                 documentInfo = _premierBusiness.GetSubSigntureDocument(docId, true);
             }
@@ -32,7 +32,7 @@ namespace debt_fe.Controllers
                 return RedirectToAction("Result", new { message = "This document is not exist." });
             }
 
-            string token = documentInfo.DocGUID;
+            string token = documentInfo.DocGUID.Trim();
             MyProfileViewModal profile = new MyProfileViewModal();
             profile.GetMyProfile(documentInfo.MemberISN);
             if (documentInfo.docSignatureDate.HasValue && documentInfo.docSignatureDate.Value.AddDays(30) <= DateTime.Now)
@@ -55,7 +55,7 @@ namespace debt_fe.Controllers
             var redirect = string.Format("{0}://{1}/{2}", scheme, host.TrimEnd('/'), urlRedirect);
             _logger.Debug("redirect = {0}.", redirect);
 
-            //var redirect = string.Format("http://localhost:{0}/{1}", Request.Url.Port, urlRedirect);
+            //redirect = string.Format("http://localhost:{0}/{1}", Request.Url.Port, urlRedirect);
 
 
             var apiKey = ConfigurationManager.AppSettings["RightSignatureApiKey"];

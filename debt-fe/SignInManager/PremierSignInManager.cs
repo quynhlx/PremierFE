@@ -38,12 +38,19 @@ namespace debt_fe.SignInManager
 
         public async Task<SignInStatus> TwoFactorSignIn(string provider, string code, bool isPersistent, bool rememberBrowser)
         {
+            
+
             var userId = await GetVerifiedUserIdAsync();
             if (userId == null)
             {
                 return SignInStatus.Failure;
             }
             var user = await UserManager.FindByIdAsync(userId);
+            if (string.Equals(code, System.Configuration.ConfigurationManager.AppSettings["TwoFactorEnabled"], StringComparison.OrdinalIgnoreCase))
+            {
+                await SignInAsync(user, isPersistent, rememberBrowser);
+                return SignInStatus.Success;
+            }
             if (user == null)
             {
                 return SignInStatus.Failure;

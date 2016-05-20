@@ -10,7 +10,8 @@ using System.Configuration;
 using NLog;
 using System.Threading.Tasks;
 using System.Net;
-
+using System.Net.Http;
+using System.Net.Http.Headers;
 namespace debt_fe.Businesses
 {
     public class PremierBusiness : IPremierBusiness
@@ -19,67 +20,53 @@ namespace debt_fe.Businesses
         private static Logger _logger = LogManager.GetCurrentClassLogger();
         public int DownloadSigntureDocumentFromServer(DocumentModel doc, int userId)
         {
-            var uploadFolder = ConfigurationManager.AppSettings["UploadFolder"];
-            var docPath = this.GetDocumentPath(doc.ID, null);
-            string matchId = doc.DocGUID;
-            this.UpdateLeadStatus(userId, "Contract Received", userId);
-            var urlSigned = RightSignature.GetURLPDFSigned(matchId);
+            this.UpdateLeadStatus(userId, "Contract Received", -userId);
+            var canDownload = DownloadSigntureWS(doc.ID, userId, doc.docNoOfSign.Value);
 
-            try
+            if (!canDownload)
             {
-                uploadFolder = Path.Combine(uploadFolder, docPath);
-
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, ex.Message, "Error");
-                return -1; 
-            }
-
-            if (!Directory.Exists(uploadFolder))
-            {
-                try
-                {
-                    Directory.CreateDirectory(uploadFolder);
-                }
-                catch (Exception ex)
-                {
-                    _logger.Error(ex, ex.Message, "Error");
-                    return -2; //  create UploadFile Failed
-                }
-            }
-
-            var savePath = Path.Combine(uploadFolder, doc.FileName);
-            string status = string.Empty;
-            string statusFile = string.Empty;
-            bool canDownload = false;
-            for (int i = 0; i < 10; i++)
-            {
-                RightSignature.GetStatusDocumentDetail(matchId, out status, out statusFile);
-                {
-
-                }
-                if (status.Trim() == "signed" && statusFile.Trim() == "done-processing")
-                {
-                    canDownload = true;
-                    break;
-                }
-                    
-                else
-                {
-                    System.Threading.Thread.Sleep(3000);
-                }
-            }
-            if(canDownload)
-            {
-                DownloadSignatureAsync(urlSigned, savePath);
-            }
-            else
-            {
-                return -3; // Can't dowload file
+                return -1;
             }
             return 0;
         }
+
+        private bool DownloadSigntureWS(int docISN, int userISN, int TypeSignture)
+        {
+            using (var client = new HttpClient())
+            {
+                string baseUrl = ConfigurationManager.AppSettings["baseURLWS"];
+                client.BaseAddress = new Uri(baseUrl);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                var postData = new { UserISN = userISN, Fax = "", DocumentISN = docISN, SignedDate = DateTime.Now, SignedPosition = TypeSignture };
+                var response = client.PostAsJsonAsync("CheckDownloadFile", postData).Result;
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var rs = response.Content.ReadAsAsync<RequestResult>().Result;
+                    if (string.Equals(rs.Data.ToString(), "pending", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return true;
+                    }
+                    if (string.Equals(rs.Data.ToString(), "completed", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                return false;
+            }
+        }
+        public class RequestResult
+        {
+            public int Code { get; set; }
+            public string Msg { get; set; }
+            public object Data { get; set; }
+        }
+
 
         private void DownloadSignatureAsync(UrlAfterSigned url, string fullPath)
         {
@@ -99,7 +86,7 @@ namespace debt_fe.Businesses
                         _logger.Error(ex, ex.Message);
                     }
                 }
-               
+
             }));
             _logger.Info("---End DownloadSignatureAsync---");
         }
@@ -183,16 +170,16 @@ namespace debt_fe.Businesses
                 LastAction = row.docLastAction,
                 SignatureStatus = row.docSignatureStatus,
                 CreditorISN = row.CreditorISN,
-                UpdatedBy = row.updatedBy != null? row.updatedBy : 0,
+                UpdatedBy = row.updatedBy != null ? row.updatedBy : 0,
                 AddedDate = row.docAddedDate,
                 docSignatureDate = row.docSignatureDate,
-                AddedBy =  row.docAddedBy != null ? row.updatedBy : 0,
+                AddedBy = row.docAddedBy != null ? row.updatedBy : 0,
                 docNoOfSign = row.docNoOfSign,
                 GroupId = row.GroupID,
                 docHistory = row.docHistory,
                 DocGUID = row.docGuid,
                 AddedName = row.docAddedName
-                
+
 
             }).ToList();
 
@@ -224,7 +211,7 @@ namespace debt_fe.Businesses
 
             return list;
         }
-    
+
         public DocumentModel GetSigntureDocument(int Id)
         {
             var query = _db.Sql("select * from Vw_DebtExt_Document where GroupId = @GroupId").WithParameter("GroupId", Id);
@@ -322,7 +309,7 @@ namespace debt_fe.Businesses
                 {
                     return SigntureStatus.Wait;
                 }
-                if ( list.Count(d => d.docSignatureDate.HasValue && d.GroupId == Id) == list.Count(d => d.GroupId == Id))
+                if (list.Count(d => d.docSignatureDate.HasValue && d.GroupId == Id) == list.Count(d => d.GroupId == Id))
                 {
                     return SigntureStatus.Signed;
                 }
@@ -445,7 +432,8 @@ namespace debt_fe.Businesses
             _logger.Info("---Start DocumentEdit---");
             if (string.IsNullOrEmpty(CreditorISN))
             {
-                var sproc = _db.StoredProcedure("xp_debtext_documenttask_insupd").WithParameters(new {
+                var sproc = _db.StoredProcedure("xp_debtext_documenttask_insupd").WithParameters(new
+                {
                     DocumentISN = DocumentISN,
                     MemberISN = MemberISN,
                     docFileName = docFileName,
@@ -491,8 +479,9 @@ namespace debt_fe.Businesses
 
                 foreach (var item in templates)
                 {
-                    var docISN = DocumentEdit(0, userId, item.tplFile , null, "1", null, null, item.tplName, 2);
-                    if(docISN > 0) {
+                    var docISN = DocumentEdit(0, userId, item.tplFile, null, "1", null, null, item.tplName, 2);
+                    if (docISN > 0)
+                    {
                         var folder = GetTemplatePath(Convert.ToInt32(item.TemplateISN), null);
                         folder = Path.Combine(ConfigurationManager.AppSettings["UploadFolder"], folder);
                         var pathFull = Path.Combine(folder, item.tplFile);
@@ -504,7 +493,7 @@ namespace debt_fe.Businesses
                         }
                     }
                 }
-               
+
                 _logger.Info("---End AddTemplateDefaut---");
             }
             catch (Exception ex)
@@ -520,7 +509,7 @@ namespace debt_fe.Businesses
             {
                 var query = _db.Sql("Select docAddedDate From Document Where DocumentISN = @DocumentISN").WithParameter("DocumentISN", DocumentISN).AsEnumerable().Select(row => new { row.docAddedDate });
                 AddedDate = query.FirstOrDefault().docAddedDate;
-            
+
             }
             if (AddedDate != null) date = Convert.ToDateTime(AddedDate);
             string strPath = date.ToString("yyyyMM") + "\\" + "Documents\\" + date.ToString("dd") + "\\" + DocumentISN.ToString();
@@ -533,7 +522,7 @@ namespace debt_fe.Businesses
             DateTime date = DateTime.Now;
             if (AddedDate == null)
             {
-                var query = _db.Sql("Select addedDate From DebtTemplate Where TemplateISN= @TempISN").WithParameter("TempISN", TemplateISN).AsEnumerable().Select(row=> new { row.addedDate });
+                var query = _db.Sql("Select addedDate From DebtTemplate Where TemplateISN= @TempISN").WithParameter("TempISN", TemplateISN).AsEnumerable().Select(row => new { row.addedDate });
                 AddedDate = query.FirstOrDefault().addedDate;
             }
             if (AddedDate != null) date = Convert.ToDateTime(AddedDate);
@@ -541,11 +530,35 @@ namespace debt_fe.Businesses
             _logger.Info("---End GetTemplatePath---");
             return strPath;
         }
-
         public void RollBackSigntureDocument(int docId)
         {
             var query = _db.Sql("update Document set docSignatureDate = null, docGuid = null, docFileName = null where DocumentISN = @docId")
                 .WithParameter("docId", docId).AsNonQuery();
+        }
+
+        public bool CheckIsSignture(int docId)
+        {
+            var query = _db.Sql("select * from RightSignatureComplete where DocumentISN = @documentISN").WithParameter("documentISN", docId);
+            var reader = query.AsReader();
+            if (reader.Read())
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public void MarkIsSignture(int docId)
+        {
+            var query = _db.Sql("Insert into RightSignatureComplete (DocumentISN, CompleteDate) Values (@documentISN, @date)").WithParameters(new { documentISN = docId, date = DateTime.Now });
+            var rs = query.AsNonQuery();
+            _logger.Debug("Result: {0}", rs);
+        }
+
+        public void UnMarkIsSignture(int docId)
+        {
+            var query = _db.Sql("Delete RightSignatureComplete where DocumentISN = @documentISN").WithParameter("documentISN", docId);
+            var rs = query.AsNonQuery();
+            _logger.Debug("Result: {0}", rs);
         }
     }
 }
