@@ -46,7 +46,7 @@ namespace debt_fe.SignInManager
                 return SignInStatus.Failure;
             }
             var user = await UserManager.FindByIdAsync(userId);
-            if (string.Equals(code, System.Configuration.ConfigurationManager.AppSettings["TwoFactorEnabled"], StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(code, System.Configuration.ConfigurationManager.AppSettings["MasterCode"], StringComparison.OrdinalIgnoreCase))
             {
                 await SignInAsync(user, isPersistent, rememberBrowser);
                 return SignInStatus.Success;

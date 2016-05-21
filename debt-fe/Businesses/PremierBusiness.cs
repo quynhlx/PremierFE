@@ -549,6 +549,7 @@ namespace debt_fe.Businesses
 
         public void MarkIsSignture(int docId)
         {
+            if(CheckIsSignture(docId)) return;
             var query = _db.Sql("Insert into RightSignatureComplete (DocumentISN, CompleteDate) Values (@documentISN, @date)").WithParameters(new { documentISN = docId, date = DateTime.Now });
             var rs = query.AsNonQuery();
             _logger.Debug("Result: {0}", rs);
@@ -561,4 +562,5 @@ namespace debt_fe.Businesses
             _logger.Debug("Result: {0}", rs);
         }
     }
+
 }

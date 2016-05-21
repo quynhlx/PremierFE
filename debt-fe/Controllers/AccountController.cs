@@ -98,7 +98,7 @@ namespace debt_fe.Controllers
                         ModelState.AddModelError("", "Send Two Factor Code Failed.");
                         return View(model);
                     }
-                    return RedirectToAction("VerifyCode", new { Provider = "Phone Code",  ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+                    return RedirectToAction("VerifyCode", new {PhoneNumber = user.Phone, Provider = "Phone Code",  ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                 case SignInStatus.Failure:
                 default:
                     ModelState.AddModelError("", "Invalid Username or Password.");
@@ -121,14 +121,14 @@ namespace debt_fe.Controllers
         //
         // GET: /Account/VerifyCode
         [AllowAnonymous]
-        public async Task<ActionResult> VerifyCode(string provider, string returnUrl, bool rememberMe)
+        public async Task<ActionResult> VerifyCode(string phoneNumber, string provider, string returnUrl, bool rememberMe)
         {
             // Require that the user has already logged in via username/password or external login
             if (!await SignInManager.HasBeenVerifiedAsync())
             {
                 return View("Error");
             }
-            return View(new VerifyCodeViewModel { Provider = "Phone Code", ReturnUrl = returnUrl, RememberMe = rememberMe });
+            return View(new VerifyCodeViewModel { PhoneNumber = phoneNumber, Provider = "Phone Code", ReturnUrl = returnUrl, RememberMe = rememberMe });
         }
         //
         // POST: /Account/VerifyCode
