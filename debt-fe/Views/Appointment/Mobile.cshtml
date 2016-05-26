@@ -46,11 +46,12 @@
     <script>
         var pageLenght = 10;
         $table = $('#table-appointment').DataTable({
+            "search": false,
             "pageLength": pageLenght, // record per page
             "lengthChange": false, // no record per page change
             "info": false, // no entities info
             "order": [[3, "desc"]], // set default sort by column 5 (added date)
-            aoColumnDefs: [{ "bSortable": false, "aTargets": [0 ,1, 2] }] // disable sort in last column
+            aoColumnDefs: [{ "bSortable": false, "aTargets": [0, 1, 2] }] // disable sort in last column
         });
         var $tableDoc = $('#table-appointment');
 
@@ -64,7 +65,7 @@
             });
         }
 
-        $('.dataTables_filter').find('input').addClass('form-control inline');
+        $('.dataTables_filter').addClass('hidden');
         $(".menu > li").removeClass("active");
         $('#menu-appoint').addClass("active");
 

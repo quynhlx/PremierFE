@@ -178,7 +178,8 @@ namespace debt_fe.Businesses
                 GroupId = row.GroupID,
                 docHistory = row.docHistory,
                 DocGUID = row.docGuid,
-                AddedName = row.docAddedName
+                AddedName = row.docAddedName,
+                CreditorName = row.Creditor
 
 
             }).ToList();
